@@ -2,20 +2,20 @@ import type { CreateModel } from '../types'
 
 import Zdog from 'zdog'
 
+import { GRASS_COORDS, TABLE_LEGS } from './constants'
 import { createBook } from '../book'
 import { createMug } from '../mug'
-import { createSun } from '../sun'
 import { getRandomColor, getRandomRotation } from '../utils'
 
-export const createChillScene: CreateModel = (props) => {
-  const scene = new Zdog.Anchor(props)
+export const createReadingBench: CreateModel = (props) => {
+  const model = new Zdog.Anchor(props)
 
   // ground
   const groundColor = getRandomColor({ a: 100 })
   const groundStroke = 20
   const groundDiameter = 700
   const ground = new Zdog.Ellipse({
-    addTo: scene,
+    addTo: model,
     diameter: groundDiameter,
     stroke: groundStroke,
     fill: true,
@@ -44,16 +44,7 @@ export const createChillScene: CreateModel = (props) => {
     visible: false,
   })
 
-  // Can't randomize this because the z average needs to be balanced
-  const grassCoords = [
-    { x: 300, y: 150 },
-    { x: 310, y: 120 },
-    { x: -300, y: -150 },
-    { x: -250, y: -160 },
-    { x: 200, y: -160 },
-    { x: -50, y: 230 },
-  ]
-  grassCoords.forEach(({ x, y }) => {
+  GRASS_COORDS.forEach(({ x, y }) => {
     grass.copy({
       visible: true,
       rotate: {
@@ -66,19 +57,9 @@ export const createChillScene: CreateModel = (props) => {
     })
   })
 
-  // sun
-
-  const sun = createSun({
-    addTo: ground,
-    translate: {
-      z: 500,
-      y: -200,
-    },
-  })
-
   // table
   const table = new Zdog.Anchor({
-    addTo: scene,
+    addTo: model,
     translate: { z: 70 },
   })
 
@@ -115,18 +96,13 @@ export const createChillScene: CreateModel = (props) => {
   }
 
   // table - legs
-  const tableLegs = new Zdog.Group({
+  const tableLegsGroup = new Zdog.Group({
     addTo: table,
   })
-  const legs = [
-    [1, 1],
-    [1, -1],
-    [-1, 1],
-    [-1, -1],
-  ]
-  legs.forEach(([xMultiplier, yMultiplier]) => {
+
+  TABLE_LEGS.forEach(([xMultiplier, yMultiplier]) => {
     new Zdog.Shape({
-      addTo: tableLegs,
+      addTo: tableLegsGroup,
       stroke: 20,
       color: tableColors[0],
       path: [{ z: -10 }, { z: -40 }],
@@ -196,9 +172,8 @@ export const createChillScene: CreateModel = (props) => {
   })
 
   return {
-    model: scene,
+    model,
     animate: () => {
-      sun.animate?.()
       mug.animate?.()
     },
   }

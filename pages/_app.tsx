@@ -3,13 +3,14 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { ChakraProvider } from '@chakra-ui/react'
 
-import { overrides } from '@theme'
+import { Header, Footer } from '@components'
+import { theme } from '@theme'
 
-import './_app.scss'
+import styles from './_app.module.scss'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider theme={overrides}>
+    <ChakraProvider theme={theme}>
       <Head>
         <meta
           name="viewport"
@@ -35,9 +36,13 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
 
-      <main className="page">
+      <Header />
+
+      <main className={styles.main}>
         <Component {...pageProps} />
       </main>
+
+      <Footer />
     </ChakraProvider>
   )
 }
