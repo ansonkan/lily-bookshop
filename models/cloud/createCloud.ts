@@ -5,7 +5,14 @@ import Zdog from 'zdog'
 import { COLOR } from './constants'
 import { getRandomInt } from '../utils'
 
-export const createCloud: CreateModel = ({ color = COLOR, ...others }) => {
+interface CreateCloudProps extends Zdog.AnchorOptions {
+  color?: Zdog.ShapeOptions['color']
+}
+
+export const createCloud: CreateModel<CreateCloudProps> = ({
+  color = COLOR,
+  ...others
+}) => {
   const model = new Zdog.Anchor(others)
 
   const variant = getRandomInt(0, 1)

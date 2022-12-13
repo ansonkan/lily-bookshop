@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import {
   Box,
   Container,
@@ -8,12 +8,18 @@ import {
   InputLeftElement,
   Input,
   Flex,
+  Button,
+  ButtonGroup,
   useBreakpointValue,
 } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
 import Zdog from 'zdog'
 
-import { createReadingBench, createSunAndCloud } from '@models'
+import {
+  createReadingBench,
+  createSunAndCloud,
+  CreateModelResult,
+} from '@models'
 
 import styles from './styles.module.scss'
 
@@ -21,9 +27,13 @@ export const LandingScene = (): JSX.Element => {
   const mainDivRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
+  const illo = useRef<Zdog.Illustration>()
+  const readingBench = useRef<CreateModelResult>()
+  const sunAndCloud = useRef<CreateModelResult>()
+
   const bpConfigs = useBreakpointValue(
     {
-      base: { zoom: 0.6, x: 0.8, y: 0.5 },
+      base: { zoom: 0.6, x: 0.7, y: 0.45 },
       sm: { zoom: 0.7, x: 0.6, y: 0.4 },
       md: { zoom: 0.8, x: 0.5, y: 0.4 },
       lg: { zoom: 0.9, x: 0.35, y: 0.4 },
@@ -37,40 +47,27 @@ export const LandingScene = (): JSX.Element => {
 
     let isOn = true
 
-    const illo = new Zdog.Illustration({
+    illo.current = new Zdog.Illustration({
       element: canvasRef.current,
       resize: true,
-      dragRotate: true,
+      // dragRotate: true,
     })
 
-    const readingBench = createReadingBench({
-      addTo: illo,
+    readingBench.current = createReadingBench({
+      addTo: illo.current,
       rotate: { x: Zdog.TAU / 6, z: Zdog.TAU / 8 },
     })
 
-    const sunAndCloud = createSunAndCloud({
-      addTo: illo,
+    sunAndCloud.current = createSunAndCloud({
+      addTo: illo.current,
       rotate: { x: Zdog.TAU / 6, z: Zdog.TAU / -8 },
     })
 
     function animate() {
-      if (!isOn) return
+      if (!isOn || !readingBench.current || !illo.current) return
 
-      if (mainDivRef.current && bpConfigs) {
-        illo.zoom = bpConfigs.zoom
-
-        const w = mainDivRef.current.clientWidth
-        const h = mainDivRef.current.clientHeight
-
-        readingBench.model.translate.x = w * bpConfigs.x
-        readingBench.model.translate.y = h * bpConfigs.y
-
-        sunAndCloud.model.translate.x = w * bpConfigs.x * -1
-        sunAndCloud.model.translate.y = h * bpConfigs.y * -1
-      }
-
-      readingBench.animate?.()
-      illo.updateRenderGraph()
+      readingBench.current.animate?.()
+      illo.current.updateRenderGraph()
       requestAnimationFrame(animate)
     }
 
@@ -79,6 +76,28 @@ export const LandingScene = (): JSX.Element => {
     return () => {
       isOn = false
     }
+  }, [])
+
+  useEffect(() => {
+    if (
+      !illo.current ||
+      !readingBench.current ||
+      !sunAndCloud.current ||
+      !mainDivRef.current ||
+      !bpConfigs
+    )
+      return
+
+    illo.current.zoom = bpConfigs.zoom
+
+    const w = mainDivRef.current.clientWidth
+    const h = mainDivRef.current.clientHeight
+
+    readingBench.current.model.translate.x = w * bpConfigs.x
+    readingBench.current.model.translate.y = h * bpConfigs.y
+
+    sunAndCloud.current.model.translate.x = w * bpConfigs.x * -1
+    sunAndCloud.current.model.translate.y = h * bpConfigs.y * -1
   }, [bpConfigs])
 
   return (
@@ -87,23 +106,26 @@ export const LandingScene = (): JSX.Element => {
 
       <Container h="full" ref={mainDivRef}>
         <Center h="full">
-          <Flex
-            direction="column"
-            gap={4}
-            backdropFilter="auto"
-            backdropBlur="sm"
-            bgColor="whiteAlpha.500"
-            borderBottom="1px"
-            borderColor="whiteAlpha.500"
-          >
-            <Heading>Welcome to Lily Bookshop! :D</Heading>
+          <Flex direction="column" gap={4}>
+            <Heading
+              as="h1"
+              fontSize={['2xl', '4xl', '4xl', '5xl']}
+              textAlign="center"
+            >
+              Looking for your next book?
+            </Heading>
 
-            <InputGroup>
+            <InputGroup backdropFilter="auto" backdropBlur="sm">
               <InputLeftElement>
                 <SearchIcon />
               </InputLeftElement>
-              <Input placeholder="Looking for your next book?" />
+              <Input placeholder="A title, author, ISBN, or anything really..." />
             </InputGroup>
+
+            <ButtonGroup alignSelf="center">
+              <Button>Visit us</Button>
+              <Button>Check out our blog</Button>
+            </ButtonGroup>
           </Flex>
         </Center>
       </Container>

@@ -1,3 +1,5 @@
+import type { CreateModel } from '../types'
+
 import Zdog from 'zdog'
 
 import { COLOR_PAIRS } from '../constants'
@@ -9,13 +11,13 @@ export interface CreateBookProps extends Zdog.AnchorOptions {
   isOpen?: boolean
 }
 
-export const createBook = ({
+export const createBook: CreateModel<CreateBookProps> = ({
   primaryColor,
   secondaryColor,
   isOpen,
   ...otherProps
-}: CreateBookProps): Zdog.Anchor => {
-  const book = new Zdog.Anchor(otherProps)
+}) => {
+  const model = new Zdog.Anchor(otherProps)
 
   if (!primaryColor && !secondaryColor) {
     const colorPairs = COLOR_PAIRS[getRandomInt(0, COLOR_PAIRS.length - 1)]
@@ -30,7 +32,7 @@ export const createBook = ({
 
   // spine
   const spine = new Zdog.Rect({
-    addTo: book,
+    addTo: model,
     width: 30,
     height: 130,
     stroke: 5,
@@ -75,7 +77,7 @@ export const createBook = ({
   } else {
     covers.forEach((multiplier) => {
       const coverGroup = new Zdog.Group({
-        addTo: book,
+        addTo: model,
         translate: { z: 15 * multiplier, x: 7 },
       })
 
@@ -115,7 +117,7 @@ export const createBook = ({
 
   if (isOpen) {
     const stackOfPage = new Zdog.Group({
-      addTo: book,
+      addTo: model,
     })
 
     const paper = new Zdog.Rect({
@@ -135,7 +137,7 @@ export const createBook = ({
     })
   } else {
     const paper = new Zdog.Rect({
-      addTo: book,
+      addTo: model,
       width: 80,
       height: 120,
       stroke: 10,
@@ -149,5 +151,5 @@ export const createBook = ({
     })
   }
 
-  return book
+  return { model }
 }

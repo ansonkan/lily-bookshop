@@ -1,28 +1,54 @@
 import type { NextPage } from 'next'
 
-import { Box, Heading, Container } from '@chakra-ui/react'
+import {
+  Box,
+  Heading,
+  Container,
+  Card,
+  CardHeader,
+  CardBody,
+  Flex,
+} from '@chakra-ui/react'
 
-import { LandingScene } from '@components'
+import { LandingScene, HighlightScene, LatestAdditionsScene } from '@components'
 
 const ZDogPage: NextPage = () => {
   return (
-    <div>
-      <Box position="relative" h="90vh" minH={500} maxH={1000}>
+    <Flex direction="column" gap={4} pb={8}>
+      <Box position="relative" h="80vh" minH={500} maxH={1000}>
         <LandingScene />
       </Box>
 
-      <Box minH={500}>
-        <Container>
-          <Heading>Highlights</Heading>
-        </Container>
-      </Box>
+      <Container>
+        <Flex direction="column" gap={8}>
+          <Card rounded="3xl" overflow="hidden" boxShadow="xl" minH="500">
+            <HighlightScene />
 
-      <Box minH={500}>
-        <Container>
-          <Heading>Latest Additions</Heading>
-        </Container>
-      </Box>
-    </div>
+            <CardHeader>
+              <Heading>Highlights</Heading>
+            </CardHeader>
+
+            <CardBody>something...</CardBody>
+          </Card>
+
+          <Card
+            rounded="3xl"
+            color="gray.100"
+            overflow="hidden"
+            boxShadow="xl"
+            minH="500"
+          >
+            <LatestAdditionsScene />
+
+            <CardHeader>
+              <Heading>Latest Additions</Heading>
+            </CardHeader>
+
+            <CardBody>something...</CardBody>
+          </Card>
+        </Flex>
+      </Container>
+    </Flex>
   )
 }
 
