@@ -25,6 +25,11 @@ export const LatestAdditionsScene = (): JSX.Element => {
 
     megaStar.current = createNewBooks({
       addTo: illo.current,
+      rotate: { x: Zdog.TAU / 6, z: Zdog.TAU / 8 },
+      translate: {
+        x: canvasRef.current.clientWidth / 3,
+        y: canvasRef.current.clientHeight / -2.5,
+      },
     })
 
     function animate() {
@@ -46,7 +51,14 @@ export const LatestAdditionsScene = (): JSX.Element => {
     <>
       <canvas className={styles.canvas} ref={canvasRef} />
 
-      <ButtonGroup position="absolute" bottom="0" right="0">
+      <ButtonGroup position="absolute" bottom="0" right="0" color="black">
+        <Button
+          onClick={() => {
+            megaStar.current?.appear()
+          }}
+        >
+          appear
+        </Button>
         <Button
           onClick={() => {
             megaStar.current?.spin()

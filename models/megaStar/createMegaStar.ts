@@ -40,15 +40,12 @@ export const createMegaStar: CreateModel<
     y: Zdog.TAU / 2,
     duration: 2000,
     delay: anime.stagger(100),
-    complete: () => {
-      model.rotate.y = 0
-    },
   })
 
   return {
     model,
     spin: () => {
-      spinAnime.restart()
+      spinAnime.play()
     },
   }
 }

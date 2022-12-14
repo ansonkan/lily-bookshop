@@ -2,6 +2,7 @@ import type { CreateModel } from '../types'
 
 import Zdog from 'zdog'
 
+import { BOOK_CLOSED_HEIGHT } from './constants'
 import { COLOR_PAIRS } from '../constants'
 import { getRandomInt, getRandomColor } from '../utils'
 
@@ -34,7 +35,7 @@ export const createBook: CreateModel<CreateBookProps> = ({
   const spine = new Zdog.Rect({
     addTo: model,
     width: 30,
-    height: 130,
+    height: BOOK_CLOSED_HEIGHT,
     stroke: 5,
     color: primaryColor,
     fill: true,
@@ -43,7 +44,6 @@ export const createBook: CreateModel<CreateBookProps> = ({
   })
 
   const coverWith = 85
-  const coverHeight = 130
   const covers = [-1, 1]
 
   if (isOpen) {
@@ -56,7 +56,7 @@ export const createBook: CreateModel<CreateBookProps> = ({
       new Zdog.Rect({
         addTo: coverGroup,
         width: 5,
-        height: coverHeight,
+        height: BOOK_CLOSED_HEIGHT,
         stroke: 5,
         fill: true,
         translate: { x: 23 * multiplier },
@@ -67,7 +67,7 @@ export const createBook: CreateModel<CreateBookProps> = ({
       new Zdog.Rect({
         addTo: coverGroup,
         width: coverWith,
-        height: coverHeight,
+        height: BOOK_CLOSED_HEIGHT,
         stroke: 5,
         color: primaryColor,
         translate: { x: 73 * multiplier },
@@ -85,7 +85,7 @@ export const createBook: CreateModel<CreateBookProps> = ({
       new Zdog.Rect({
         addTo: coverGroup,
         width: coverWith,
-        height: coverHeight,
+        height: BOOK_CLOSED_HEIGHT,
         stroke: 5,
         color: primaryColor,
         fill: true,
@@ -95,7 +95,7 @@ export const createBook: CreateModel<CreateBookProps> = ({
       new Zdog.Rect({
         addTo: coverGroup,
         width: 5,
-        height: coverHeight,
+        height: BOOK_CLOSED_HEIGHT,
         stroke: 5,
         fill: true,
         translate: { x: -50 },

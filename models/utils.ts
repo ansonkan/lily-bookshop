@@ -6,7 +6,7 @@ export const getRandomCoordinate = (limit: number) =>
 export const getRandomRotation = () => Zdog.TAU / (Math.random() + 1)
 
 export const getRandomInt = (min: number, max: number) =>
-  min + Math.floor(Math.random() * (max + 0.1))
+  min + Math.floor(Math.random() * (max + 1))
 
 interface GetRandomColorProps {
   h?: number
