@@ -26,11 +26,17 @@ export const LatestAdditionsScene = (): JSX.Element => {
     megaStar.current = createNewBooks({
       addTo: illo.current,
       rotate: { x: Zdog.TAU / 6, z: Zdog.TAU / 8 },
-      translate: {
-        x: canvasRef.current.clientWidth / 3,
-        y: canvasRef.current.clientHeight / -2.5,
-      },
     })
+
+    const onResize = () => {
+      if (!megaStar.current || !canvasRef.current) return
+
+      megaStar.current.model.translate.x = canvasRef.current.clientWidth / 3
+      megaStar.current.model.translate.y = canvasRef.current.clientHeight / -2.5
+    }
+
+    onResize()
+    window.addEventListener('resize', onResize)
 
     function animate() {
       if (!isOn || !megaStar.current || !illo.current) return
@@ -44,6 +50,7 @@ export const LatestAdditionsScene = (): JSX.Element => {
 
     return () => {
       isOn = false
+      window.removeEventListener('resize', onResize)
     }
   }, [])
 

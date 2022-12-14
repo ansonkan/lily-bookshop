@@ -11,6 +11,7 @@ interface CreateMegaStarProps extends Zdog.AnchorOptions {
 }
 
 interface CreateMegaStarResult extends CreateModelResult {
+  appear: () => void
   spin: () => void
 }
 
@@ -21,29 +22,45 @@ export const createMegaStar: CreateModel<
   const model = new Zdog.Group(others)
   const stars: ReturnType<typeof createStar>[] = []
 
+  const base = new Zdog.Anchor({
+    addTo: model,
+  })
+
   for (let i = 1; i <= STAR_COLORS.length; i++) {
     const color = STAR_COLORS[STAR_COLORS.length - i]
 
     stars.push(
       createStar({
-        addTo: model,
+        addTo: base,
         color,
         scale: 2 / i,
         stroke: 50 / i,
+        translate: { z: -400 },
       })
     )
   }
 
+  const appearAnime = anime({
+    autoplay: false,
+    targets: stars.map((s) => s.model.translate),
+    z: anime.stagger([-100, 100]),
+    duration: 2000,
+    delay: anime.stagger(100),
+  })
+
   const spinAnime = anime({
     autoplay: false,
     targets: [...stars].reverse().map((s) => s.model.rotate),
-    y: Zdog.TAU / 2,
+    z: Zdog.TAU,
     duration: 2000,
     delay: anime.stagger(100),
   })
 
   return {
     model,
+    appear: () => {
+      appearAnime.play()
+    },
     spin: () => {
       spinAnime.play()
     },

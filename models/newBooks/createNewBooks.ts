@@ -21,7 +21,7 @@ interface CreateNewBooksResult extends CreateModelResult {
 export const createNewBooks: CreateModel<
   CreateNewBooksProps,
   CreateNewBooksResult
-> = ({ colors, columns = 5, booksPerColumn = 3, ...others }) => {
+> = ({ colors, columns = 4, booksPerColumn = 2, ...others }) => {
   const model = new Zdog.Anchor(others)
   const cols: Zdog.Anchor[] = []
   const books: ReturnType<typeof createBook>[] = []
@@ -63,7 +63,7 @@ export const createNewBooks: CreateModel<
     autoplay: false,
     targets: cols.map((c) => c.translate),
     y: 0,
-    duration: 2500,
+    duration: 2000,
     delay: anime.stagger(50),
   })
 
@@ -71,7 +71,7 @@ export const createNewBooks: CreateModel<
     autoplay: false,
     targets: books.map((b) => b.model.rotate),
     x: Zdog.TAU,
-    duration: 2500,
+    duration: 2000,
     delay: anime.stagger(50),
   })
 

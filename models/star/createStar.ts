@@ -4,11 +4,14 @@ import Zdog from 'zdog'
 
 interface CreateStarProps
   extends Zdog.AnchorOptions,
-    Pick<Zdog.ShapeOptions, 'color' | 'stroke'> {}
+    Pick<Zdog.ShapeOptions, 'color' | 'stroke'> {
+  scale?: number
+}
 
 export const createStar: CreateModel<CreateStarProps> = ({
   color,
   stroke = 20,
+  scale = 1,
   ...others
 }) => {
   const model = new Zdog.Anchor(others)
@@ -18,8 +21,8 @@ export const createStar: CreateModel<CreateStarProps> = ({
    * 2. Convert from relative to absolute commands in https://lea.verou.me/2019/05/utility-convert-svg-path-to-all-relative-or-all-absolute-commands/
    * 3. Parse the commands by https://www.npmjs.com/package/svg-path-parser
    */
-  const scale = 5
-  const offset = (-47.94 / 2) * scale
+  const _scale = 5 * scale
+  const offset = (-47.94 / 2) * _scale
 
   new Zdog.Shape({
     addTo: model,
@@ -27,7 +30,7 @@ export const createStar: CreateModel<CreateStarProps> = ({
     stroke,
     fill: true,
     closed: true,
-    scale,
+    scale: _scale,
     translate: { x: offset, y: offset },
     path: [
       { move: { x: 26.285, y: 2.486 } },

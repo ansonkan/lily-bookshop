@@ -20,17 +20,26 @@ export const HighlightScene = (): JSX.Element => {
     illo.current = new Zdog.Illustration({
       element: canvasRef.current,
       resize: true,
-      dragRotate: true,
     })
 
     megaStar.current = createMegaStar({
       addTo: illo.current,
+      rotate: { x: Zdog.TAU / -15, y: Zdog.TAU / 10 },
     })
+
+    const onResize = () => {
+      if (!megaStar.current || !canvasRef.current) return
+
+      megaStar.current.model.translate.x = canvasRef.current.clientWidth / 3
+      megaStar.current.model.translate.y = canvasRef.current.clientHeight / -2.5
+    }
+
+    onResize()
+    window.addEventListener('resize', onResize)
 
     function animate() {
       if (!isOn || !megaStar.current || !illo.current) return
 
-      // megaStar.current.animate?.()
       illo.current.updateRenderGraph()
       requestAnimationFrame(animate)
     }
@@ -39,6 +48,7 @@ export const HighlightScene = (): JSX.Element => {
 
     return () => {
       isOn = false
+      window.removeEventListener('resize', onResize)
     }
   }, [])
 
@@ -47,6 +57,14 @@ export const HighlightScene = (): JSX.Element => {
       <canvas className={styles.canvas} ref={canvasRef} />
 
       <ButtonGroup position="absolute" bottom="0" right="0">
+        <Button
+          onClick={() => {
+            megaStar.current?.appear()
+          }}
+        >
+          appear
+        </Button>
+
         <Button
           onClick={() => {
             megaStar.current?.spin()
