@@ -21,11 +21,18 @@ const ZDogPage: NextPage = () => {
 
       <Container>
         <Flex direction="column" gap={8}>
-          <Card rounded="3xl" overflow="hidden" boxShadow="xl" minH="500">
+          <Card
+            rounded="3xl"
+            overflow="hidden"
+            boxShadow="xl"
+            minH="500"
+            // https://stackoverflow.com/questions/49066011/overflow-hidden-with-border-radius-not-working-on-safari
+            isolation="isolate"
+          >
             <HighlightScene />
 
             <CardHeader>
-              <Heading>Highlights</Heading>
+              <Heading textShadow="1px 1px #f3b259">Highlights</Heading>
             </CardHeader>
 
             <CardBody>something...</CardBody>
@@ -37,11 +44,12 @@ const ZDogPage: NextPage = () => {
             overflow="hidden"
             boxShadow="xl"
             minH="500"
+            isolation="isolate"
           >
             <LatestAdditionsScene />
 
             <CardHeader>
-              <Heading>Latest Additions</Heading>
+              <Heading textShadow="1px 1px #86c384">Latest Additions</Heading>
             </CardHeader>
 
             <CardBody>something...</CardBody>

@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import Zdog from 'zdog'
-import { Button, ButtonGroup } from '@chakra-ui/react'
 
 import { createNewBooks } from '@models'
 
@@ -38,10 +37,30 @@ export const LatestAdditionsScene = (): JSX.Element => {
     onResize()
     window.addEventListener('resize', onResize)
 
+    let hasAppeared = false
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (!hasAppeared) {
+              megaStar.current?.appear()
+              hasAppeared = true
+            } else {
+              megaStar.current?.spin()
+            }
+          }
+        })
+      },
+      {
+        threshold: 0.3,
+      }
+    )
+
+    observer.observe(canvasRef.current)
+
     function animate() {
       if (!isOn || !megaStar.current || !illo.current) return
 
-      // megaStar.current.animate?.()
       illo.current.updateRenderGraph()
       requestAnimationFrame(animate)
     }
@@ -51,29 +70,9 @@ export const LatestAdditionsScene = (): JSX.Element => {
     return () => {
       isOn = false
       window.removeEventListener('resize', onResize)
+      observer.disconnect()
     }
   }, [])
 
-  return (
-    <>
-      <canvas className={styles.canvas} ref={canvasRef} />
-
-      <ButtonGroup position="absolute" bottom="0" right="0" color="black">
-        <Button
-          onClick={() => {
-            megaStar.current?.appear()
-          }}
-        >
-          appear
-        </Button>
-        <Button
-          onClick={() => {
-            megaStar.current?.spin()
-          }}
-        >
-          spin
-        </Button>
-      </ButtonGroup>
-    </>
-  )
+  return <canvas className={styles.canvas} ref={canvasRef} />
 }

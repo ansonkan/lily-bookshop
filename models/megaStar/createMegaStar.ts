@@ -35,7 +35,7 @@ export const createMegaStar: CreateModel<
         color,
         scale: 2 / i,
         stroke: 50 / i,
-        translate: { z: -400 },
+        translate: { z: Math.min(window.innerWidth / -10, -700) },
       })
     )
   }

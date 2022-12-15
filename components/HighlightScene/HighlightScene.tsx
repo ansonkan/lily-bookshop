@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import Zdog from 'zdog'
-import { Button, ButtonGroup } from '@chakra-ui/react'
 
 import { createMegaStar } from '@models'
 
@@ -31,11 +30,32 @@ export const HighlightScene = (): JSX.Element => {
       if (!megaStar.current || !canvasRef.current) return
 
       megaStar.current.model.translate.x = canvasRef.current.clientWidth / 3
-      megaStar.current.model.translate.y = canvasRef.current.clientHeight / -2.5
+      megaStar.current.model.translate.y = canvasRef.current.clientHeight / -4
     }
 
     onResize()
     window.addEventListener('resize', onResize)
+
+    let hasAppeared = false
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (!hasAppeared) {
+              megaStar.current?.appear()
+              hasAppeared = true
+            } else {
+              megaStar.current?.spin()
+            }
+          }
+        })
+      },
+      {
+        threshold: 0.3,
+      }
+    )
+
+    observer.observe(canvasRef.current)
 
     function animate() {
       if (!isOn || !megaStar.current || !illo.current) return
@@ -49,30 +69,9 @@ export const HighlightScene = (): JSX.Element => {
     return () => {
       isOn = false
       window.removeEventListener('resize', onResize)
+      observer.disconnect()
     }
   }, [])
 
-  return (
-    <>
-      <canvas className={styles.canvas} ref={canvasRef} />
-
-      <ButtonGroup position="absolute" bottom="0" right="0">
-        <Button
-          onClick={() => {
-            megaStar.current?.appear()
-          }}
-        >
-          appear
-        </Button>
-
-        <Button
-          onClick={() => {
-            megaStar.current?.spin()
-          }}
-        >
-          spin
-        </Button>
-      </ButtonGroup>
-    </>
-  )
+  return <canvas className={styles.canvas} ref={canvasRef} />
 }

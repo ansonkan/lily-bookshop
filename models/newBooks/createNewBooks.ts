@@ -21,7 +21,7 @@ interface CreateNewBooksResult extends CreateModelResult {
 export const createNewBooks: CreateModel<
   CreateNewBooksProps,
   CreateNewBooksResult
-> = ({ colors, columns = 4, booksPerColumn = 2, ...others }) => {
+> = ({ colors, columns = 4, booksPerColumn = 3, ...others }) => {
   const model = new Zdog.Anchor(others)
   const cols: Zdog.Anchor[] = []
   const books: ReturnType<typeof createBook>[] = []
@@ -32,7 +32,7 @@ export const createNewBooks: CreateModel<
     const col = new Zdog.Anchor({
       addTo: model,
       translate: {
-        y: -400,
+        y: Math.min(window.innerWidth / -10, -700),
       },
     })
 
