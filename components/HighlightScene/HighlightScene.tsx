@@ -30,7 +30,7 @@ export const HighlightScene = (): JSX.Element => {
       if (!megaStar.current || !canvasRef.current) return
 
       megaStar.current.model.translate.x = canvasRef.current.clientWidth / 3
-      megaStar.current.model.translate.y = canvasRef.current.clientHeight / -4
+      megaStar.current.model.translate.y = canvasRef.current.clientHeight / -3
     }
 
     onResize()

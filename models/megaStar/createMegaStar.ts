@@ -51,7 +51,7 @@ export const createMegaStar: CreateModel<
   const spinAnime = anime({
     autoplay: false,
     targets: [...stars].reverse().map((s) => s.model.rotate),
-    z: Zdog.TAU,
+    y: Zdog.TAU,
     duration: 2000,
     delay: anime.stagger(100),
   })

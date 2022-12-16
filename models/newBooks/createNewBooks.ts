@@ -70,7 +70,7 @@ export const createNewBooks: CreateModel<
   const spinAnime = anime({
     autoplay: false,
     targets: books.map((b) => b.model.rotate),
-    x: Zdog.TAU,
+    z: Zdog.TAU,
     duration: 2000,
     delay: anime.stagger(50),
   })
