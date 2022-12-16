@@ -30,6 +30,7 @@
     "zdog": "1.1.3"
   },
   "devDependencies": {
+    "@faker-js/faker": "7.6.0",
     "@types/animejs": "3.1.6",
     "@types/zdog": "1.1.2",
     "prettier": "2.8.1",

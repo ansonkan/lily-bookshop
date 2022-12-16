@@ -29,7 +29,13 @@
       "@models/*": ["models/*"],
 
       "@theme": ["theme"],
-      "@theme/*": ["theme/*"]
+      "@theme/*": ["theme/*"],
+
+      "@utils": ["utils"],
+      "@utils/*": ["utils/*"],
+
+      "@types": ["types"],
+      "@types/*": ["types/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
