@@ -8,7 +8,10 @@ export const fakeBook = (): RealBook => {
   return {
     id,
     title: faker.commerce.productName(),
-    authors: many(faker.name.fullName),
+    authors: many(
+      faker.name.fullName,
+      faker.datatype.number({ min: 1, max: 2 })
+    ),
     price: {
       amount: faker.datatype.number({ min: 20, max: 500 }),
       currencyCode: 'HKD',

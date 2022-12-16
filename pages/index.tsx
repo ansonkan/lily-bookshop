@@ -72,7 +72,7 @@ const HomePage: NextPage<HomePageProps> = ({ highlight, latestAdditions }) => {
             </CardHeader>
 
             <CardBody>
-              <SimpleGrid columns={[2, null, 3, 4]} spacing={4}>
+              <SimpleGrid columns={[1, 2, 3, 4]} spacing={4}>
                 {latestAdditions.map(({ id, ...others }) => (
                   <Book key={id} {...others} />
                 ))}
@@ -107,8 +107,8 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> = async ({
 
   return {
     props: {
-      highlight: many(fakeBook),
-      latestAdditions: many(fakeBook),
+      highlight: many(fakeBook, 12),
+      latestAdditions: many(fakeBook, 12),
     },
   }
 }

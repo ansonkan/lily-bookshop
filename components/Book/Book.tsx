@@ -40,7 +40,7 @@ export const Book = ({
   return (
     <LinkBox as="article">
       <VStack spacing={2}>
-        <AspectRatio ratio={1 / 1.5} width="full">
+        <AspectRatio ratio={1 / 1.5} width="full" maxW={[150, 200]}>
           <Image
             src={imageLink ?? placeholderImageSrc}
             alt={`Thumbnail of ${title}`}
