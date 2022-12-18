@@ -70,7 +70,7 @@ const HomePage: NextPage<HomePageProps> = ({ highlight, latestAdditions }) => {
 
           <Card
             rounded="3xl"
-            color="gray.100"
+            color="white"
             overflow="hidden"
             boxShadow="xl"
             minH="500"
@@ -96,6 +96,7 @@ const HomePage: NextPage<HomePageProps> = ({ highlight, latestAdditions }) => {
           </Card>
 
           <Box
+            id="about"
             minH={[600, 500]}
             display="flex"
             flexDir={['column', 'row']}

@@ -10,6 +10,7 @@ import {
   Flex,
   Button,
   ButtonGroup,
+  Link,
   useBreakpointValue,
 } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
@@ -123,7 +124,9 @@ export const LandingScene = (): JSX.Element => {
             </InputGroup>
 
             <ButtonGroup alignSelf="center">
-              <Button>Visit us</Button>
+              <Button as={Link} href="#about">
+                Visit us
+              </Button>
               <Button>Check out our blog</Button>
             </ButtonGroup>
           </Flex>
