@@ -1,12 +1,10 @@
 import type { AppProps } from 'next/app'
 
 import Head from 'next/head'
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, Box } from '@chakra-ui/react'
 
 import { Header, Footer } from '@components'
 import { theme } from '@theme'
-
-import styles from './_app.module.scss'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -38,9 +36,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <Header />
 
-      <main className={styles.main}>
+      <Box as="main" minH="100vh" overflowX="hidden" pb={20}>
         <Component {...pageProps} />
-      </main>
+      </Box>
 
       <Footer />
     </ChakraProvider>

@@ -1,4 +1,4 @@
-import { Box, Container, Heading } from '@chakra-ui/react'
+import { Box, Container, Heading, HStack } from '@chakra-ui/react'
 
 export const Header = (): JSX.Element => (
   <Box
@@ -15,7 +15,9 @@ export const Header = (): JSX.Element => (
     zIndex="sticky"
   >
     <Container py={4}>
-      <Heading size="md">Lily Bookshop</Heading>
+      <HStack>
+        <Heading size="md">Lily Bookshop</Heading>
+      </HStack>
     </Container>
   </Box>
 )

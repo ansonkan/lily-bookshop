@@ -19,7 +19,7 @@ interface HomePageProps {
 
 const HomePage: NextPage<HomePageProps> = ({ highlights, latestAdditions }) => {
   return (
-    <Flex direction="column" gap={4} pb={8}>
+    <Flex direction="column" gap={4}>
       <LandingScene />
 
       <Container>
