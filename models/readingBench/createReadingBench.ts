@@ -11,7 +11,7 @@ export const createReadingBench: CreateModel = (props) => {
   const model = new Zdog.Anchor(props)
 
   // ground
-  const groundColor = getRandomColor({ a: 100 })
+  const groundColor = 'hsl(228, 40%, 26%, 100%)'
   const groundStroke = 20
   const groundDiameter = 700
   const ground = new Zdog.Ellipse({
@@ -40,7 +40,7 @@ export const createReadingBench: CreateModel = (props) => {
       { arc: [{ z: 15 }, { z: 15, x: 15 }] },
     ],
     closed: false,
-    color: getRandomColor({ a: 100 }),
+    color: 'hsl(98, 78%, 40%, 100%)',
     visible: false,
   })
 
@@ -69,7 +69,7 @@ export const createReadingBench: CreateModel = (props) => {
   const tableHeightHalf = tableHeight / 2
   const tableLegInset = (Math.min(tableWidth, tableHeight) / 2) * 0.2
   const tableStroke = 20
-  const tableColors = [getRandomColor({ a: 100 }), getRandomColor({ a: 100 })]
+  const tableColors = ['hsl(8, 92%, 75%, 100%)', 'hsl(150, 59%, 31%, 100%)']
 
   // table - top
   const plankCount = 4

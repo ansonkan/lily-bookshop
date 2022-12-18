@@ -5,6 +5,8 @@ import { Card, CardHeader, CardBody, Heading } from '@chakra-ui/react'
 
 import { LatestAdditionsScene, Book } from '@components'
 
+import styles from './styles.module.scss'
+
 export interface LatestAdditionSectionProps extends CardProps {
   books: RealBook[]
 }
@@ -13,11 +15,11 @@ export const LatestAdditionSection = ({
   books,
   ...cardProps
 }: LatestAdditionSectionProps): JSX.Element => (
-  <Card {...cardProps}>
+  <Card {...cardProps} color="white">
     <LatestAdditionsScene />
 
     <CardHeader>
-      <Heading textShadow="1px 1px #86c384">Latest Additions</Heading>
+      <Heading className={styles.heading}>Latest Additions</Heading>
     </CardHeader>
 
     <CardBody display="flex" flexDir="row" gap={4} overflowX="scroll">

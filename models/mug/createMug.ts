@@ -13,8 +13,8 @@ const smokeLineHeight = 40
 export const createMug: CreateModel = (props) => {
   const scene = new Zdog.Anchor(props)
 
-  const primaryColor = getRandomColor({ a: 100 })
-  const secondaryColor = getRandomColor({ a: 100 })
+  const primaryColor = 'hsl(85, 90%, 73%, 100%)'
+  const secondaryColor = 'hsl(95, 43%, 43%, 100%)'
 
   const upper = new Zdog.Ellipse({
     addTo: scene,
@@ -70,7 +70,7 @@ export const createMug: CreateModel = (props) => {
   const smokeLine = new Zdog.Shape({
     addTo: smokeGroup,
     stroke: 5,
-    color: getRandomColor({ a: 50 }),
+    color: 'hsl(78, 97%, 95%, 50%)',
     path: [
       {}, // start
       {

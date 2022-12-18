@@ -38,7 +38,6 @@ const HomePage: NextPage<HomePageProps> = ({ highlights, latestAdditions }) => {
 
           <LatestAdditionSection
             rounded="3xl"
-            color="white"
             overflow="hidden"
             boxShadow="xl"
             minH="500"

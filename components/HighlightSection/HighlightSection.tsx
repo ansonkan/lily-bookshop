@@ -5,6 +5,8 @@ import { Card, CardHeader, CardBody, Heading } from '@chakra-ui/react'
 
 import { HighlightScene, Book } from '@components'
 
+import styles from './styles.module.scss'
+
 export interface HighlightSectionProps extends CardProps {
   books: RealBook[]
 }
@@ -17,7 +19,7 @@ export const HighlightSection = ({
     <HighlightScene />
 
     <CardHeader>
-      <Heading textShadow="1px 1px #f3b259">Highlights</Heading>
+      <Heading className={styles.heading}>Highlights</Heading>
     </CardHeader>
 
     <CardBody
