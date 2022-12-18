@@ -3,8 +3,10 @@ import { Box, Container, Heading } from '@chakra-ui/react'
 export const Header = (): JSX.Element => (
   <Box
     as="header"
-    position="sticky"
+    position="fixed"
     top="0"
+    left="0"
+    right="0"
     backdropFilter="auto"
     backdropBlur="sm"
     bgColor="whiteAlpha.500"
@@ -12,7 +14,7 @@ export const Header = (): JSX.Element => (
     borderColor="whiteAlpha.500"
     zIndex="sticky"
   >
-    <Container>
+    <Container py={4}>
       <Heading size="md">Lily Bookshop</Heading>
     </Container>
   </Box>

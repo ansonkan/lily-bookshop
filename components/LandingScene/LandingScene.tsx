@@ -1,19 +1,5 @@
 import { useEffect, useRef } from 'react'
-import {
-  Box,
-  Container,
-  Center,
-  Heading,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  Flex,
-  Button,
-  ButtonGroup,
-  Link,
-  useBreakpointValue,
-} from '@chakra-ui/react'
-import { SearchIcon } from '@chakra-ui/icons'
+import { useBreakpointValue } from '@chakra-ui/react'
 import Zdog from 'zdog'
 
 import {
@@ -25,23 +11,19 @@ import {
 import styles from './styles.module.scss'
 
 export const LandingScene = (): JSX.Element => {
-  const mainDivRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const illo = useRef<Zdog.Illustration>()
   const readingBench = useRef<CreateModelResult>()
   const sunAndCloud = useRef<CreateModelResult>()
 
-  const bpConfigs = useBreakpointValue(
-    {
-      base: { zoom: 0.6, x: 0.7, y: 0.45 },
-      sm: { zoom: 0.7, x: 0.6, y: 0.4 },
-      md: { zoom: 0.8, x: 0.5, y: 0.4 },
-      lg: { zoom: 0.9, x: 0.35, y: 0.4 },
-      xl: { zoom: 1, x: 0.3, y: 0.4 },
-    },
-    { ssr: false }
-  )
+  const bpConfigs = useBreakpointValue({
+    base: { zoom: 0.6, x: 0.7, y: 0.45 },
+    sm: { zoom: 0.7, x: 0.6, y: 0.4 },
+    md: { zoom: 0.8, x: 0.5, y: 0.4 },
+    lg: { zoom: 0.9, x: 0.35, y: 0.4 },
+    xl: { zoom: 1, x: 0.3, y: 0.4 },
+  })
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -63,7 +45,6 @@ export const LandingScene = (): JSX.Element => {
       addTo: illo.current,
       rotate: { x: Zdog.TAU / 6, z: Zdog.TAU / -8 },
     })
-
     function animate() {
       if (!isOn || !readingBench.current || !illo.current) return
 
@@ -81,57 +62,31 @@ export const LandingScene = (): JSX.Element => {
 
   useEffect(() => {
     if (
-      !illo.current ||
+      !canvasRef.current ||
       !readingBench.current ||
       !sunAndCloud.current ||
-      !mainDivRef.current ||
+      !illo.current ||
       !bpConfigs
     )
       return
 
     illo.current.zoom = bpConfigs.zoom
 
-    const w = mainDivRef.current.clientWidth
-    const h = mainDivRef.current.clientHeight
+    const w = canvasRef.current.clientWidth
+    const h = canvasRef.current.clientHeight
 
-    readingBench.current.model.translate.x = w * bpConfigs.x
-    readingBench.current.model.translate.y = h * bpConfigs.y
+    readingBench.current.model.translate.x = Math.min(
+      Math.max(w * bpConfigs.x, 350),
+      500
+    )
+    readingBench.current.model.translate.y = Math.max(h * bpConfigs.y * -1, 150)
 
-    sunAndCloud.current.model.translate.x = w * bpConfigs.x * -1
-    sunAndCloud.current.model.translate.y = h * bpConfigs.y * -1
+    sunAndCloud.current.model.translate.x = Math.max(
+      Math.min(w * -bpConfigs.x, -250),
+      -500
+    )
+    sunAndCloud.current.model.translate.y = Math.min(h * bpConfigs.y * -1, -150)
   }, [bpConfigs])
 
-  return (
-    <Box position="relative" h="full">
-      <canvas className={styles.canvas} ref={canvasRef} />
-
-      <Container h="full" ref={mainDivRef}>
-        <Center h="full">
-          <Flex direction="column" gap={4}>
-            <Heading
-              as="h1"
-              fontSize={['2xl', '4xl', '4xl', '5xl']}
-              textAlign="center"
-            >
-              Looking for your next book?
-            </Heading>
-
-            <InputGroup backdropFilter="auto" backdropBlur="sm">
-              <InputLeftElement>
-                <SearchIcon />
-              </InputLeftElement>
-              <Input placeholder="A title, author, ISBN, or anything really..." />
-            </InputGroup>
-
-            <ButtonGroup alignSelf="center">
-              <Button as={Link} href="#about">
-                Visit us
-              </Button>
-              <Button>Check out our blog</Button>
-            </ButtonGroup>
-          </Flex>
-        </Center>
-      </Container>
-    </Box>
-  )
+  return <canvas ref={canvasRef} className={styles.canvas} />
 }

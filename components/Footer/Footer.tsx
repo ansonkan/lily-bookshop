@@ -12,13 +12,13 @@ import { PhoneIcon } from '@chakra-ui/icons'
 import { MapPinIcon } from '@components'
 
 export const Footer = (): JSX.Element => (
-  <Box as="footer" bgColor="purple.800" color="white" fontSize="small">
+  <Box as="footer" bgColor="purple.800" color="white">
     <Container py={8}>
       <Heading size="md" mb={8}>
         Lily Bookshop
       </Heading>
 
-      <VStack alignItems="flex-start">
+      <VStack alignItems="flex-start" fontSize="small">
         <HStack>
           <PhoneIcon />
           <Link href="tel:85269775833">+852 6977 5833</Link>
