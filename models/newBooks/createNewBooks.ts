@@ -14,8 +14,8 @@ interface CreateNewBooksProps extends Zdog.AnchorOptions {
 }
 
 interface CreateNewBooksResult extends CreateModelResult {
-  appear: () => void
-  spin: () => void
+  appear: () => Promise<void>
+  spin: () => Promise<void>
 }
 
 export const createNewBooks: CreateModel<
@@ -77,9 +77,13 @@ export const createNewBooks: CreateModel<
 
   return {
     model,
-    appear: () => appearAnime.play(),
+    appear: () => {
+      appearAnime.play()
+      return appearAnime.finished
+    },
     spin: () => {
       spinAnime.play()
+      return spinAnime.finished
     },
   }
 }

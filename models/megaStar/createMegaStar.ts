@@ -11,8 +11,8 @@ interface CreateMegaStarProps extends Zdog.AnchorOptions {
 }
 
 interface CreateMegaStarResult extends CreateModelResult {
-  appear: () => void
-  spin: () => void
+  appear: () => Promise<void>
+  spin: () => Promise<void>
 }
 
 export const createMegaStar: CreateModel<
@@ -60,9 +60,11 @@ export const createMegaStar: CreateModel<
     model,
     appear: () => {
       appearAnime.play()
+      return appearAnime.finished
     },
     spin: () => {
       spinAnime.play()
+      return spinAnime.finished
     },
   }
 }
