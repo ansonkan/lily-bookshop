@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardBody,
   Flex,
-  SimpleGrid,
 } from '@chakra-ui/react'
 
 import {
@@ -48,12 +47,22 @@ const HomePage: NextPage<HomePageProps> = ({ highlight, latestAdditions }) => {
               <Heading textShadow="1px 1px #f3b259">Highlights</Heading>
             </CardHeader>
 
-            <CardBody>
-              <SimpleGrid columns={[1, 2, 3, 4]} spacing={4}>
-                {highlight.map(({ id, ...others }) => (
-                  <Book key={id} {...others} />
-                ))}
-              </SimpleGrid>
+            <CardBody
+              display="flex"
+              flexDir="row"
+              alignItems="stretch"
+              gap={4}
+              overflowX="scroll"
+            >
+              {highlight.map(({ id, ...others }) => (
+                <Book
+                  key={id}
+                  w={[150, 200]}
+                  flexShrink={0}
+                  flexGrow={0}
+                  {...others}
+                />
+              ))}
             </CardBody>
           </Card>
 
@@ -71,12 +80,16 @@ const HomePage: NextPage<HomePageProps> = ({ highlight, latestAdditions }) => {
               <Heading textShadow="1px 1px #86c384">Latest Additions</Heading>
             </CardHeader>
 
-            <CardBody>
-              <SimpleGrid columns={[1, 2, 3, 4]} spacing={4}>
-                {latestAdditions.map(({ id, ...others }) => (
-                  <Book key={id} {...others} />
-                ))}
-              </SimpleGrid>
+            <CardBody display="flex" flexDir="row" gap={4} overflowX="scroll">
+              {latestAdditions.map(({ id, ...others }) => (
+                <Book
+                  key={id}
+                  w={[150, 200]}
+                  flexShrink={0}
+                  flexGrow={0}
+                  {...others}
+                />
+              ))}
             </CardBody>
           </Card>
         </Flex>

@@ -1,10 +1,11 @@
+import type { LinkBoxProps } from '@chakra-ui/react'
+
 import Image from 'next/image'
 import NextLink from 'next/link'
 import {
   Text,
   AspectRatio,
   VStack,
-  Link,
   LinkBox,
   LinkOverlay,
 } from '@chakra-ui/react'
@@ -16,7 +17,7 @@ export interface Price {
   currencyCode: string
 }
 
-export interface BookProps {
+export interface BookProps extends LinkBoxProps {
   title: string
   authors: string[]
   price: Price
@@ -30,6 +31,7 @@ export const Book = ({
   price,
   detailsLink,
   imageLink,
+  ...linkBoxProps
 }: BookProps): JSX.Element => {
   // `navigator.language` doesn't exist on the server side, so let's use `en-GB` for now
   const priceLabel = new Intl.NumberFormat('en-GB', {
@@ -38,27 +40,44 @@ export const Book = ({
   }).format(price.amount)
 
   return (
-    <LinkBox as="article">
-      <VStack spacing={2}>
-        <AspectRatio ratio={1 / 1.5} width="full" maxW={[150, 200]}>
-          <Image
-            src={imageLink ?? placeholderImageSrc}
-            alt={`Thumbnail of ${title}`}
-            fill={true}
-            placeholder="blur"
-          />
-        </AspectRatio>
+    <LinkBox
+      as="article"
+      display="flex"
+      flexDir="column"
+      gap={2}
+      {...linkBoxProps}
+    >
+      <AspectRatio
+        ratio={1 / 1.5}
+        w="full"
+        bgColor="gray.100"
+        rounded="3xl"
+        overflow="hidden"
+      >
+        <Image
+          src={imageLink ?? placeholderImageSrc}
+          alt={`Thumbnail of ${title}`}
+          fill={true}
+          placeholder="blur"
+        />
+      </AspectRatio>
 
-        <LinkOverlay as={NextLink} href={detailsLink}>
-          <Text as="b" fontSize="large">
-            {title}
-          </Text>
-        </LinkOverlay>
-
-        <Text>{authors.join(', ')}</Text>
-
-        <Text>{priceLabel}</Text>
-      </VStack>
+      <LinkOverlay
+        as={NextLink}
+        href={detailsLink}
+        w="full"
+        flexGrow={1}
+        display="flex"
+        flexDirection="column"
+      >
+        <Text as="b" fontSize="large">
+          {title}
+        </Text>
+        <Text fontSize="small">{authors.join(', ')}</Text>
+        <Text as="b" alignSelf="end" mt="auto">
+          {priceLabel}
+        </Text>
+      </LinkOverlay>
     </LinkBox>
   )
 }
