@@ -8,6 +8,8 @@
       {
         "allowSeparatedGroups": true
       }
-    ]
+    ],
+    // to work around the global type `JSX`
+    "no-undef": "off"
   }
 }
