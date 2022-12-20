@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/234ccdd6-1439-49d5-aaca-47cd9a29ab09/deploy-status)](https://app.netlify.com/sites/lilybookshop/deploys)
+
 ## Getting Started
 
 First, run the development server:
