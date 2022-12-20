@@ -2,13 +2,7 @@ import type { LinkBoxProps } from '@chakra-ui/react'
 
 import Image from 'next/image'
 import NextLink from 'next/link'
-import {
-  Text,
-  AspectRatio,
-  VStack,
-  LinkBox,
-  LinkOverlay,
-} from '@chakra-ui/react'
+import { Text, AspectRatio, LinkBox, LinkOverlay } from '@chakra-ui/react'
 
 import placeholderImageSrc from 'public/placeholder-image.png'
 
@@ -70,9 +64,7 @@ export const Book = ({
         display="flex"
         flexDirection="column"
       >
-        <Text as="b" fontSize="large">
-          {title}
-        </Text>
+        <Text as="b">{title}</Text>
         <Text fontSize="small">{authors.join(', ')}</Text>
         <Text as="b" alignSelf="end" mt="auto">
           {priceLabel}

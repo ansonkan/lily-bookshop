@@ -51,7 +51,7 @@ export const HighlightScene = (): JSX.Element => {
         })
       },
       {
-        threshold: 0.3,
+        threshold: 0.5,
       }
     )
 

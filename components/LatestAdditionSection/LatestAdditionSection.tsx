@@ -24,7 +24,7 @@ export const LatestAdditionSection = ({
 
     <CardBody display="flex" flexDir="row" gap={4} overflowX="scroll">
       {books.map(({ id, ...others }) => (
-        <Book key={id} w={[150, 200]} flexShrink={0} flexGrow={0} {...others} />
+        <Book key={id} w={[125, 150]} flexShrink={0} flexGrow={0} {...others} />
       ))}
     </CardBody>
   </Card>
