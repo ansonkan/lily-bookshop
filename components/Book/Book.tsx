@@ -1,6 +1,6 @@
 import type { LinkBoxProps } from '@chakra-ui/react'
 
-import { AspectRatio, LinkBox, LinkOverlay, Text } from '@chakra-ui/react'
+import { AspectRatio, Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react'
 import Image from 'next/image'
 import NextLink from 'next/link'
 
@@ -56,20 +56,15 @@ export const Book = ({
         />
       </AspectRatio>
 
-      <LinkOverlay
-        as={NextLink}
-        href={detailsLink}
-        w="full"
-        flexGrow={1}
-        display="flex"
-        flexDirection="column"
-      >
-        <Text as="b">{title}</Text>
+      <Box w="full" flexGrow={1} display="flex" flexDirection="column">
+        <LinkOverlay as={NextLink} href={detailsLink}>
+          <Text as="b">{title}</Text>
+        </LinkOverlay>
         <Text fontSize="small">{authors.join(', ')}</Text>
         <Text as="b" alignSelf="end" mt="auto">
           {priceLabel}
         </Text>
-      </LinkOverlay>
+      </Box>
     </LinkBox>
   )
 }
