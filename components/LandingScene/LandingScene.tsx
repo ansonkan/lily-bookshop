@@ -17,13 +17,17 @@ export const LandingScene = (): JSX.Element => {
   const readingBench = useRef<CreateModelResult>()
   const sunAndCloud = useRef<CreateModelResult>()
 
-  const bpConfigs = useBreakpointValue({
-    base: { zoom: 0.6, x: 0.7, y: 0.45 },
-    sm: { zoom: 0.7, x: 0.6, y: 0.4 },
-    md: { zoom: 0.8, x: 0.5, y: 0.4 },
-    lg: { zoom: 0.9, x: 0.35, y: 0.4 },
-    xl: { zoom: 1, x: 0.3, y: 0.4 },
-  })
+  const bpConfigs = useBreakpointValue(
+    {
+      base: { zoom: 0.6, x: 0.7, y: 0.45 },
+      sm: { zoom: 0.7, x: 0.6, y: 0.4 },
+      md: { zoom: 0.8, x: 0.5, y: 0.4 },
+      lg: { zoom: 0.9, x: 0.35, y: 0.4 },
+      xl: { zoom: 1, x: 0.3, y: 0.4 },
+    },
+    // disable `ssr` because `base` would be used on the first render, which might not be the correct breakpoint value
+    { ssr: false }
+  )
 
   useEffect(() => {
     if (!canvasRef.current) return
