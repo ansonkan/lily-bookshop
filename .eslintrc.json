@@ -1,7 +1,13 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": ["next/core-web-vitals", "eslint:recommended"],
   "rules": {
     "eqeqeq": "warn",
-    "no-console": "warn"
+    "no-console": "warn",
+    "sort-imports": [
+      "warn",
+      {
+        "allowSeparatedGroups": true
+      }
+    ]
   }
 }

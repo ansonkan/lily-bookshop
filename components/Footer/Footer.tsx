@@ -1,11 +1,11 @@
 import {
   Box,
   Container,
-  Heading,
-  VStack,
   HStack,
-  Text,
+  Heading,
   Link,
+  Text,
+  VStack,
 } from '@chakra-ui/react'
 import { PhoneIcon } from '@chakra-ui/icons'
 

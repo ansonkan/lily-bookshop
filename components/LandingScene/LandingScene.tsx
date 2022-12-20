@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { useBreakpointValue } from '@chakra-ui/react'
 import Zdog from 'zdog'
+import { useBreakpointValue } from '@chakra-ui/react'
 
 import {
+  CreateModelResult,
   createReadingBench,
   createSunAndCloud,
-  CreateModelResult,
 } from '@models'
 
 import styles from './styles.module.scss'

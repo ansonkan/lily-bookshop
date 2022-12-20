@@ -1,4 +1,4 @@
-import { Box, Container, Heading, HStack } from '@chakra-ui/react'
+import { Box, Container, HStack, Heading } from '@chakra-ui/react'
 
 export const Header = (): JSX.Element => (
   <Box

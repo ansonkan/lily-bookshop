@@ -1,15 +1,16 @@
 import type { AppProps } from 'next/app'
 
+import { Box, ChakraProvider } from '@chakra-ui/react'
 import Head from 'next/head'
-import { ChakraProvider, Box } from '@chakra-ui/react'
 
-import { Header, Footer } from '@components'
+import { Footer, Header } from '@components'
 import { theme } from '@theme'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <Head>
+        <title>Lily Bookshop</title>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0"

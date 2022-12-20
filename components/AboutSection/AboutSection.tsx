@@ -1,6 +1,6 @@
 import type { BoxProps } from '@chakra-ui/react'
 
-import { Box, Square, Heading, Text } from '@chakra-ui/react'
+import { Box, Heading, Square, Text } from '@chakra-ui/react'
 
 export const AboutSection = (props: BoxProps): JSX.Element => (
   <Box

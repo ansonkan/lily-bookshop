@@ -1,8 +1,8 @@
 import type { LinkBoxProps } from '@chakra-ui/react'
 
+import { AspectRatio, LinkBox, LinkOverlay, Text } from '@chakra-ui/react'
 import Image from 'next/image'
 import NextLink from 'next/link'
-import { Text, AspectRatio, LinkBox, LinkOverlay } from '@chakra-ui/react'
 
 import placeholderImageSrc from 'public/placeholder-image.png'
 

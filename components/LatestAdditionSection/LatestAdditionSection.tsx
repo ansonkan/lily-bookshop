@@ -1,9 +1,9 @@
 import type { CardProps } from '@chakra-ui/react'
 import type { RealBook } from '@types'
 
-import { Card, CardHeader, CardBody, Heading } from '@chakra-ui/react'
+import { Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
 
-import { LatestAdditionsScene, Book } from '@components'
+import { Book, LatestAdditionsScene } from '@components'
 
 import styles from './styles.module.scss'
 

@@ -1,14 +1,14 @@
-import type { NextPage, GetServerSideProps } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import type { RealBook } from '@types'
 
 import { Container, Flex } from '@chakra-ui/react'
 
 import {
+  AboutSection,
+  HighlightSection,
   LandingScene,
   LandingSection,
-  HighlightSection,
   LatestAdditionSection,
-  AboutSection,
 } from '@components'
 import { fakeBook, many } from '@utils'
 
