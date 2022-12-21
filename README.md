@@ -17,6 +17,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
     - [ ] result section
     - [ ] pagination
   - [ ] i18n ([Internationalized Routing](https://nextjs.org/docs/advanced-features/i18n-routing) + [next-i18next](https://github.com/i18next/next-i18next))
+  - [ ] Blog post list page
+  - [ ] Blog post page
 - [ ] CMS
   - [ ] create a new Directus project
   - [ ] setup a Directus webbook to sync book entries to MongoDB Atlas
@@ -31,7 +33,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
     - [ ] related books section
   - [ ] Search result page
     - [ ] result section
-- [ ] Investigate `SSR` vs `SSG` + `ISR` because Netlify doesn't support caching on `SSR` pages (https://docs.netlify.com/integrations/frameworks/next-js/overview/#limitations) and AWS Amplify seems to support that and most of the Next.js 12 & 13 features (https://aws.amazon.com/about-aws/whats-new/2022/11/aws-amplify-hosting-support-next-js-12-13/)
+- [ ] Platform
+  - [ ] Investigate `SSR` vs `SSG` + `ISR` because Netlify doesn't support caching on `SSR` pages (https://docs.netlify.com/integrations/frameworks/next-js/overview/#limitations) and AWS Amplify seems to support that and most of the Next.js 12 & 13 features (https://aws.amazon.com/about-aws/whats-new/2022/11/aws-amplify-hosting-support-next-js-12-13/)
+  - [ ] buy a domain
+  - [ ] deploy
+- [ ] Import the real books from the Lily Bookshop
 
 ## Getting Started
 
