@@ -1,9 +1,11 @@
+import type { CreateModelResult } from '@models'
+
 import { useEffect, useRef } from 'react'
 import Zdog from 'zdog'
 import { useBreakpointValue } from '@chakra-ui/react'
 
 import {
-  CreateModelResult,
+  createGradientDiscs,
   createReadingBench,
   createSunAndCloud,
 } from '@models'
@@ -16,6 +18,7 @@ export const LandingScene = (): JSX.Element => {
   const illo = useRef<Zdog.Illustration>()
   const readingBench = useRef<CreateModelResult>()
   const sunAndCloud = useRef<CreateModelResult>()
+  const gradientDiscs = useRef<CreateModelResult>()
 
   const bpConfigs = useBreakpointValue(
     {
@@ -49,6 +52,11 @@ export const LandingScene = (): JSX.Element => {
       addTo: illo.current,
       rotate: { x: Zdog.TAU / 6, z: Zdog.TAU / -8 },
     })
+
+    gradientDiscs.current = createGradientDiscs({
+      addTo: illo.current,
+    })
+
     function animate() {
       if (!isOn || !readingBench.current || !illo.current) return
 
@@ -65,31 +73,49 @@ export const LandingScene = (): JSX.Element => {
   }, [])
 
   useEffect(() => {
-    if (
-      !canvasRef.current ||
-      !readingBench.current ||
-      !sunAndCloud.current ||
-      !illo.current ||
-      !bpConfigs
-    )
-      return
+    const onResize = () => {
+      if (
+        !canvasRef.current ||
+        !readingBench.current ||
+        !sunAndCloud.current ||
+        !gradientDiscs.current ||
+        !illo.current ||
+        !bpConfigs
+      )
+        return
 
-    illo.current.zoom = bpConfigs.zoom
+      illo.current.zoom = bpConfigs.zoom
 
-    const w = canvasRef.current.clientWidth
-    const h = canvasRef.current.clientHeight
+      const w = canvasRef.current.clientWidth
+      const h = canvasRef.current.clientHeight
 
-    readingBench.current.model.translate.x = Math.min(
-      Math.max(w * bpConfigs.x, 350),
-      500
-    )
-    readingBench.current.model.translate.y = Math.max(h * bpConfigs.y * -1, 150)
+      readingBench.current.model.translate.x = Math.min(
+        Math.max(w * bpConfigs.x, 350),
+        500
+      )
+      readingBench.current.model.translate.y = Math.max(
+        h * bpConfigs.y * -1,
+        150
+      )
 
-    sunAndCloud.current.model.translate.x = Math.max(
-      Math.min(w * -bpConfigs.x, -250),
-      -500
-    )
-    sunAndCloud.current.model.translate.y = Math.min(h * bpConfigs.y * -1, -150)
+      sunAndCloud.current.model.translate.x = Math.max(
+        Math.min(w * -bpConfigs.x, -250),
+        -500
+      )
+      sunAndCloud.current.model.translate.y = Math.min(
+        h * bpConfigs.y * -1,
+        -150
+      )
+
+      gradientDiscs.current.model.translate.y = Math.min(h * -0.3, -150)
+    }
+
+    onResize()
+    window.addEventListener('resize', onResize)
+
+    return () => {
+      window.removeEventListener('resize', onResize)
+    }
   }, [bpConfigs])
 
   return <canvas ref={canvasRef} className={styles.canvas} />

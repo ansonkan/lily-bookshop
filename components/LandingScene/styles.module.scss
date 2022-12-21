@@ -7,6 +7,7 @@
   width: 100%;
   height: 100vh;
   min-height: 600px;
+  // this is kind of a dirty workaround... probably need to dig into this when it is time to polish
   max-height: 1000px;
   z-index: -1;
 }

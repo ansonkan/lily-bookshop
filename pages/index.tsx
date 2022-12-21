@@ -27,7 +27,7 @@ const HomePage: NextPage<HomePageProps> = ({
 
       <Container>
         <Flex direction="column" gap={[8, 8, 12]}>
-          <LandingSection h="80vh" minH={500} maxH={1000} />
+          <LandingSection h="80vh" minH={500} maxH={700} />
 
           <HighlightSection
             rounded="3xl"
