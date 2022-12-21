@@ -4,3 +4,4 @@ node_modules
 # next.js
 .next
 .public
+.vercel
