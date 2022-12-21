@@ -8,14 +8,14 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
     - [x] Complete the search form in the landing scene
     - [x] Complete the search form in the header. As search button that toggles the header between a search input and the header
     - [ ] Investigate the horizontal scrollbar in Windows. Might need to use [SimpleBar](https://github.com/Grsmto/simplebar/tree/master/packages/simplebar-react#1-documentation) or other workaround if it looks bad
-  - [ ] Book details page
-    - [ ] breadcrumbs
-    - [ ] details section
-    - [ ] related books section ([$search](https://www.mongodb.com/docs/atlas/atlas-search/tutorial/run-query/) + [$sample](https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/)?)
   - [ ] Search result page
     - [ ] breadcrumbs
     - [ ] result section
     - [ ] pagination
+  - [ ] Book details page
+    - [ ] breadcrumbs
+    - [ ] details section
+    - [ ] related books section ([$search](https://www.mongodb.com/docs/atlas/atlas-search/tutorial/run-query/) + [$sample](https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/)?)
   - [ ] i18n ([Internationalized Routing](https://nextjs.org/docs/advanced-features/i18n-routing) + [next-i18next](https://github.com/i18next/next-i18next))
   - [ ] Blog post list page
   - [ ] Blog post page
