@@ -1,5 +1,10 @@
 {
-  "extends": ["next/core-web-vitals", "eslint:recommended"],
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime"
+  ],
   "rules": {
     "eqeqeq": "warn",
     "no-console": "warn",
@@ -8,8 +13,14 @@
       {
         "allowSeparatedGroups": true
       }
-    ],
-    // to work around the global type `JSX`
-    "no-undef": "off"
-  }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "no-undef": "off"
+      }
+    }
+  ]
 }

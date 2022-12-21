@@ -17,7 +17,10 @@ interface HomePageProps {
   latestAdditions: RealBook[]
 }
 
-const HomePage: NextPage<HomePageProps> = ({ highlights, latestAdditions }) => {
+const HomePage: NextPage<HomePageProps> = ({
+  highlights,
+  latestAdditions,
+}: HomePageProps) => {
   return (
     <Flex direction="column" gap={4}>
       <LandingScene />
