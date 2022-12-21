@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app'
 import { Box, ChakraProvider } from '@chakra-ui/react'
 import Head from 'next/head'
 
+import './globals.scss'
 import { Footer, Header, SearchModal, SearchModalProvider } from '@components'
 import { theme } from '@theme'
 

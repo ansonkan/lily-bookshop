@@ -1,10 +1,35 @@
-import { Box, Button, Container, HStack, Heading, Kbd } from '@chakra-ui/react'
-import { useContext } from 'react'
+import {
+  Box,
+  Button,
+  Container,
+  Fade,
+  HStack,
+  Heading,
+  Kbd,
+} from '@chakra-ui/react'
+import { useContext, useEffect, useState } from 'react'
 
 import { SearchModalContext } from '../SearchModal'
 
 export const Header = (): JSX.Element => {
   const { onOpen } = useContext(SearchModalContext)
+  const [showAll, setShowAll] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY > window.innerHeight * 0.5) {
+        !showAll && setShowAll(true)
+      } else {
+        showAll && setShowAll(false)
+      }
+    }
+
+    window.addEventListener('scroll', onScroll)
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [showAll])
 
   return (
     <Box
@@ -14,25 +39,27 @@ export const Header = (): JSX.Element => {
       left="0"
       right="0"
       backdropFilter="auto"
-      backdropBlur="sm"
-      bgColor="whiteAlpha.500"
+      backdropBlur={showAll ? 'md' : 'none'}
+      bgColor={showAll ? 'whiteAlpha.800' : 'transparent'}
       borderBottom="1px"
-      borderColor="whiteAlpha.500"
+      borderColor={showAll ? 'white' : 'transparent'}
       zIndex="sticky"
+      transition="all 0.3s ease-in-out"
     >
       <Container py={4}>
         <HStack justifyContent="space-between">
           <Heading size="md">Lily Bookshop</Heading>
 
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => onOpen()}
-            // leftIcon={<SearchIcon />}
-            rightIcon={<Kbd>/</Kbd>}
-          >
-            Search
-          </Button>
+          <Fade in={showAll}>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onOpen()}
+              rightIcon={<Kbd>/</Kbd>}
+            >
+              Search
+            </Button>
+          </Fade>
         </HStack>
       </Container>
     </Box>
