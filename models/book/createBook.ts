@@ -2,9 +2,9 @@ import type { CreateModel } from '../types'
 
 import Zdog from 'zdog'
 
+import { getRandomColor, getRandomInt } from '../utils'
 import { BOOK_CLOSED_HEIGHT } from './constants'
 import { COLOR_PAIRS } from '../constants'
-import { getRandomInt, getRandomColor } from '../utils'
 
 export interface CreateBookProps extends Zdog.AnchorOptions {
   primaryColor?: string

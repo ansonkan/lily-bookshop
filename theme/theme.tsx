@@ -1,6 +1,6 @@
 // import type { StyleFunctionProps } from '@chakra-ui/styled-system'
 
-import { extendTheme, defineStyle, defineStyleConfig } from '@chakra-ui/react'
+import { defineStyle, defineStyleConfig, extendTheme } from '@chakra-ui/react'
 // import { mode } from '@chakra-ui/theme-tools'
 
 // Version 2: Using functions

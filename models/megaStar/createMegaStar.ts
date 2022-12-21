@@ -18,8 +18,8 @@ interface CreateMegaStarResult extends CreateModelResult {
 export const createMegaStar: CreateModel<
   CreateMegaStarProps,
   CreateMegaStarResult
-> = ({ colors, ...others }) => {
-  const model = new Zdog.Group(others)
+> = (props) => {
+  const model = new Zdog.Group(props)
   const stars: ReturnType<typeof createStar>[] = []
 
   const base = new Zdog.Anchor({

@@ -1,8 +1,8 @@
 import Zdog from 'zdog'
 
-import { createBook } from '../book'
 import { getRandomCoordinate, getRandomRotation } from '../utils'
 import { COLOR_PAIRS } from '../constants'
+import { createBook } from '../book'
 
 export const createBooksScene = (props: Zdog.AnchorOptions): Zdog.Anchor => {
   const scene = new Zdog.Anchor(props)

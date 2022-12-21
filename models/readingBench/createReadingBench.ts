@@ -5,7 +5,7 @@ import Zdog from 'zdog'
 import { GRASS_COORDS, TABLE_LEGS } from './constants'
 import { createBook } from '../book'
 import { createMug } from '../mug'
-import { getRandomColor, getRandomRotation } from '../utils'
+import { getRandomRotation } from '../utils'
 
 export const createReadingBench: CreateModel = (props) => {
   const model = new Zdog.Anchor(props)

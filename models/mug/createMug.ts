@@ -2,8 +2,6 @@ import type { CreateModel } from '../types'
 
 import Zdog from 'zdog'
 
-import { getRandomColor } from '../utils'
-
 const stroke = 10
 const height = 50
 const diameter = 50

@@ -1,10 +1,15 @@
 {
   "extends": [
-    "next/core-web-vitals",
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:react/jsx-runtime"
+    "plugin:react/jsx-runtime",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "next/core-web-vitals"
   ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "root": true,
   "rules": {
     "eqeqeq": "warn",
     "no-console": "warn",
@@ -22,5 +27,6 @@
         "no-undef": "off"
       }
     }
-  ]
+  ],
+  "ignorePatterns": ["scripts/**"]
 }
