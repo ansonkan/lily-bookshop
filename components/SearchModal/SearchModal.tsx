@@ -5,7 +5,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useEffect } from 'react'
 
 import { BookSearchForm } from '../BookSearchForm'
 
@@ -37,14 +37,35 @@ export const SearchModalProvider = ({ children }: SearchModalProviderProps) => {
 }
 
 export const SearchModal = (): JSX.Element => {
-  const { isOpen, onClose } = useContext(SearchModalContext)
+  const { isOpen, onOpen, onClose } = useContext(SearchModalContext)
+
+  useEffect(() => {
+    const onKeyup = (e: KeyboardEvent) => {
+      if (e.key !== '/' || e.ctrlKey || e.metaKey) return
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore - https://justincypret.com/blog/adding-a-keyboard-shortcut-for-global-search
+      const tagName: string | undefined = e.target?.tagName
+      if (tagName && /^(?:input|textarea|select|button)$/i.test(tagName)) return
+
+      e.preventDefault()
+
+      onOpen()
+    }
+
+    document.addEventListener('keyup', onKeyup)
+
+    return () => {
+      document.removeEventListener('keyup', onKeyup)
+    }
+  }, [onOpen])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay backdropFilter="auto" backdropBlur="sm" />
 
       <ModalContent>
-        <ModalBody>
+        <ModalBody p={4}>
           <BookSearchForm />
         </ModalBody>
       </ModalContent>

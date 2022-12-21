@@ -6,9 +6,9 @@ import {
   Center,
   Flex,
   Heading,
+  Kbd,
   Link,
 } from '@chakra-ui/react'
-import { SearchIcon } from '@chakra-ui/icons'
 import { useContext } from 'react'
 
 import { SearchModalContext } from '../SearchModal'
@@ -30,8 +30,9 @@ export const LandingSection = (props: CenterProps): JSX.Element => {
         <Button
           variant="outline"
           onClick={() => onOpen()}
-          leftIcon={<SearchIcon color="ButtonText" />}
-          justifyContent="flex-start"
+          // leftIcon={<SearchIcon color="ButtonText" />}
+          rightIcon={<Kbd>/</Kbd>}
+          justifyContent="space-between"
           color="chakra-placeholder-color"
           fontWeight="normal"
         >

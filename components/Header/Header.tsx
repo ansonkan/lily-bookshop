@@ -1,5 +1,4 @@
-import { Box, Button, Container, HStack, Heading } from '@chakra-ui/react'
-import { SearchIcon } from '@chakra-ui/icons'
+import { Box, Button, Container, HStack, Heading, Kbd } from '@chakra-ui/react'
 import { useContext } from 'react'
 
 import { SearchModalContext } from '../SearchModal'
@@ -29,7 +28,8 @@ export const Header = (): JSX.Element => {
             size="sm"
             variant="ghost"
             onClick={() => onOpen()}
-            leftIcon={<SearchIcon />}
+            // leftIcon={<SearchIcon />}
+            rightIcon={<Kbd>/</Kbd>}
           >
             Search
           </Button>
