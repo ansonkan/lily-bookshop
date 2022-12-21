@@ -1,3 +1,4 @@
+import type { Book } from '@types'
 import type { LinkBoxProps } from '@chakra-ui/react'
 
 import { AspectRatio, Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react'
@@ -6,27 +7,20 @@ import NextLink from 'next/link'
 
 import placeholderImageSrc from 'public/placeholder-image.png'
 
-export interface Price {
-  amount: number
-  currencyCode: string
-}
-
-export interface BookProps extends LinkBoxProps {
-  title: string
-  authors: string[]
-  price: Price
+export interface BookItemProps
+  extends Omit<LinkBoxProps, 'id' | 'title'>,
+    Book {
   detailsLink: string
-  imageLink?: string
 }
 
-export const Book = ({
+export const BookItem = ({
   title,
   authors,
   price,
   detailsLink,
   imageLink,
   ...linkBoxProps
-}: BookProps): JSX.Element => {
+}: BookItemProps): JSX.Element => {
   // `navigator.language` doesn't exist on the server side, so let's use `en-GB` for now
   const priceLabel = new Intl.NumberFormat('en-GB', {
     style: 'currency',

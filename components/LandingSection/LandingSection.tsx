@@ -6,37 +6,45 @@ import {
   Center,
   Flex,
   Heading,
-  Input,
-  InputGroup,
-  InputLeftElement,
   Link,
 } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
+import { useContext } from 'react'
 
-export const LandingSection = (props: CenterProps): JSX.Element => (
-  <Center {...props}>
-    <Flex direction="column" gap={4}>
-      <Heading
-        as="h1"
-        fontSize={['2xl', '4xl', '4xl', '5xl']}
-        textAlign="center"
-      >
-        Looking for your next book?
-      </Heading>
+import { SearchModalContext } from '../SearchModal'
 
-      <InputGroup backdropFilter="auto" backdropBlur="sm">
-        <InputLeftElement>
-          <SearchIcon />
-        </InputLeftElement>
-        <Input placeholder="A title, author, ISBN, or anything really..." />
-      </InputGroup>
+export const LandingSection = (props: CenterProps): JSX.Element => {
+  const { onOpen } = useContext(SearchModalContext)
 
-      <ButtonGroup alignSelf="center">
-        <Button as={Link} href="#about">
-          Visit us
+  return (
+    <Center {...props}>
+      <Flex direction="column" gap={4}>
+        <Heading
+          as="h1"
+          fontSize={['2xl', '4xl', '4xl', '5xl']}
+          textAlign="center"
+        >
+          Looking for your next book?
+        </Heading>
+
+        <Button
+          variant="outline"
+          onClick={() => onOpen()}
+          leftIcon={<SearchIcon color="ButtonText" />}
+          justifyContent="flex-start"
+          color="chakra-placeholder-color"
+          fontWeight="normal"
+        >
+          A title, author, ISBN, or anything really...
         </Button>
-        <Button>Check out our blog</Button>
-      </ButtonGroup>
-    </Flex>
-  </Center>
-)
+
+        <ButtonGroup alignSelf="center">
+          <Button as={Link} href="#about">
+            Visit us
+          </Button>
+          <Button>Check out our blog</Button>
+        </ButtonGroup>
+      </Flex>
+    </Center>
+  )
+}

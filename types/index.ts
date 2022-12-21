@@ -1,5 +1,12 @@
-import type { BookProps } from '@components'
+export interface Price {
+  amount: number
+  currencyCode: string
+}
 
-export interface RealBook extends BookProps {
+export interface Book {
   id: string
+  title: string
+  authors: string[]
+  price: Price
+  imageLink?: string
 }

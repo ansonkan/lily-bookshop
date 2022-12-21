@@ -1,5 +1,5 @@
 import type { GetServerSideProps, NextPage } from 'next'
-import type { RealBook } from '@types'
+import type { Book } from '@types'
 
 import { Container, Flex } from '@chakra-ui/react'
 
@@ -13,8 +13,8 @@ import {
 import { fakeBook, many } from '@utils'
 
 interface HomePageProps {
-  highlights: RealBook[]
-  latestAdditions: RealBook[]
+  highlights: Book[]
+  latestAdditions: Book[]
 }
 
 const HomePage: NextPage<HomePageProps> = ({

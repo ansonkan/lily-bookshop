@@ -1,14 +1,14 @@
+import type { Book } from '@types'
 import type { CardProps } from '@chakra-ui/react'
-import type { RealBook } from '@types'
 
 import { Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
 
-import { Book, HighlightScene } from '@components'
+import { BookItem, HighlightScene } from '@components'
 
 import styles from './styles.module.scss'
 
 export interface HighlightSectionProps extends CardProps {
-  books: RealBook[]
+  books: Book[]
 }
 
 export const HighlightSection = ({
@@ -29,8 +29,15 @@ export const HighlightSection = ({
       gap={4}
       overflowX="scroll"
     >
-      {books.map(({ id, ...others }) => (
-        <Book key={id} w={[125, 150]} flexShrink={0} flexGrow={0} {...others} />
+      {books.map((book) => (
+        <BookItem
+          key={book.id}
+          w={[125, 150]}
+          flexShrink={0}
+          flexGrow={0}
+          detailsLink={`/books/${book.id}`}
+          {...book}
+        />
       ))}
     </CardBody>
   </Card>
