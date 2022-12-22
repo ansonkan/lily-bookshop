@@ -11,7 +11,11 @@ import { useContext, useEffect, useState } from 'react'
 
 import { SearchModalContext } from '../SearchModal'
 
-export const Header = (): JSX.Element => {
+export interface HeaderProps {
+  position?: 'fixed' | 'sticky'
+}
+
+export const Header = ({ position = 'fixed' }: HeaderProps): JSX.Element => {
   const { onOpen } = useContext(SearchModalContext)
   const [showAll, setShowAll] = useState(false)
 
@@ -34,7 +38,7 @@ export const Header = (): JSX.Element => {
   return (
     <Box
       as="header"
-      position="fixed"
+      position={position}
       top="0"
       left="0"
       right="0"

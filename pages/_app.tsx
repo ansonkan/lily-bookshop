@@ -7,7 +7,7 @@ import './globals.scss'
 import { Footer, Header, SearchModal, SearchModalProvider } from 'components'
 import { theme } from 'theme'
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps, router }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <SearchModalProvider>
@@ -37,7 +37,8 @@ export default function App({ Component, pageProps }: AppProps) {
           <link rel="manifest" href="/site.webmanifest" />
         </Head>
 
-        <Header />
+        {/* home page is fine for `fixed` because of the Zdog scene setup but other pages can use a `sticky` header for easier top offset for the main `Container` */}
+        <Header position={router.pathname === '/' ? 'fixed' : 'sticky'} />
 
         <Box as="main" minH="100vh" overflowX="hidden" pb={20}>
           <Component {...pageProps} />

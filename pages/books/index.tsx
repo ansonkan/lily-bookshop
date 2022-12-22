@@ -25,8 +25,7 @@ const BooksPage: NextPage<BooksPageProps> = ({
   query,
 }: BooksPageProps) => {
   return (
-    // might need to find a responsive way to offset the `Header`'s height
-    <Container mt={100}>
+    <Container>
       <Flex direction="column" gap={4}>
         <Breadcrumb separator={<ChevronRightIcon color="gray.500" />}>
           <BreadcrumbItem>
