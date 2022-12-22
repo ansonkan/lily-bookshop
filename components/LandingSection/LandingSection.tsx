@@ -30,7 +30,6 @@ export const LandingSection = (props: CenterProps): JSX.Element => {
         <Button
           variant="outline"
           onClick={() => onOpen()}
-          // leftIcon={<SearchIcon color="ButtonText" />}
           rightIcon={<Kbd>/</Kbd>}
           justifyContent="space-between"
           color="chakra-placeholder-color"

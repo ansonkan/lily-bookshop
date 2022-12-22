@@ -40,6 +40,7 @@ export const SearchModal = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useContext(SearchModalContext)
 
   useEffect(() => {
+    // this doesn't work for mobile but don't know what to fallback to
     const onKeyup = (e: KeyboardEvent) => {
       if (e.key !== '/' || e.ctrlKey || e.metaKey) return
 

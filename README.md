@@ -3,11 +3,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## todo
 
 - [ ] UI
-  - [ ] Home page
+  - [x] Home page
     - [x] Add a soft background to the landing scene to try to make it less bleak
     - [x] Complete the search form in the landing scene
     - [x] Complete the search form in the header. As search button that toggles the header between a search input and the header
-    - [ ] Investigate the horizontal scrollbar in Windows. Might need to use [SimpleBar](https://github.com/Grsmto/simplebar/tree/master/packages/simplebar-react#1-documentation) or other workaround if it looks bad
+    - [x] Investigate the horizontal scrollbar in Windows. Might need to use [SimpleBar](https://github.com/Grsmto/simplebar/tree/master/packages/simplebar-react#1-documentation) or other workaround if it looks bad
   - [ ] Search result page
     - [ ] breadcrumbs
     - [ ] result section

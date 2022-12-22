@@ -17,6 +17,6 @@ pre-commit:
       run: npm run lint {staged_files}
     tsc:
       glob: '*.{js,ts,jsx,tsx}'
-      run: npm run type-check {staged_files}
+      run: npm run type-check
     prettier:
       run: npm run format:check
