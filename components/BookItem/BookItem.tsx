@@ -1,4 +1,4 @@
-import type { Book } from '@types'
+import type { Book } from 'types'
 import type { LinkBoxProps } from '@chakra-ui/react'
 
 import { AspectRatio, Box, LinkBox, LinkOverlay, Text } from '@chakra-ui/react'

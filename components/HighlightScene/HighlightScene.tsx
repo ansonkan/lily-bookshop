@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import Zdog from 'zdog'
 
-import { createMegaStar } from '@models'
+import { createMegaStar } from 'models'
 
 import styles from './styles.module.scss'
 

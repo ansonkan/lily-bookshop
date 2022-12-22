@@ -1,5 +1,5 @@
 import type { GetServerSideProps, NextPage } from 'next'
-import type { Book } from '@types'
+import type { Book } from 'types'
 
 import {
   Breadcrumb,
@@ -12,8 +12,8 @@ import {
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
 
-import { fakeBook, many } from '@utils'
-import { BookItem } from '@components'
+import { fakeBook, many } from 'utils'
+import { BookItem } from 'components'
 
 interface BooksPageProps {
   books: Book[]

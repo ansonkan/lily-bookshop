@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import Zdog from 'zdog'
 
-import { createNewBooks } from '@models'
+import { createNewBooks } from 'models'
 
 import styles from './styles.module.scss'
 

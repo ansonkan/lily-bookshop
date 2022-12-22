@@ -2,3 +2,28 @@ html,
 body {
   overscroll-behavior: none;
 }
+
+.my-scrollbar {
+  cursor: grab;
+
+  ::-webkit-scrollbar {
+    width: 0.7em;
+    height: 0.7em;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(95, 95, 95, 0.1);
+    border-radius: 100vw;
+    margin-block: 0.5em;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(95, 95, 95, 0.3);
+    // border: 0.25em solid rgba(95, 95, 95, 0.1);
+    border-radius: 100vw;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(95, 95, 95, 0.5);
+  }
+}

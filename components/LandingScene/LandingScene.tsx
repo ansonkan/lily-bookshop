@@ -1,4 +1,4 @@
-import type { CreateModelResult } from '@models'
+import type { CreateModelResult } from 'models'
 
 import { useEffect, useRef } from 'react'
 import Zdog from 'zdog'
@@ -8,7 +8,7 @@ import {
   createGradientDiscs,
   createReadingBench,
   createSunAndCloud,
-} from '@models'
+} from 'models'
 
 import styles from './styles.module.scss'
 

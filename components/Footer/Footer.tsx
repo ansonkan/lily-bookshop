@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 import { PhoneIcon } from '@chakra-ui/icons'
 
-import { MapPinIcon } from '@components'
+import { MapPinIcon } from 'components'
 
 export const Footer = (): JSX.Element => (
   <Box as="footer" bgColor="purple.800" color="white">

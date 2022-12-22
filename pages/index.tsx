@@ -1,5 +1,5 @@
 import type { GetServerSideProps, NextPage } from 'next'
-import type { Book } from '@types'
+import type { Book } from 'types'
 
 import { Container, Flex } from '@chakra-ui/react'
 
@@ -9,8 +9,8 @@ import {
   LandingScene,
   LandingSection,
   LatestAdditionSection,
-} from '@components'
-import { fakeBook, many } from '@utils'
+} from 'components'
+import { fakeBook, many } from 'utils'
 
 interface HomePageProps {
   highlights: Book[]
