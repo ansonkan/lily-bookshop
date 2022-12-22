@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --max-warnings 0",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint --max-warnings 0",
+    "lint:fix": "eslint --fix",
     "type-check": "tsc --noEmit",
     "format": "prettier -w .",
     "format:check": "prettier -c ."
@@ -38,6 +38,7 @@
     "eslint-config-next": "13.0.6",
     "eslint-plugin-react": "7.31.11",
     "eslint-plugin-unused-imports": "2.0.0",
+    "lefthook": "1.2.6",
     "prettier": "2.8.1",
     "sass": "1.56.2"
   }
