@@ -46,7 +46,7 @@ export const Header = (): JSX.Element => {
       zIndex="sticky"
       transition="all 0.3s ease-in-out"
     >
-      <Container py={4}>
+      <Container py={[2, 4]}>
         <HStack justifyContent="space-between">
           <Heading size="md">Lily Bookshop</Heading>
 
