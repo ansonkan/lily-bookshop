@@ -1,8 +1,8 @@
-import type { RealBook } from '@types'
+import type { Book } from '@types'
 
 import { faker } from '@faker-js/faker'
 
-export const fakeBook = (): RealBook => {
+export const fakeBook = (): Book => {
   const id = faker.datatype.uuid()
 
   return {
@@ -16,7 +16,6 @@ export const fakeBook = (): RealBook => {
       amount: faker.datatype.number({ min: 20, max: 500 }),
       currencyCode: 'HKD',
     },
-    detailsLink: `/book/${id}`,
   }
 }
 
