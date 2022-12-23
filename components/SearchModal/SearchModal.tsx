@@ -66,7 +66,7 @@ export const SearchModal = (): JSX.Element => {
       <ModalOverlay backdropFilter="auto" backdropBlur="sm" />
 
       <ModalContent>
-        <ModalBody p={4}>
+        <ModalBody>
           <BookSearchForm />
         </ModalBody>
       </ModalContent>

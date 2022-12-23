@@ -12,6 +12,7 @@ export const fakeBook = (): Book => {
       faker.name.fullName,
       faker.datatype.number({ min: 1, max: 2 })
     ),
+    description: faker.lorem.paragraphs(),
     price: {
       amount: faker.datatype.number({ min: 20, max: 500 }),
       currencyCode: 'HKD',

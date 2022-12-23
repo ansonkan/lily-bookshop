@@ -8,6 +8,7 @@ import {
   Container,
   Flex,
   Text,
+  VStack,
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
@@ -41,16 +42,18 @@ const BooksPage: NextPage<BooksPageProps> = ({
 
         <Text>{JSON.stringify(query)}</Text>
 
-        {books.map((book) => (
-          <BookItem
-            key={book.id}
-            w={[125, 150]}
-            flexShrink={0}
-            flexGrow={0}
-            detailsLink={`/books/${book.id}`}
-            {...book}
-          />
-        ))}
+        <VStack gap={[2, 4]}>
+          {books.map((book) => (
+            <BookItem
+              variant="detailed"
+              key={book.id}
+              flexShrink={0}
+              flexGrow={0}
+              detailsLink={`/books/${book.id}`}
+              {...book}
+            />
+          ))}
+        </VStack>
       </Flex>
     </Container>
   )
@@ -63,7 +66,7 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
 }) => {
   return {
     props: {
-      books: many(fakeBook),
+      books: many(fakeBook, 20),
       query,
     },
   }

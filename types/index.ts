@@ -8,5 +8,6 @@ export interface Book {
   title: string
   authors: string[]
   price: Price
+  description: string
   imageLink?: string
 }
