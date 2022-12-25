@@ -8,10 +8,10 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
     - [x] Complete the search form in the landing scene
     - [x] Complete the search form in the header. As search button that toggles the header between a search input and the header
     - [x] Investigate the horizontal scrollbar in Windows. Might need to use [SimpleBar](https://github.com/Grsmto/simplebar/tree/master/packages/simplebar-react#1-documentation) or other workaround if it looks bad
-  - [ ] Search result page
-    - [ ] breadcrumbs
-    - [ ] result section
-    - [ ] pagination
+  - [x] Search result page
+    - [x] breadcrumbs
+    - [x] result section
+    - [x] pagination
   - [ ] Book details page
     - [ ] breadcrumbs
     - [ ] details section
