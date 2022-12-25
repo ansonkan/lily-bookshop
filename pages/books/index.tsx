@@ -5,7 +5,6 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  Container,
   Flex,
   VStack,
 } from '@chakra-ui/react'
@@ -14,6 +13,7 @@ import NextLink from 'next/link'
 
 import { BookItem, Pagination } from 'components'
 import { fakeBook, many } from 'utils'
+import { BaseLayout } from 'layouts'
 
 interface BooksPageQuery {
   q?: string
@@ -34,7 +34,7 @@ const BooksPage: NextPage<BooksPageProps> = ({
   total,
 }: BooksPageProps) => {
   return (
-    <Container>
+    <BaseLayout>
       <Flex direction="column" gap={4}>
         <Breadcrumb separator={<ChevronRightIcon color="gray.500" />}>
           <BreadcrumbItem>
@@ -81,7 +81,7 @@ const BooksPage: NextPage<BooksPageProps> = ({
           />
         </Flex>
       </Flex>
-    </Container>
+    </BaseLayout>
   )
 }
 
