@@ -4,6 +4,9 @@
     "en": "English",
     "zh-HK": "繁中"
   },
+  "book-search-form": {
+    "placeholder": "A title, author, ISBN, or anything really..."
+  },
   "landing-section": {
     "heading": "Looking for your next book?",
     "search-button": "A title, author, ISBN, or anything really...",
@@ -28,6 +31,19 @@
       "line1": "Room F-G, 1st Floor, Kai Fung Mansion",
       "line2": "189-205 Queen’s Road, Central, Sheung Wan",
       "line3": "Hong Kong"
+    }
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "books": "Books"
+  },
+  "pagination": {
+    "first": "First",
+    "last": "Last"
+  },
+  "book-detailed-page": {
+    "related-books": {
+      "heading": "Related Books"
     }
   }
 }

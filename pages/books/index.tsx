@@ -10,6 +10,8 @@ import {
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 import { BookItem, Pagination } from 'components'
 import { fakeBook, many } from 'utils'
@@ -33,6 +35,8 @@ const BooksPage: NextPage<BooksPageProps> = ({
   books,
   total,
 }: BooksPageProps) => {
+  const { t } = useTranslation('common')
+
   return (
     <BaseLayout defaultValue={query.q}>
       <Breadcrumb
@@ -41,12 +45,12 @@ const BooksPage: NextPage<BooksPageProps> = ({
       >
         <BreadcrumbItem>
           <BreadcrumbLink href="/" as={NextLink}>
-            Home
+            {t('breadcrumb.home')}
           </BreadcrumbLink>
         </BreadcrumbItem>
 
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink>Books</BreadcrumbLink>
+          <BreadcrumbLink>{t('breadcrumb.books')}</BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
 
@@ -63,23 +67,7 @@ const BooksPage: NextPage<BooksPageProps> = ({
       </VStack>
 
       <Flex justifyContent="center">
-        <Pagination
-          page={query.page}
-          limit={query.limit}
-          total={total}
-          getLink={(page) => {
-            const { q, limit } = query
-            const searchParams = new URLSearchParams({
-              page: page + '',
-              limit: limit + '',
-            })
-            if (q) searchParams.append('q', q)
-
-            searchParams.sort()
-
-            return `/books?${searchParams.toString()}`
-          }}
-        />
+        <Pagination page={query.page} limit={query.limit} total={total} />
       </Flex>
     </BaseLayout>
   )
@@ -91,6 +79,7 @@ const LIMIT = 20
 
 export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
   query,
+  locale,
 }) => {
   const { q = '', page = '1' } = query
 
@@ -104,8 +93,11 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
 
   const books = many(fakeBook, LIMIT)
 
+  const translations = await serverSideTranslations(locale ?? 'en', ['common'])
+
   return {
     props: {
+      ...translations,
       books,
       query: {
         q,

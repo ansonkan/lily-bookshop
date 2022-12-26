@@ -16,9 +16,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
     - [x] breadcrumbs
     - [x] details section
     - [x] related books section ([$search](https://www.mongodb.com/docs/atlas/atlas-search/tutorial/run-query/) + [$sample](https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/)?)
-  - [ ] i18n
+  - [x] i18n
     - [x] initial setup ([Internationalized Routing](https://nextjs.org/docs/advanced-features/i18n-routing) + [next-i18next](https://github.com/i18next/next-i18next))
-    - [ ] verify the existing links are working with the i18n setup
+    - [x] verify the existing links are working with the i18n setup
   - [ ] Blog post list page
   - [ ] Blog post page
 - [ ] CMS

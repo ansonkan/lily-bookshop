@@ -4,6 +4,9 @@
     "en": "English",
     "zh-HK": "繁中"
   },
+  "book-search-form": {
+    "placeholder": "書名、作者、ISBN 或咩都可以"
+  },
   "landing-section": {
     "heading": "搵緊下一本書？",
     "search-button": "書名、作者、ISBN 或咩都可以",
@@ -28,6 +31,20 @@
       "line1": "香港上環",
       "line2": "皇后大道中189-205號",
       "line3": "啓豐大廈1樓F-G室"
+    }
+  },
+  "breadcrumb": {
+    "home": "主頁",
+    "books": "圖書"
+  },
+  "pagination": {
+    "first": "第一頁",
+    "last": "最後一頁"
+  },
+  "book-detailed-page": {
+    "description": "摘要",
+    "related-books": {
+      "heading": "相關圖書"
     }
   }
 }

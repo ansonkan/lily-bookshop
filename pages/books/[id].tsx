@@ -10,6 +10,8 @@ import {
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 import { fakeBook, many } from 'utils'
 import { BaseLayout } from 'layouts'
@@ -24,6 +26,8 @@ const BookPage: NextPage<BookPageProps> = ({
   book,
   moreBooks,
 }: BookPageProps) => {
+  const { t } = useTranslation('common')
+
   return (
     <BaseLayout>
       <Breadcrumb
@@ -32,13 +36,13 @@ const BookPage: NextPage<BookPageProps> = ({
       >
         <BreadcrumbItem>
           <BreadcrumbLink href="/" as={NextLink}>
-            Home
+            {t('breadcrumb.home')}
           </BreadcrumbLink>
         </BreadcrumbItem>
 
         <BreadcrumbItem>
           <BreadcrumbLink href="/books" as={NextLink}>
-            Books
+            {t('breadcrumb.books')}
           </BreadcrumbLink>
         </BreadcrumbItem>
 
@@ -51,7 +55,9 @@ const BookPage: NextPage<BookPageProps> = ({
 
       {moreBooks.length && (
         <VStack gap={[2, 4]} alignItems="stretch" mt={[8, 16]}>
-          <Heading size="md">More books related books</Heading>
+          <Heading size="md">
+            {t('book-detailed-page.related-books.heading')}
+          </Heading>
 
           {moreBooks.map((book) => (
             <BookItem
@@ -73,14 +79,18 @@ export default BookPage
 export const getServerSideProps: GetServerSideProps<
   BookPageProps,
   { id: string }
-> = async ({ params }) => {
-  if (!params?.id)
+> = async ({ params, locale }) => {
+  if (!params?.id) {
     return {
       notFound: true,
     }
+  }
+
+  const translations = await serverSideTranslations(locale ?? 'en', ['common'])
 
   return {
     props: {
+      ...translations,
       book: { ...fakeBook(), id: params?.id },
       moreBooks: many(fakeBook, 3),
     },
