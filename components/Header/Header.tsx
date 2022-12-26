@@ -12,16 +12,24 @@ import { useContext, useEffect, useState } from 'react'
 import { SearchModalContext } from '../SearchModal'
 
 export interface HeaderProps {
-  position?: 'fixed' | 'sticky'
+  showAllThreshold?: number
+  showAllThresholdRatio?: number
 }
 
-export const Header = ({ position = 'fixed' }: HeaderProps): JSX.Element => {
+export const Header = ({
+  showAllThreshold,
+  showAllThresholdRatio = 0.5,
+}: HeaderProps): JSX.Element => {
   const { onOpen } = useContext(SearchModalContext)
   const [showAll, setShowAll] = useState(false)
 
   useEffect(() => {
     const onScroll = () => {
-      if (window.scrollY > window.innerHeight * 0.5) {
+      const threshold = showAllThreshold
+        ? showAllThreshold
+        : window.innerHeight * showAllThresholdRatio
+
+      if (window.scrollY > threshold) {
         !showAll && setShowAll(true)
       } else {
         showAll && setShowAll(false)
@@ -33,12 +41,12 @@ export const Header = ({ position = 'fixed' }: HeaderProps): JSX.Element => {
     return () => {
       window.removeEventListener('scroll', onScroll)
     }
-  }, [showAll])
+  }, [showAll, showAllThreshold, showAllThresholdRatio])
 
   return (
     <Box
       as="header"
-      position={position}
+      position="fixed"
       top="0"
       left="0"
       right="0"

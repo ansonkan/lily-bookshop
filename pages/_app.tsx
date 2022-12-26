@@ -2,12 +2,15 @@ import type { AppProps } from 'next/app'
 
 import { Box, ChakraProvider } from '@chakra-ui/react'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 
 import './globals.scss'
 import { Footer, Header, SearchModal, SearchModalProvider } from 'components'
 import { theme } from 'theme'
 
 export default function App({ Component, pageProps }: AppProps) {
+  const { pathname } = useRouter()
+
   return (
     <ChakraProvider theme={theme}>
       <SearchModalProvider>
@@ -37,9 +40,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <link rel="manifest" href="/site.webmanifest" />
         </Head>
 
-        {/* home page is fine for `fixed` because of the Zdog scene setup but other pages can use a `sticky` header for easier top offset for the main `Container` */}
-        {/* <Header position={router.pathname === '/' ? 'fixed' : 'sticky'} /> */}
-        <Header />
+        <Header showAllThreshold={pathname === '/' ? undefined : 50} />
 
         <Box as="main" minH="100vh" overflowX="hidden" pb={20}>
           <Component {...pageProps} />
