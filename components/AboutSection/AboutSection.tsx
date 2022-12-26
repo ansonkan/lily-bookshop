@@ -2,9 +2,28 @@ import type { BoxProps } from '@chakra-ui/react'
 
 import { Box, Heading, Square, Text } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'next-i18next'
+import { useEffect, useState } from 'react'
 
 export const AboutSection = (props: BoxProps): JSX.Element => {
   const { t, i18n } = useTranslation('common')
+
+  const [mapVisible, setMapVisible] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => {
+      // `500` is just a arbitrary number, just wanted to show/load the map what user starts to scroll down
+      if (window.scrollY > 500) {
+        !mapVisible && setMapVisible(true)
+      }
+    }
+
+    onScroll()
+    window.addEventListener('scroll', onScroll)
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [mapVisible])
 
   return (
     <Box
@@ -42,9 +61,14 @@ export const AboutSection = (props: BoxProps): JSX.Element => {
         loading="lazy"
         allowFullScreen
         referrerPolicy="no-referrer-when-downgrade"
-        src={`https://www.google.com/maps/embed/v1/place?key=${
-          process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-        }&q=Lily+Bookshop,Hong+Kong&language=${i18n.language ?? 'en'}`}
+        src={
+          mapVisible
+            ? `https://www.google.com/maps/embed/v1/place?key=${
+                process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+              }&q=Lily+Bookshop,Hong+Kong&language=${i18n.language ?? 'en'}`
+            : undefined
+        }
+        bgColor="gray.100"
       />
     </Box>
   )
