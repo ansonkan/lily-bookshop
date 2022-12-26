@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import Zdog from 'zdog'
 
 import { createNewBooks } from 'models'
+import { throttle } from 'utils'
 
 import styles from './styles.module.scss'
 
@@ -9,7 +10,7 @@ export const LatestAdditionsScene = (): JSX.Element => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const illo = useRef<Zdog.Illustration>()
-  const megaStar = useRef<ReturnType<typeof createNewBooks>>()
+  const newBooks = useRef<ReturnType<typeof createNewBooks>>()
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -22,16 +23,17 @@ export const LatestAdditionsScene = (): JSX.Element => {
       dragRotate: true,
     })
 
-    megaStar.current = createNewBooks({
+    newBooks.current = createNewBooks({
       addTo: illo.current,
       rotate: { x: Zdog.TAU / 6, z: Zdog.TAU / 8 },
     })
+    const throttledSpin = throttle(newBooks.current.spin, 5000)
 
     const onResize = () => {
-      if (!megaStar.current || !canvasRef.current) return
+      if (!newBooks.current || !canvasRef.current) return
 
-      megaStar.current.model.translate.x = canvasRef.current.clientWidth / 2.5
-      megaStar.current.model.translate.y = canvasRef.current.clientHeight / -2
+      newBooks.current.model.translate.x = canvasRef.current.clientWidth / 2.5
+      newBooks.current.model.translate.y = canvasRef.current.clientHeight / -2
     }
 
     onResize()
@@ -43,10 +45,10 @@ export const LatestAdditionsScene = (): JSX.Element => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             if (!hasAppeared) {
-              megaStar.current?.appear()
+              newBooks.current?.appear()
               hasAppeared = true
             } else {
-              megaStar.current?.spin()
+              throttledSpin()
             }
           }
         })
@@ -59,7 +61,7 @@ export const LatestAdditionsScene = (): JSX.Element => {
     observer.observe(canvasRef.current)
 
     function animate() {
-      if (!isOn || !megaStar.current || !illo.current) return
+      if (!isOn || !newBooks.current || !illo.current) return
 
       illo.current.updateRenderGraph()
       requestAnimationFrame(animate)

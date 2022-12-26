@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import Zdog from 'zdog'
 
 import { createMegaStar } from 'models'
+import { throttle } from 'utils'
 
 import styles from './styles.module.scss'
 
@@ -25,6 +26,7 @@ export const HighlightScene = (): JSX.Element => {
       addTo: illo.current,
       rotate: { x: Zdog.TAU / -15, y: Zdog.TAU / 10 },
     })
+    const throttledSpin = throttle(megaStar.current.spin, 5000)
 
     const onResize = () => {
       if (!megaStar.current || !canvasRef.current) return
@@ -45,7 +47,7 @@ export const HighlightScene = (): JSX.Element => {
               megaStar.current?.appear()
               hasAppeared = true
             } else {
-              megaStar.current?.spin()
+              throttledSpin()
             }
           }
         })
