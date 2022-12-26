@@ -12,10 +12,10 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
     - [x] breadcrumbs
     - [x] result section
     - [x] pagination
-  - [ ] Book details page
-    - [ ] breadcrumbs
-    - [ ] details section
-    - [ ] related books section ([$search](https://www.mongodb.com/docs/atlas/atlas-search/tutorial/run-query/) + [$sample](https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/)?)
+  - [x] Book details page
+    - [x] breadcrumbs
+    - [x] details section
+    - [x] related books section ([$search](https://www.mongodb.com/docs/atlas/atlas-search/tutorial/run-query/) + [$sample](https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/)?)
   - [ ] i18n ([Internationalized Routing](https://nextjs.org/docs/advanced-features/i18n-routing) + [next-i18next](https://github.com/i18next/next-i18next))
   - [ ] Blog post list page
   - [ ] Blog post page
