@@ -1,5 +1,6 @@
 import type { Book } from 'types'
 import type { CardProps } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 
 import { BookScrollXCard, HighlightScene } from 'components'
 
@@ -12,13 +13,17 @@ export interface HighlightSectionProps extends CardProps {
 export const HighlightSection = ({
   books,
   ...cardProps
-}: HighlightSectionProps): JSX.Element => (
-  <BookScrollXCard
-    {...cardProps}
-    heading="Latest Additions"
-    books={books}
-    headingClassName={styles.heading}
-  >
-    <HighlightScene />
-  </BookScrollXCard>
-)
+}: HighlightSectionProps): JSX.Element => {
+  const { t } = useTranslation('common')
+
+  return (
+    <BookScrollXCard
+      {...cardProps}
+      heading={t('highlight-section.heading')}
+      books={books}
+      headingClassName={styles.heading}
+    >
+      <HighlightScene />
+    </BookScrollXCard>
+  )
+}

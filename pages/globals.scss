@@ -30,10 +30,10 @@ body {
 
 .hidden {
   opacity: 0;
-  transition: all 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .visible {
   opacity: 1;
-  transition: all 0.2s ease;
+  transition: opacity 0.2s ease;
 }

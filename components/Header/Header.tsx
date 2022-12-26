@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  ButtonGroup,
   Container,
   Fade,
   HStack,
@@ -8,7 +9,9 @@ import {
   Kbd,
 } from '@chakra-ui/react'
 import { useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
+import { LocaleSwitcher } from '../LocaleSwitcher'
 import { SearchModalContext } from '../SearchModal'
 
 export interface HeaderProps {
@@ -20,6 +23,7 @@ export const Header = ({
   showAllThreshold,
   showAllThresholdRatio = 0.5,
 }: HeaderProps): JSX.Element => {
+  const { t } = useTranslation('common')
   const { onOpen } = useContext(SearchModalContext)
   const [showAll, setShowAll] = useState(false)
 
@@ -61,18 +65,22 @@ export const Header = ({
     >
       <Container py={[2, 4]}>
         <HStack justifyContent="space-between">
-          <Heading size="md">Lily Bookshop</Heading>
+          <Heading size="md">{t('header.heading')}</Heading>
 
-          <Fade in={showAll}>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => onOpen()}
-              rightIcon={<Kbd>/</Kbd>}
-            >
-              Search
-            </Button>
-          </Fade>
+          <ButtonGroup>
+            <Fade in={showAll}>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => onOpen()}
+                rightIcon={<Kbd>/</Kbd>}
+              >
+                {t('header.search-button')}
+              </Button>
+            </Fade>
+
+            <LocaleSwitcher />
+          </ButtonGroup>
         </HStack>
       </Container>
     </Box>

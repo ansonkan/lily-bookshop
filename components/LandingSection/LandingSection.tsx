@@ -10,10 +10,12 @@ import {
   Link,
 } from '@chakra-ui/react'
 import { useContext } from 'react'
+import { useTranslation } from 'next-i18next'
 
 import { SearchModalContext } from '../SearchModal'
 
 export const LandingSection = (props: CenterProps): JSX.Element => {
+  const { t } = useTranslation('common')
   const { onOpen } = useContext(SearchModalContext)
 
   return (
@@ -24,7 +26,7 @@ export const LandingSection = (props: CenterProps): JSX.Element => {
           fontSize={['2xl', '4xl', '4xl', '5xl']}
           textAlign="center"
         >
-          Looking for your next book?
+          {t('landing-section.heading')}
         </Heading>
 
         <Button
@@ -35,14 +37,14 @@ export const LandingSection = (props: CenterProps): JSX.Element => {
           color="chakra-placeholder-color"
           fontWeight="normal"
         >
-          A title, author, ISBN, or anything really...
+          {t('landing-section.search-button')}
         </Button>
 
         <ButtonGroup alignSelf="center">
           <Button as={Link} href="#about">
-            Visit us
+            {t('landing-section.visit-us-button')}
           </Button>
-          <Button>Check out our blog</Button>
+          <Button>{t('landing-section.blog-button')}</Button>
         </ButtonGroup>
       </Flex>
     </Center>
