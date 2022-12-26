@@ -84,9 +84,8 @@ const BooksPage: NextPage<BooksPageProps> = ({
             <BookItem
               variant="detailed"
               key={book.id}
-              flexShrink={0}
-              flexGrow={0}
               detailsLink={`/books/${book.id}`}
+              noOfLines={4}
               {...book}
             />
           ))}
@@ -123,7 +122,7 @@ const LIMIT = 20
 export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
   query,
 }) => {
-  const { q, page = '1' } = query
+  const { q = '', page = '1' } = query
 
   // need to investigate how `ParsedUrlQuery` works, for now just expect all parameters to be `string`
   if (typeof page !== 'string' || typeof q !== 'string')

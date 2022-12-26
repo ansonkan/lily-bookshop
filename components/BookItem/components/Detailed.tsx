@@ -17,6 +17,7 @@ export const Detailed = ({
   priceLabel,
   detailsLink,
   imageLink,
+  noOfLines,
   ...linkBoxProps
 }: DetailedProps): JSX.Element => (
   <LinkBox as="article" display="flex" flexDir="row" gap={2} {...linkBoxProps}>
@@ -38,7 +39,7 @@ export const Detailed = ({
         <Text fontSize="small">{authors.join(', ')}</Text>
       </Box>
 
-      <VStack alignItems="flex-start">
+      <VStack alignItems="flex-start" noOfLines={noOfLines}>
         {description.split('\n').map((paragraph, i) => (
           <Text fontSize="small" key={i}>
             {paragraph}
