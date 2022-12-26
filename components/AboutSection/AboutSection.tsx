@@ -4,7 +4,7 @@ import { Box, Heading, Square, Text } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'next-i18next'
 
 export const AboutSection = (props: BoxProps): JSX.Element => {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
 
   return (
     <Box
@@ -42,7 +42,9 @@ export const AboutSection = (props: BoxProps): JSX.Element => {
         loading="lazy"
         allowFullScreen
         referrerPolicy="no-referrer-when-downgrade"
-        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=Lily+Bookshop,Hong+Kong`}
+        src={`https://www.google.com/maps/embed/v1/place?key=${
+          process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+        }&q=Lily+Bookshop,Hong+Kong&language=${i18n.language ?? 'en'}`}
       />
     </Box>
   )
