@@ -2,13 +2,14 @@ import type { AppProps } from 'next/app'
 
 import { Box, ChakraProvider } from '@chakra-ui/react'
 import Head from 'next/head'
+import { appWithTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 
 import './globals.scss'
 import { Footer, Header, SearchModal, SearchModalProvider } from 'components'
 import { theme } from 'theme'
 
-export default function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter()
 
   return (
@@ -53,3 +54,5 @@ export default function App({ Component, pageProps }: AppProps) {
     </ChakraProvider>
   )
 }
+
+export default appWithTranslation(App)

@@ -1,0 +1,32 @@
+{
+  "locale-switcher": {
+    "en": "English",
+    "zh-HK": "繁中"
+  },
+  "landing-section": {
+    "heading": "搵緊下一本書？",
+    "search-button": "書名、作者、ISBN 或咩都可以",
+    "visit-us-button": "親自拜訪",
+    "blog-button": "睇我哋個Blog"
+  },
+  "highlight-section": {
+    "heading": "焦點"
+  },
+  "latest-addition-section": {
+    "heading": "最新"
+  },
+  "about-section": {
+    "heading": "我哋係有<0>格調</0>嘅二手書店",
+    "main": "稀有書籍、超大書籍、小說、攝影、兒童、藝術同好多其他類型嘅書籍。我們有英文、中文、日文和其他歐洲書籍。請隨時與我們聯繫或訪問本店！"
+  },
+  "header": { "heading": "莉莉書屋", "search-button": "搜尋" },
+  "footer": {
+    "heading": "莉莉書屋",
+    "tel": { "href": "tel:85269775833", "string": "+852 6977 5833" },
+    "address": {
+      "line1": "香港上環",
+      "line2": "皇后大道中189-205號",
+      "line3": "啓豐大廈1樓F-G室"
+    }
+  }
+}

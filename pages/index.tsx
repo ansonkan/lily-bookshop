@@ -2,6 +2,7 @@ import type { GetServerSideProps, NextPage } from 'next'
 import type { Book } from 'types'
 
 import { Container, Flex } from '@chakra-ui/react'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import {
   AboutSection,
@@ -65,6 +66,7 @@ export default HomePage
 
 export const getServerSideProps: GetServerSideProps<HomePageProps> = async ({
   res,
+  locale,
 }) => {
   // const apiUrl = process.env.API_URL
 
@@ -81,8 +83,11 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> = async ({
   //   fetch(`${apiUrl}/books?limit=6&sort=average_rating&order=desc`),
   // ])
 
+  const translations = await serverSideTranslations(locale ?? 'en', ['common'])
+
   return {
     props: {
+      ...translations,
       highlights: many(fakeBook, 12),
       latestAdditions: many(fakeBook, 12),
     },

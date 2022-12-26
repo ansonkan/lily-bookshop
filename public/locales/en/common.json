@@ -1,0 +1,32 @@
+{
+  "locale-switcher": {
+    "en": "English",
+    "zh-HK": "繁中"
+  },
+  "landing-section": {
+    "heading": "Looking for your next book?",
+    "search-button": "A title, author, ISBN, or anything really...",
+    "visit-us-button": "Visit us",
+    "blog-button": "Check out our blog"
+  },
+  "highlight-section": {
+    "heading": "Highlights"
+  },
+  "latest-addition-section": {
+    "heading": "Latest Additions"
+  },
+  "about-section": {
+    "heading": "We are a second hand bookshop with <0>Style</0>",
+    "main": "Rare books, oversized books, novels, photography, children, art and many others. We have English, Chinese, Japanese and other European books. Please feel free to contact us or visit us!"
+  },
+  "header": { "heading": "Lily Bookshop", "search-button": "Search" },
+  "footer": {
+    "heading": "Lily Bookshop",
+    "tel": { "href": "tel:85269775833", "string": "+852 6977 5833" },
+    "address": {
+      "line1": "Room F-G, 1st Floor, Kai Fung Mansion",
+      "line2": "189-205 Queen’s Road, Central, Sheung Wan",
+      "line3": "Hong Kong"
+    }
+  }
+}
