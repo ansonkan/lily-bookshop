@@ -12,7 +12,8 @@ export const BaseLayout = ({
   children,
 }: BaseLayoutProps): JSX.Element => (
   <Box>
-    <Box position="relative" h={[150, 200]} bgColor="GrayText">
+    {/* the `bgColor` is the same from `BaseLayoutScene` to workaround the blank bg before the `appear` animation */}
+    <Box position="relative" h={[150, 200]} bgColor="#fbf8cc">
       <BaseLayoutScene />
       {slotTop}
     </Box>

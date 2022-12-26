@@ -11,6 +11,7 @@ interface CreateNewBooksProps extends Zdog.AnchorOptions {
   colors?: string[]
   columns?: number
   booksPerColumn?: number
+  appeared?: boolean
 }
 
 interface CreateNewBooksResult extends CreateModelResult {
@@ -21,7 +22,7 @@ interface CreateNewBooksResult extends CreateModelResult {
 export const createNewBooks: CreateModel<
   CreateNewBooksProps,
   CreateNewBooksResult
-> = ({ columns = 4, booksPerColumn = 3, ...others }) => {
+> = ({ columns = 4, booksPerColumn = 3, appeared, ...others }) => {
   const model = new Zdog.Anchor(others)
   const cols: Zdog.Anchor[] = []
   const books: ReturnType<typeof createBook>[] = []
@@ -32,7 +33,7 @@ export const createNewBooks: CreateModel<
     const col = new Zdog.Anchor({
       addTo: model,
       translate: {
-        y: Math.min(window.innerWidth / -10, -700),
+        y: appeared ? 0 : Math.min(window.innerWidth / -10, -700),
       },
     })
 
