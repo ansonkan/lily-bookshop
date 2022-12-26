@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
-import { useRef } from 'react'
 
 import { BookItem, BookSearchForm, Pagination } from 'components'
 import { fakeBook, many } from 'utils'
@@ -34,12 +33,6 @@ const BooksPage: NextPage<BooksPageProps> = ({
   books,
   total,
 }: BooksPageProps) => {
-  const formRef = useRef<HTMLDivElement>(null)
-
-  const pt = formRef.current?.clientHeight
-    ? formRef.current?.clientHeight / 2
-    : 0
-
   return (
     <BaseLayout
       slotTop={
@@ -58,14 +51,21 @@ const BooksPage: NextPage<BooksPageProps> = ({
           px={2}
           py={1}
           defaultValue={query.q}
-          ref={formRef}
         />
       }
     >
       <Flex
         direction="column"
         gap={4}
-        pt={`calc(var(--chakra-space-4) + ${pt}px)`}
+        /**
+         * Because the first rendering doesn't have access to `BookSearchForm`'s height yet, so the gap would still stutter once
+         * the part of the Chakra variables below are used inside of `BookSearchForm`
+         *
+         * 4: base padding
+         * 10: icon's height
+         * 1: `py`
+         */
+        pt="calc(var(--chakra-space-4) + (var(--chakra-sizes-10) / 2) + var(--chakra-sizes-1))"
       >
         <Breadcrumb separator={<ChevronRightIcon color="gray.500" />}>
           <BreadcrumbItem>
