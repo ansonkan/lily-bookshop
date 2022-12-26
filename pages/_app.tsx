@@ -1,8 +1,8 @@
 import type { AppProps } from 'next/app'
 
 import { Box, ChakraProvider } from '@chakra-ui/react'
+import { appWithTranslation, useTranslation } from 'next-i18next'
 import Head from 'next/head'
-import { appWithTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 
 import './globals.scss'
@@ -10,13 +10,14 @@ import { Footer, Header, SearchModal, SearchModalProvider } from 'components'
 import { theme } from 'theme'
 
 function App({ Component, pageProps }: AppProps) {
+  const { t } = useTranslation('common')
   const { pathname } = useRouter()
 
   return (
     <ChakraProvider theme={theme}>
       <SearchModalProvider>
         <Head>
-          <title>Lily Bookshop</title>
+          <title>{t('head.title')}</title>
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
