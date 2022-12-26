@@ -11,7 +11,7 @@ import {
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
 
-import { BookItem, BookSearchForm, Pagination } from 'components'
+import { BookItem, Pagination } from 'components'
 import { fakeBook, many } from 'utils'
 import { BaseLayout } from 'layouts'
 
@@ -34,82 +34,52 @@ const BooksPage: NextPage<BooksPageProps> = ({
   total,
 }: BooksPageProps) => {
   return (
-    <BaseLayout
-      slotTop={
-        <BookSearchForm
-          position="absolute"
-          bottom={0}
-          left="50%"
-          w="50%"
-          transform="translate(-50%, 50%)"
-          maxW={600}
-          minW={300}
-          rounded="3xl"
-          boxShadow="md"
-          bgColor="white"
-          zIndex="dropdown"
-          px={2}
-          py={1}
-          defaultValue={query.q}
-        />
-      }
-    >
-      <Flex
-        direction="column"
-        gap={4}
-        /**
-         * Because the first rendering doesn't have access to `BookSearchForm`'s height yet, so the gap would still stutter once
-         * the part of the Chakra variables below are used inside of `BookSearchForm`
-         *
-         * 4: base padding
-         * 10: icon's height
-         * 1: `py`
-         */
-        pt="calc(var(--chakra-space-4) + (var(--chakra-sizes-10) / 2) + var(--chakra-sizes-1))"
+    <BaseLayout defaultValue={query.q}>
+      <Breadcrumb
+        separator={<ChevronRightIcon color="gray.500" />}
+        fontSize="sm"
       >
-        <Breadcrumb separator={<ChevronRightIcon color="gray.500" />}>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/" as={NextLink}>
-              Home
-            </BreadcrumbLink>
-          </BreadcrumbItem>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/" as={NextLink}>
+            Home
+          </BreadcrumbLink>
+        </BreadcrumbItem>
 
-          <BreadcrumbItem isCurrentPage>
-            <BreadcrumbLink>Books</BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
+        <BreadcrumbItem isCurrentPage>
+          <BreadcrumbLink>Books</BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
 
-        <VStack gap={[2, 4]} alignItems="stretch">
-          {books.map((book) => (
-            <BookItem
-              variant="detailed"
-              key={book.id}
-              detailsLink={`/books/${book.id}`}
-              noOfLines={4}
-              {...book}
-            />
-          ))}
-        </VStack>
-
-        <Flex justifyContent="center">
-          <Pagination
-            page={query.page}
-            limit={query.limit}
-            total={total}
-            getLink={(page) => {
-              const { q, limit } = query
-              const searchParams = new URLSearchParams({
-                page: page + '',
-                limit: limit + '',
-              })
-              if (q) searchParams.append('q', q)
-
-              searchParams.sort()
-
-              return `/books?${searchParams.toString()}`
-            }}
+      <VStack gap={[2, 4]} alignItems="stretch">
+        {books.map((book) => (
+          <BookItem
+            variant="detailed"
+            key={book.id}
+            detailsLink={`/books/${book.id}`}
+            noOfLines={4}
+            {...book}
           />
-        </Flex>
+        ))}
+      </VStack>
+
+      <Flex justifyContent="center">
+        <Pagination
+          page={query.page}
+          limit={query.limit}
+          total={total}
+          getLink={(page) => {
+            const { q, limit } = query
+            const searchParams = new URLSearchParams({
+              page: page + '',
+              limit: limit + '',
+            })
+            if (q) searchParams.append('q', q)
+
+            searchParams.sort()
+
+            return `/books?${searchParams.toString()}`
+          }}
+        />
       </Flex>
     </BaseLayout>
   )

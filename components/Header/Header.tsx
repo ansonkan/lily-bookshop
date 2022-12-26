@@ -25,9 +25,10 @@ export const Header = ({
 
   useEffect(() => {
     const onScroll = () => {
-      const threshold = showAllThreshold
-        ? showAllThreshold
-        : window.innerHeight * showAllThresholdRatio
+      const threshold =
+        showAllThreshold !== undefined
+          ? showAllThreshold
+          : window.innerHeight * showAllThresholdRatio
 
       if (window.scrollY > threshold) {
         !showAll && setShowAll(true)

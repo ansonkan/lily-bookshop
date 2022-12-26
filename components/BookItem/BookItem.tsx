@@ -1,6 +1,6 @@
 import type { BookItemProps } from './types'
 
-import { Base, Detailed } from './components'
+import { Base, Detailed, Full } from './components'
 
 export const BookItem = ({
   price,
@@ -12,6 +12,10 @@ export const BookItem = ({
     style: 'currency',
     currency: price.currencyCode,
   }).format(price.amount)
+
+  if (variant === 'full') {
+    return <Full priceLabel={priceLabel} {...others} />
+  }
 
   if (variant === 'detailed') {
     return <Detailed priceLabel={priceLabel} {...others} />

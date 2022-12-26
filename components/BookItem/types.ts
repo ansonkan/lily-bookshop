@@ -5,5 +5,5 @@ export interface BookItemProps
   extends Omit<LinkBoxProps, 'id' | 'title'>,
     Book {
   detailsLink: string
-  variant?: 'base' | 'detailed'
+  variant?: 'base' | 'detailed' | 'full'
 }

@@ -18,7 +18,7 @@ export const theme = extendTheme({
   components: {
     Container: defineStyleConfig({
       baseStyle: defineStyle({
-        maxW: '120ch',
+        maxW: '100ch',
       }),
     }),
   },
