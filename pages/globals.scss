@@ -27,3 +27,13 @@ body {
     background: rgba(95, 95, 95, 0.5);
   }
 }
+
+.hidden {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.visible {
+  opacity: 1;
+  transition: all 0.2s ease;
+}

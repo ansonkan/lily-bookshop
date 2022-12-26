@@ -1,7 +1,8 @@
 import type { CreateModelResult } from 'models'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Zdog from 'zdog'
+import { clsx } from 'clsx'
 import { useBreakpointValue } from '@chakra-ui/react'
 
 import {
@@ -14,11 +15,12 @@ import styles from './styles.module.scss'
 
 export const LandingScene = (): JSX.Element => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-
   const illo = useRef<Zdog.Illustration>()
   const readingBench = useRef<CreateModelResult>()
   const sunAndCloud = useRef<CreateModelResult>()
   const gradientDiscs = useRef<CreateModelResult>()
+
+  const [visible, setVisible] = useState(false)
 
   const bpConfigs = useBreakpointValue(
     {
@@ -27,9 +29,10 @@ export const LandingScene = (): JSX.Element => {
       md: { zoom: 0.8, x: 0.5, y: 0.4 },
       lg: { zoom: 0.9, x: 0.35, y: 0.4 },
       xl: { zoom: 1, x: 0.3, y: 0.4 },
-    },
+    }
     // disable `ssr` because `base` would be used on the first render, which might not be the correct breakpoint value
-    { ssr: false }
+    // updated: this isn't needed when the `visible` animation is in use
+    // { ssr: false }
   )
 
   useEffect(() => {
@@ -62,10 +65,16 @@ export const LandingScene = (): JSX.Element => {
 
       readingBench.current.animate?.()
       illo.current.updateRenderGraph()
+
       requestAnimationFrame(animate)
     }
 
     animate()
+
+    // don't know why without this timeout, the animation doesn't seem to be showing. Somewhere must got the timing or states wrong...
+    setTimeout(() => {
+      setVisible(true)
+    }, 50)
 
     return () => {
       isOn = false
@@ -118,5 +127,10 @@ export const LandingScene = (): JSX.Element => {
     }
   }, [bpConfigs])
 
-  return <canvas ref={canvasRef} className={styles.canvas} />
+  return (
+    <canvas
+      ref={canvasRef}
+      className={clsx(styles.canvas, visible ? 'visible' : 'hidden')}
+    />
+  )
 }

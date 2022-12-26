@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Zdog from 'zdog'
+import { clsx } from 'clsx'
 
 import { createNewBooks } from 'models'
 
@@ -51,11 +52,11 @@ export const BaseLayoutScene = (): JSX.Element => {
       isOn = false
       window.removeEventListener('resize', onResize)
     }
-  }, [setVisible])
+  }, [])
 
   return (
     <canvas
-      className={`${styles.canvas} ${visible ? styles.visible : ''}`}
+      className={clsx(styles.canvas, visible ? 'visible' : 'hidden')}
       ref={canvasRef}
     />
   )
