@@ -7,15 +7,15 @@ const properties = [
   { key: 'isbn13', type: 'string' },
   { key: 'isbn10', type: 'string' },
   { key: 'title', type: 'string' },
-  { key: 'subtitle', type: 'string' },
+  // { key: 'subtitle', type: 'string' },
   { key: 'authors', type: 'string' },
-  { key: 'categories', type: 'string' },
-  { key: 'thumbnail', type: 'string' },
-  { key: 'description', type: 'string' },
-  { key: 'published_year', type: 'string' },
-  { key: 'average_rating', type: 'number' },
-  { key: 'num_pages', type: 'number' },
-  { key: 'ratings_count', type: 'number' },
+  // { key: 'categories', type: 'string' },
+  // { key: 'thumbnail', type: 'string' },
+  // { key: 'description', type: 'string' },
+  // { key: 'published_year', type: 'string' },
+  // { key: 'average_rating', type: 'number' },
+  // { key: 'num_pages', type: 'number' },
+  // { key: 'ratings_count', type: 'number' },
 ]
 
 try {

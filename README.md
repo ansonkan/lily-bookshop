@@ -22,7 +22,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
   - [ ] Blog post list page
   - [ ] Blog post page
 - [ ] CMS
-  - [ ] create a new Directus project
+  - [x] create a new Directus project
+  - [x] create a basic scripts to load Google books by on ISBN into Directus
   - [ ] setup a Directus webbook to sync book entries to MongoDB Atlas
   - [ ] create a script the read Array<{`ISBN` + images}> -> look up details through [Google Books search API](https://developers.google.com/books/docs/v1/using#PerformingSearch) -> import the details and images to Directus (-> import the same set of data to MongoDB Atlas if the webhook doesn't work for imports)
 - [ ] Integration

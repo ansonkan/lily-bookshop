@@ -14,7 +14,7 @@ pre-commit:
   commands:
     eslint:
       glob: '*.{js,ts,jsx,tsx}'
-      run: npm run lint {staged_files}
+      run: npm run lint
     tsc:
       glob: '*.{js,ts,jsx,tsx}'
       run: npm run type-check
