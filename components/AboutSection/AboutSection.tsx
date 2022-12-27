@@ -2,17 +2,23 @@ import type { BoxProps } from '@chakra-ui/react'
 
 import { Box, Heading, Square, Text } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'next-i18next'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export const AboutSection = (props: BoxProps): JSX.Element => {
   const { t, i18n } = useTranslation('common')
+  const rootRef = useRef<HTMLDivElement | null>(null)
 
   const [mapVisible, setMapVisible] = useState(false)
 
   useEffect(() => {
     const onScroll = () => {
-      // `500` is just a arbitrary number, just wanted to show/load the map what user starts to scroll down
-      if (window.scrollY > 500) {
+      // `500` and the `2` multiplier are just arbitrary numbers that seems to make things work fine, just wanted to show/load the map what user starts to scroll down
+      if (
+        window.scrollY >
+        (rootRef.current
+          ? rootRef.current.offsetTop - rootRef.current.clientHeight * 2
+          : 500)
+      ) {
         !mapVisible && setMapVisible(true)
       }
     }
@@ -32,6 +38,7 @@ export const AboutSection = (props: BoxProps): JSX.Element => {
       display="flex"
       flexDir={['column', 'row']}
       gap={4}
+      ref={rootRef}
       {...props}
     >
       <Square flex={1} display="flex" flexDirection="column" gap={4}>
