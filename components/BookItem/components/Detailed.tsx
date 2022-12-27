@@ -2,12 +2,14 @@ import type { BookItemProps } from '../types'
 
 import { Box, LinkBox, LinkOverlay, Text, VStack } from '@chakra-ui/react'
 import NextLink from 'next/link'
+import { useMemo } from 'react'
 
 import { Thumbnail } from './Thumbnail'
 
 export interface DetailedProps
   extends Omit<BookItemProps, 'variant' | 'price'> {
   priceLabel: string
+  descriptionWorkCount?: number
 }
 
 export const Detailed = ({
@@ -17,39 +19,57 @@ export const Detailed = ({
   priceLabel,
   detailsLink,
   imageLink,
-  noOfLines,
+  descriptionWorkCount = 100,
   ...linkBoxProps
-}: DetailedProps): JSX.Element => (
-  <LinkBox as="article" display="flex" flexDir="row" gap={2} {...linkBoxProps}>
-    <Box w={[125, 150]}>
-      <Thumbnail src={imageLink} bookTitle={title} />
-    </Box>
+}: DetailedProps): JSX.Element => {
+  const shortDescription = useMemo(
+    () =>
+      description
+        .split(' ')
+        .filter((w) => !!w)
+        .splice(0, descriptionWorkCount)
+        .join(' ') + '...',
+    [description, descriptionWorkCount]
+  )
 
-    <Box
-      w="full"
-      flexGrow={1}
+  return (
+    <LinkBox
+      as="article"
       display="flex"
-      flexDirection="column"
-      gap={[2, 4]}
+      flexDir="row"
+      gap={2}
+      {...linkBoxProps}
     >
-      <Box>
-        <LinkOverlay as={NextLink} href={detailsLink}>
-          <Text as="b">{title}</Text>
-        </LinkOverlay>
-        <Text fontSize="small">{authors.join(', ')}</Text>
+      <Box w={[125, 150]}>
+        <Thumbnail src={imageLink} bookTitle={title} />
       </Box>
 
-      <VStack alignItems="flex-start" noOfLines={noOfLines}>
-        {description.split('\n').map((paragraph, i) => (
-          <Text fontSize="small" key={i}>
-            {paragraph}
-          </Text>
-        ))}
-      </VStack>
+      <Box
+        w="full"
+        flexGrow={1}
+        display="flex"
+        flexDirection="column"
+        gap={[2, 4]}
+      >
+        <Box>
+          <LinkOverlay as={NextLink} href={detailsLink}>
+            <Text as="b">{title}</Text>
+          </LinkOverlay>
+          <Text fontSize="small">{authors.join(', ')}</Text>
+        </Box>
 
-      <Text as="b" alignSelf="end">
-        {priceLabel}
-      </Text>
-    </Box>
-  </LinkBox>
-)
+        <VStack alignItems="flex-start">
+          {shortDescription.split('\n').map((paragraph, i) => (
+            <Text fontSize="small" key={i}>
+              {paragraph}
+            </Text>
+          ))}
+        </VStack>
+
+        <Text as="b" alignSelf="end">
+          {priceLabel}
+        </Text>
+      </Box>
+    </LinkBox>
+  )
+}

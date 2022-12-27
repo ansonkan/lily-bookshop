@@ -27,7 +27,7 @@ export const LatestAdditionsScene = (): JSX.Element => {
       addTo: illo.current,
       rotate: { x: Zdog.TAU / 6, z: Zdog.TAU / 8 },
     })
-    const throttledSpin = throttle(newBooks.current.spin, 5000)
+    const throttledSpin = throttle(newBooks.current.spin, 60000)
 
     const onResize = () => {
       if (!newBooks.current || !canvasRef.current) return

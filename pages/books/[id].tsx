@@ -64,7 +64,6 @@ const BookPage: NextPage<BookPageProps> = ({
               variant="detailed"
               key={book.id}
               detailsLink={`/books/${book.id}`}
-              noOfLines={4}
               {...book}
             />
           ))}

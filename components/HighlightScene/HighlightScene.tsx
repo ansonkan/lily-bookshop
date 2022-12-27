@@ -26,7 +26,7 @@ export const HighlightScene = (): JSX.Element => {
       addTo: illo.current,
       rotate: { x: Zdog.TAU / -15, y: Zdog.TAU / 10 },
     })
-    const throttledSpin = throttle(megaStar.current.spin, 5000)
+    const throttledSpin = throttle(megaStar.current.spin, 60000)
 
     const onResize = () => {
       if (!megaStar.current || !canvasRef.current) return

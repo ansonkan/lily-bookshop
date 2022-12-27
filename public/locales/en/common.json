@@ -42,6 +42,7 @@
     "last": "Last"
   },
   "book-detailed-page": {
+    "description": "Description",
     "related-books": {
       "heading": "Related Books"
     }
