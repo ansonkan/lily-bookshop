@@ -45,7 +45,7 @@
     "eslint-config-next": "13.0.6",
     "eslint-plugin-react": "7.31.11",
     "eslint-plugin-unused-imports": "2.0.0",
-    "got": "11.8.3",
+    "got": "11.8.6",
     "iconv-lite": "0.6.3",
     "lefthook": "1.2.6",
     "prettier": "2.8.1",

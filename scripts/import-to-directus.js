@@ -26,8 +26,8 @@ async function main() {
   const multiMatches = []
   let parsed = []
 
-  for (let i = 0; i < bookIds.length; i++) {
-    // for (let i = 0; i < 10; i++) {
+  // for (let i = 0; i < bookIds.length; i++) {
+  for (let i = 0; i < 10; i++) {
     const id = bookIds[i]
     const { isbn13, isbn10 } = id
 
