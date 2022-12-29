@@ -16,5 +16,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     previewData: req.previewData,
   })
 
-  res.status(200)
+  res.status(200).json({ success: true })
 }
