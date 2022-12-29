@@ -11,3 +11,7 @@ export interface Book {
   description: string
   imageLink?: string
 }
+
+// export interface DirectusBook {
+
+// }

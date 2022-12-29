@@ -23,11 +23,11 @@ main()
 async function main() {
   let books = []
   const fails = []
-  const multiMatches = []
+
   let parsed = []
 
   // for (let i = 0; i < bookIds.length; i++) {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 55; i++) {
     const id = bookIds[i]
     const { isbn13, isbn10 } = id
 
@@ -43,7 +43,7 @@ async function main() {
       const result = await (await fetch(queryUrl)).json()
 
       if (result.totalItems === 0) {
-        fails.push(id)
+        fails.push({ id, reason: 'totalItems === 0' })
       } else if (result.totalItems === 1) {
         books.push(
           await populateAboutTheAuthor(
@@ -52,34 +52,47 @@ async function main() {
         )
         // books.push(result.items[0].volumeInfo)
       } else {
-        multiMatches.push({ queryUrl, items: result.items })
+        fails.push({ id, reason: 'multiple matches' })
       }
     } catch (err) {
       fails.push({ id, error: JSON.stringify(err) })
     }
 
-    if (books.length >= 50) {
+    if (books.length >= 10) {
+      console.log(`Starting batch import, index: ${i} ...`)
+
       await importToDirectus(books)
       parsed = [...parsed, ...books]
       books = []
+
+      console.log(`Finished batch import, index: ${i}`)
     }
   }
 
   if (books.length) {
+    console.log('Starting the last batch import')
+
     await importToDirectus(books)
     parsed = [...parsed, ...books]
+
+    console.log('Finished the last batch import')
   }
 
   fs.writeFileSync(
-    path.join(__dirname, 'google-books.json'),
-    JSON.stringify({ books: parsed, fails, multiMatches })
+    path.join(__dirname, 'data', 'imported.json'),
+    JSON.stringify({ books: parsed })
+  )
+
+  fs.writeFileSync(
+    path.join(__dirname, 'data', 'failed.json'),
+    JSON.stringify({ fails })
   )
 
   console.log(
     'Done!',
     `\n${parsed.length} books imported`,
     `\n${fails.length} fails`,
-    `\n${multiMatches.length} multi-matches`
+    '\n\n'
   )
 }
 
@@ -150,6 +163,8 @@ async function populateAboutTheAuthor(googleBook) {
 
 async function importToDirectus(books) {
   try {
+    console.log('Start importing books to Directus...')
+
     const results = await Promise.allSettled(
       books.map((b) =>
         fetch(process.env.DIRECTUS_URL + 'files/import', {
@@ -173,9 +188,8 @@ async function importToDirectus(books) {
       const value = await results[i].value.json()
       books[i].thumbnailLink = books[i].thumbnail
       books[i].thumbnail = value.data.id
+      books[i].status = 'published'
     }
-
-    books.status = 'published'
 
     const result = await fetch(process.env.DIRECTUS_URL + 'items/Books', {
       method: 'POST',
@@ -187,7 +201,11 @@ async function importToDirectus(books) {
       },
     })
 
-    // const json = await result.json()
+    console.log(
+      `Imported ${results.length} books to Directus!`,
+      JSON.stringify(result, null, 2),
+      '\n\n'
+    )
   } catch (error) {
     console.error(error)
   }
