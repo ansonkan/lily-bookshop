@@ -3,6 +3,7 @@ const path = require('path')
 const cheerio = require('cheerio')
 const got = require('got')
 const iconv = require('iconv-lite')
+const { faker } = require('@faker-js/faker')
 require('dotenv').config({ path: path.join(__dirname, '..', '.env.local') })
 
 const bookIds = JSON.parse(
@@ -45,12 +46,20 @@ async function main() {
       if (result.totalItems === 0) {
         fails.push({ id, reason: 'totalItems === 0' })
       } else if (result.totalItems === 1) {
-        books.push(
-          await populateAboutTheAuthor(
+        books.push({
+          ...(await populateAboutTheAuthor(
             transformGoogleBook(result.items[0].volumeInfo)
-          )
-        )
-        // books.push(result.items[0].volumeInfo)
+          )),
+          // When we actually importing real books, these information should be given at the start
+          storageLocation: `bookshelf:${faker.random.alpha({
+            count: 2,
+            casing: 'upper',
+          })}`,
+          quantity: 1,
+          // highlightOrder: -1
+          price: faker.datatype.float({ min: 20, max: 200, precision: 0.01 }),
+          currency: 'HKD',
+        })
       } else {
         fails.push({ id, reason: 'multiple matches' })
       }
@@ -121,7 +130,7 @@ function transformGoogleBook(googleBook) {
     publisher,
     publishedDate,
     description,
-    // industryIdentifiers,
+    // industryIdentifiers -> { ISBN_13, ISBN_10 }
     ...industryIdentifiers.reduce((acc, cur) => {
       acc[cur.type] = cur.identifier
       return acc
