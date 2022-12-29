@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from 'next'
+import type { GetStaticProps, NextPage } from 'next'
 import type { Book } from 'types'
 
 import { Container, Flex } from '@chakra-ui/react'
@@ -64,18 +64,12 @@ const HomePage: NextPage<HomePageProps> = ({
 
 export default HomePage
 
-export const getServerSideProps: GetServerSideProps<HomePageProps> = async ({
-  res,
+export const getStaticProps: GetStaticProps<HomePageProps> = async ({
   locale,
 }) => {
   // const apiUrl = process.env.API_URL
 
   // if (!apiUrl) throw new Error('Something went wrong...')
-
-  res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=86400, stale-while-revalidate=86400'
-  )
 
   // const results = await Promise.allSettled([
   //   fetch(`${apiUrl}/books?limit=3`),
@@ -91,5 +85,6 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> = async ({
       highlights: many(fakeBook, 12),
       latestAdditions: many(fakeBook, 12),
     },
+    revalidate: 60 * 15, // 15min
   }
 }

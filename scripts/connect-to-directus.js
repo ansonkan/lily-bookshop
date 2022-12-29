@@ -6,6 +6,7 @@ const URL = {
   listBooks: 'items/Books',
   getCollectionBooks: 'collections/Books',
   listBooksFields: 'fields/Books',
+  listFields: 'fields/Books',
 }
 
 main()
@@ -28,9 +29,8 @@ async function main() {
     // })
 
     const result = await fetch(
-      process.env.DIRECTUS_URL +
-        URL.listBooks +
-        '/50540047-7fa4-4d9f-b2eb-fb62891d971d',
+      process.env.DIRECTUS_URL + URL.listFields,
+      // '/50540047-7fa4-4d9f-b2eb-fb62891d971d',
       {
         method: 'GET',
         headers: {
@@ -43,7 +43,10 @@ async function main() {
 
     const json = await result.json()
 
-    console.log(JSON.stringify(json, null, 2))
+    fs.writeFileSync(
+      path.join(__dirname, 'data', 'books-fields.json'),
+      JSON.stringify(json)
+    )
   } catch (error) {
     console.error(error)
   }

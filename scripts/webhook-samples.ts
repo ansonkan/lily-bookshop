@@ -1,11 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
-
-// Could use https://webhook.site/#!/ to test Directus webhook payload
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  res.status(200).json({ success: true })
-}
-
 export const events = [
   {
     event: 'items.update',
