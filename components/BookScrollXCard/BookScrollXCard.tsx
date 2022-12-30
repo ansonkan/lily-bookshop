@@ -3,7 +3,7 @@ import type { CardProps } from '@chakra-ui/react'
 
 import { Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
 
-import { BookItem } from 'components'
+import { BookItem } from '../BookItem'
 
 export interface BookScrollXCardProps extends CardProps {
   heading: string
@@ -30,7 +30,7 @@ export const BookScrollXCard = ({
       {books.map((book) => (
         <BookItem
           key={book.id}
-          w={[125, 150]}
+          w={[110, 130]}
           flexShrink={0}
           flexGrow={0}
           detailsLink={`/books/${book.id}`}

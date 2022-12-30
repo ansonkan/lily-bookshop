@@ -8,27 +8,30 @@ import { Thumbnail } from './Thumbnail'
 
 export interface DetailedProps
   extends Omit<BookItemProps, 'variant' | 'price'> {
-  priceLabel: string
+  priceLabel?: string
   descriptionWorkCount?: number
 }
 
 export const Detailed = ({
   title,
+  subtitle,
   authors,
   description,
   priceLabel,
   detailsLink,
-  imageLink,
+  thumbnail,
   descriptionWorkCount = 100,
   ...linkBoxProps
 }: DetailedProps): JSX.Element => {
   const shortDescription = useMemo(
     () =>
       description
-        .split(' ')
-        .filter((w) => !!w)
-        .splice(0, descriptionWorkCount)
-        .join(' ') + '...',
+        ? description
+            .split(' ')
+            .filter((w) => !!w)
+            .splice(0, descriptionWorkCount)
+            .join(' ') + '...'
+        : undefined,
     [description, descriptionWorkCount]
   )
 
@@ -40,8 +43,8 @@ export const Detailed = ({
       gap={2}
       {...linkBoxProps}
     >
-      <Box w={[125, 150]}>
-        <Thumbnail src={imageLink} bookTitle={title} />
+      <Box w={[110, 130]}>
+        <Thumbnail src={thumbnail} bookTitle={title} />
       </Box>
 
       <Box
@@ -54,21 +57,32 @@ export const Detailed = ({
         <Box>
           <LinkOverlay as={NextLink} href={detailsLink}>
             <Text as="b">{title}</Text>
+
+            {subtitle && (
+              <Text as="span" fontSize="small">
+                {' ' + subtitle}
+              </Text>
+            )}
           </LinkOverlay>
-          <Text fontSize="small">{authors.join(', ')}</Text>
+
+          {authors && <Text fontSize="small">{authors.join(', ')}</Text>}
         </Box>
 
-        <VStack alignItems="flex-start">
-          {shortDescription.split('\n').map((paragraph, i) => (
-            <Text fontSize="small" key={i}>
-              {paragraph}
-            </Text>
-          ))}
-        </VStack>
+        {shortDescription && (
+          <VStack alignItems="flex-start">
+            {shortDescription.split('\n').map((paragraph, i) => (
+              <Text fontSize="small" key={i}>
+                {paragraph}
+              </Text>
+            ))}
+          </VStack>
+        )}
 
-        <Text as="b" alignSelf="end">
-          {priceLabel}
-        </Text>
+        {priceLabel && (
+          <Text as="b" alignSelf="end">
+            {priceLabel}
+          </Text>
+        )}
       </Box>
     </LinkBox>
   )

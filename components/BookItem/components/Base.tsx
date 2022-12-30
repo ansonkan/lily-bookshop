@@ -6,15 +6,16 @@ import NextLink from 'next/link'
 import { Thumbnail } from './Thumbnail'
 
 export interface BaseProps extends Omit<BookItemProps, 'variant' | 'price'> {
-  priceLabel: string
+  priceLabel?: string
 }
 
 export const Base = ({
   title,
+  subtitle,
   authors,
   priceLabel,
   detailsLink,
-  imageLink,
+  thumbnail,
   ...linkBoxProps
 }: BaseProps): JSX.Element => (
   <LinkBox
@@ -24,13 +25,17 @@ export const Base = ({
     gap={2}
     {...linkBoxProps}
   >
-    <Thumbnail src={imageLink} bookTitle={title} />
+    <Thumbnail src={thumbnail} bookTitle={title} />
 
     <Box w="full" flexGrow={1} display="flex" flexDirection="column">
       <LinkOverlay as={NextLink} href={detailsLink}>
         <Text as="b">{title}</Text>
       </LinkOverlay>
-      <Text fontSize="small">{authors.join(', ')}</Text>
+
+      {subtitle && <Text fontSize="xs">{subtitle}</Text>}
+
+      {authors && <Text fontSize="xs">{authors.join(', ')}</Text>}
+
       <Text as="b" alignSelf="end" mt="auto">
         {priceLabel}
       </Text>

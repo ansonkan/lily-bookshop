@@ -9,6 +9,7 @@ import {
   Kbd,
 } from '@chakra-ui/react'
 import { useContext, useEffect, useState } from 'react'
+import NextLink from 'next/link'
 import { useTranslation } from 'next-i18next'
 
 import { LocaleSwitcher } from '../LocaleSwitcher'
@@ -65,7 +66,9 @@ export const Header = ({
     >
       <Container py={[2, 4]}>
         <HStack justifyContent="space-between">
-          <Heading size="md">{t('header.heading')}</Heading>
+          <NextLink href="/">
+            <Heading size={['sm', 'md']}>{t('header.heading')}</Heading>
+          </NextLink>
 
           <ButtonGroup>
             <Fade in={showAll}>

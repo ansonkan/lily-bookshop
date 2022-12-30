@@ -187,6 +187,8 @@ async function importToDirectus(books) {
             url: b.thumbnail,
             data: {
               title: b.title,
+              // folder `public`
+              folder: '5a16839a-d3fd-4e24-a03d-4f184ed67e8f',
             },
           }),
         })

@@ -7,7 +7,7 @@
   width: 100%;
   height: 100%;
   // should turn this into a JS prop for safety
-  background-color: #f3b259;
+  background-color: var(--highlight-theme);
   z-index: -2;
 }
 

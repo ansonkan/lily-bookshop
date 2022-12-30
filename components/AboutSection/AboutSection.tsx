@@ -13,12 +13,7 @@ export const AboutSection = (props: BoxProps): JSX.Element => {
   useEffect(() => {
     const onScroll = () => {
       // `500` and the `2` multiplier are just arbitrary numbers that seems to make things work fine, just wanted to show/load the map what user starts to scroll down
-      if (
-        window.scrollY >
-        (rootRef.current
-          ? rootRef.current.offsetTop - rootRef.current.clientHeight * 2
-          : 500)
-      ) {
+      if (window.scrollY > 500) {
         !mapVisible && setMapVisible(true)
       }
     }

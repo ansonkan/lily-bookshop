@@ -84,13 +84,14 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
 
   // need to investigate how `ParsedUrlQuery` works, for now just expect all parameters to be `string`
   if (typeof page !== 'string' || typeof q !== 'string')
-    throw new Error('400 Bad Request')
+    throw new Error('400: Bad Request')
 
   const pageInt = Number.parseInt(page)
-  if (pageInt <= 0) throw new Error('400 Bad Request')
+  if (pageInt <= 0) throw new Error('400: Bad Request')
   // const skip = (pageInt - 1) * LIMIT
 
   const books = many(fakeBook, LIMIT)
+  // need to cast books from `Directus`/`MongoDB Atlas` to `DirectusBook`, then remove all of the `null` properties
 
   const translations = await serverSideTranslations(locale ?? 'en', ['common'])
 

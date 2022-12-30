@@ -82,6 +82,7 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
   return {
     props: {
       ...translations,
+      // need to cast books from `Directus`/`MongoDB Atlas` to `DirectusBook`, then remove all of the `null` properties
       highlights: many(fakeBook, 12),
       latestAdditions: many(fakeBook, 12),
     },

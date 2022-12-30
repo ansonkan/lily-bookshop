@@ -2,9 +2,8 @@ import type { Book } from 'types'
 import type { CardProps } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
-// this doesn't cause any circular dependencies?
-import { BookScrollXCard, LatestAdditionsScene } from 'components'
-
+import { BookScrollXCard } from '../BookScrollXCard'
+import { LatestAdditionsScene } from '../LatestAdditionsScene'
 import styles from './styles.module.scss'
 
 export interface LatestAdditionSectionProps extends CardProps {

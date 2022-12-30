@@ -5,9 +5,11 @@ import { appWithTranslation, useTranslation } from 'next-i18next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
-import './globals.scss'
 import { Footer, Header, SearchModal, SearchModalProvider } from 'components'
 import { theme } from 'theme'
+
+import './globals.scss'
+import nextI18NextConfig from '../next-i18next.config'
 
 function App({ Component, pageProps }: AppProps) {
   const { t } = useTranslation('common')
@@ -56,4 +58,4 @@ function App({ Component, pageProps }: AppProps) {
   )
 }
 
-export default appWithTranslation(App)
+export default appWithTranslation(App, nextI18NextConfig)

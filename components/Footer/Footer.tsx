@@ -10,7 +10,7 @@ import {
 import { PhoneIcon } from '@chakra-ui/icons'
 import { useTranslation } from 'next-i18next'
 
-import { MapPinIcon } from 'components'
+import { MapPinIcon } from '../MapPinIcon'
 
 export const Footer = (): JSX.Element => {
   const { t } = useTranslation('common')
@@ -18,7 +18,7 @@ export const Footer = (): JSX.Element => {
   return (
     <Box as="footer" bgColor="purple.800" color="white">
       <Container py={8}>
-        <Heading size="md" mb={8}>
+        <Heading size={['sm', 'md']} mb={8}>
           {t('footer.heading')}
         </Heading>
 

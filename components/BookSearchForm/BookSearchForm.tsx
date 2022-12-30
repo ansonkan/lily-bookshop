@@ -1,12 +1,12 @@
 import type { BoxProps, InputProps } from '@chakra-ui/react'
 
 import { Box, Input, Square } from '@chakra-ui/react'
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { SearchIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
-import { SearchModalContext } from 'components/SearchModal'
+import { SearchModalContext } from '../SearchModal'
 
 export interface BookSearchFormProps
   extends BoxProps,
@@ -18,10 +18,18 @@ export const BookSearchForm = ({
   ...props
 }: BookSearchFormProps) => {
   const { t } = useTranslation('common')
-  const { push, locale } = useRouter()
+  const { push, locale, query } = useRouter()
   const [q, setQ] = useState(defaultValue ? `${defaultValue}` : '')
   const { onClose } = useContext(SearchModalContext)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    /**
+     * might need to find a way to convey this `q` better across components and pages,
+     * otherwise they will continue to be tangled together by this hardcoded property
+     */
+    setQ(typeof query?.q === 'string' ? query.q : '')
+  }, [query])
 
   return (
     <Box
@@ -55,6 +63,7 @@ export const BookSearchForm = ({
         onKeyUp={(event) => {
           if (event.key === 'Escape') inputRef.current?.blur()
         }}
+        defaultValue={defaultValue}
       />
     </Box>
   )
