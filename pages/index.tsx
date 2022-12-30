@@ -1,7 +1,8 @@
+import type { Book, DirectusBook } from 'types'
 import type { GetStaticProps, NextPage } from 'next'
-import type { Book } from 'types'
 
 import { Container, Flex } from '@chakra-ui/react'
+import { captureException } from '@sentry/nextjs'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import {
@@ -11,7 +12,8 @@ import {
   LandingSection,
   LatestAdditionSection,
 } from 'components'
-import { fakeBook, many } from 'utils'
+import clientPromise from 'utils/mongodb'
+import { formatDirectusBook } from 'utils'
 
 interface HomePageProps {
   highlights: Book[]
@@ -30,24 +32,30 @@ const HomePage: NextPage<HomePageProps> = ({
         <Flex direction="column" gap={[8, 8, 12]}>
           <LandingSection h="80vh" minH={500} maxH={700} />
 
-          <HighlightSection
-            rounded="3xl"
-            overflow="hidden"
-            boxShadow="xl"
-            minH="500"
-            // https://stackoverflow.com/questions/49066011/overflow-hidden-with-border-radius-not-working-on-safari
-            isolation="isolate"
-            books={highlights}
-          />
+          {highlights.length > 0 && (
+            <HighlightSection
+              rounded="3xl"
+              overflow="hidden"
+              boxShadow="xl"
+              minH="500"
+              // https://stackoverflow.com/questions/49066011/overflow-hidden-with-border-radius-not-working-on-safari
+              isolation="isolate"
+              books={highlights}
+            />
+          )}
 
-          <LatestAdditionSection
-            rounded="3xl"
-            overflow="hidden"
-            boxShadow="xl"
-            minH="500"
-            isolation="isolate"
-            books={latestAdditions}
-          />
+          {latestAdditions.length > 0 && (
+            <LatestAdditionSection
+              rounded="3xl"
+              overflow="hidden"
+              boxShadow="xl"
+              minH="500"
+              isolation="isolate"
+              books={latestAdditions}
+            />
+          )}
+
+          {/* add a `Random` section using `$sample`  */}
 
           <AboutSection
             id="about"
@@ -64,27 +72,57 @@ const HomePage: NextPage<HomePageProps> = ({
 
 export default HomePage
 
+const LIMIT = 20
+
 export const getStaticProps: GetStaticProps<HomePageProps> = async ({
   locale,
 }) => {
-  // const apiUrl = process.env.API_URL
+  const client = await clientPromise
+  const books = client.db('bookshop').collection<DirectusBook>('books')
 
-  // if (!apiUrl) throw new Error('Something went wrong...')
+  const [tranResult, highResult, latestResult] = await Promise.allSettled([
+    serverSideTranslations(locale ?? 'en', ['common']),
+    books
+      .find(
+        { highlightOrder: { $ne: null }, quantity: { $gt: 0 } },
+        { limit: LIMIT, sort: { highlightOrder: 'ascending' } }
+      )
+      .toArray(),
+    books
+      .find(
+        { quantity: { $gt: 0 } },
+        {
+          limit: LIMIT,
+          sort: { dateRestocked: 'descending', date_updated: 'descending' },
+        }
+      )
+      .toArray(),
+  ])
 
-  // const results = await Promise.allSettled([
-  //   fetch(`${apiUrl}/books?limit=3`),
-  //   fetch(`${apiUrl}/books?limit=6&sort=searched_count&order=desc`),
-  //   fetch(`${apiUrl}/books?limit=6&sort=average_rating&order=desc`),
-  // ])
+  if (tranResult.status === 'rejected') {
+    captureException(tranResult.reason)
+  }
 
-  const translations = await serverSideTranslations(locale ?? 'en', ['common'])
+  if (highResult.status === 'rejected') {
+    captureException(highResult.reason)
+  }
+
+  if (latestResult.status === 'rejected') {
+    captureException(latestResult.reason)
+  }
 
   return {
     props: {
-      ...translations,
+      ...(tranResult.status === 'fulfilled' ? tranResult.value : {}),
       // need to cast books from `Directus`/`MongoDB Atlas` to `DirectusBook`, then remove all of the `null` properties
-      highlights: many(fakeBook, 12),
-      latestAdditions: many(fakeBook, 12),
+      highlights:
+        highResult.status === 'fulfilled'
+          ? highResult.value.map((v) => formatDirectusBook(v))
+          : [],
+      latestAdditions:
+        latestResult.status === 'fulfilled'
+          ? latestResult.value.map((v) => formatDirectusBook(v))
+          : [],
     },
     revalidate: 60 * 15, // 15min
   }

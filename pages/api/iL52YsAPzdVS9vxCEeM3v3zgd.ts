@@ -45,6 +45,7 @@ export default async function handler(
       case 'items.create':
         await dbCollection.insertOne({
           _id: new ObjectId(key),
+          id: key,
           ...payload,
         })
         break

@@ -1,13 +1,16 @@
+import type { Book, DirectusBook } from 'types'
 import type { GetServerSideProps, NextPage } from 'next'
-import type { Book } from 'types'
 
 import { Heading, VStack } from '@chakra-ui/react'
+import { ObjectId } from 'mongodb'
+import { captureException } from '@sentry/nextjs'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
 import { ArrowBreadcrumb, BookItem } from 'components'
-import { fakeBook, many } from 'utils'
 import { BaseLayout } from 'layouts'
+import clientPromise from 'utils/mongodb'
+import { formatDirectusBook } from 'utils'
 
 interface BookPageProps {
   book: Book
@@ -54,24 +57,84 @@ const BookPage: NextPage<BookPageProps> = ({
 
 export default BookPage
 
+const LIMIT = 3
+
 export const getServerSideProps: GetServerSideProps<
   BookPageProps,
   { id: string }
 > = async ({ params, locale }) => {
   if (!params?.id) {
-    return {
-      notFound: true,
-    }
+    return { notFound: true }
   }
 
-  const translations = await serverSideTranslations(locale ?? 'en', ['common'])
+  const client = await clientPromise
+  const books = client.db('bookshop').collection<DirectusBook>('books')
+
+  const book = await books.findOne({ _id: new ObjectId(params.id) })
+
+  if (!book) {
+    return { notFound: true }
+  }
+
+  const [tranResult, searchResult] = await Promise.allSettled([
+    serverSideTranslations(locale ?? 'en', ['common']),
+    books
+      .aggregate<DirectusBook>([
+        {
+          $search: {
+            index: 'default',
+            compound: {
+              should: [
+                {
+                  text: {
+                    query: [
+                      ...(book.authors || []),
+                      ...(book.categories || []),
+                      ...book.title.split(' '),
+                    ].filter((w) => !!w),
+                    path: [
+                      'title',
+                      'subtitle',
+                      'authors',
+                      'categories',
+                      'description',
+                    ],
+                    fuzzy: {},
+                  },
+                },
+              ],
+            },
+          },
+        },
+        {
+          $match: {
+            _id: { $ne: new ObjectId(book._id) },
+          },
+        },
+        {
+          $limit: LIMIT,
+        },
+      ])
+      .toArray(),
+  ])
+
+  if (tranResult.status === 'rejected') {
+    captureException(tranResult.reason)
+  }
+
+  if (searchResult.status === 'rejected') {
+    captureException(searchResult.reason)
+  }
 
   return {
     props: {
-      ...translations,
+      ...(tranResult.status === 'fulfilled' ? tranResult.value : {}),
       // need to cast books from `Directus`/`MongoDB Atlas` to `DirectusBook`, then remove all of the `null` properties
-      book: { ...fakeBook(), id: params?.id },
-      moreBooks: many(fakeBook, 3),
+      book: formatDirectusBook(book),
+      moreBooks:
+        searchResult.status === 'fulfilled'
+          ? searchResult.value.map((v) => formatDirectusBook(v))
+          : [],
     },
   }
 }

@@ -41,3 +41,8 @@ scripts/data/*
 
 # Sentry
 .sentryclirc
+
+# playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/

@@ -25,6 +25,7 @@ export interface DirectusBook {
   highlightOrder?: number | null
   price?: number | null
   currency?: string | null
+  dateRestocked?: string | null
 }
 
 export type NonNullableFields<T> = {

@@ -31,3 +31,10 @@ if (process.env.NODE_ENV === 'development') {
 // Export a module-scoped MongoClient promise. By doing this in a
 // separate module, the client can be shared across functions.
 export default clientPromise
+
+/**
+ * !!
+ * This is not exported in the `utils/index.ts` file
+ * because of the variables in this module scope
+ * !!
+ */

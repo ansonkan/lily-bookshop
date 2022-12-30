@@ -64,5 +64,8 @@
     "ru": "俄文",
     "ko": "韓文",
     "de": "德文"
+  },
+  "book-search-page": {
+    "zero-result": "沒有搜尋結果"
   }
 }
