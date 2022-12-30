@@ -1,19 +1,11 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import type { Book } from 'types'
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Flex,
-  VStack,
-} from '@chakra-ui/react'
-import { ChevronRightIcon } from '@chakra-ui/icons'
-import NextLink from 'next/link'
+import { Flex, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
-import { BookItem, Pagination } from 'components'
+import { ArrowBreadcrumb, BookItem, Pagination } from 'components'
 import { fakeBook, many } from 'utils'
 import { BaseLayout } from 'layouts'
 
@@ -39,20 +31,12 @@ const BooksPage: NextPage<BooksPageProps> = ({
 
   return (
     <BaseLayout defaultValue={query.q}>
-      <Breadcrumb
-        separator={<ChevronRightIcon color="gray.500" />}
-        fontSize="sm"
-      >
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/" as={NextLink}>
-            {t('breadcrumb.home')}
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink>{t('breadcrumb.books')}</BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
+      <ArrowBreadcrumb
+        items={[
+          { label: t('breadcrumb.home'), href: '/' },
+          { label: t('breadcrumb.books') },
+        ]}
+      />
 
       <VStack gap={[2, 4]} alignItems="stretch">
         {books.map((book) => (

@@ -30,7 +30,7 @@ export const BookScrollXCard = ({
       {books.map((book) => (
         <BookItem
           key={book.id}
-          w={[110, 130]}
+          w={[125, 130]}
           flexShrink={0}
           flexGrow={0}
           detailsLink={`/books/${book.id}`}

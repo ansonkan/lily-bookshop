@@ -43,7 +43,7 @@ export const Detailed = ({
       gap={2}
       {...linkBoxProps}
     >
-      <Box w={[110, 130]}>
+      <Box w={[125, 130]}>
         <Thumbnail src={thumbnail} bookTitle={title} />
       </Box>
 
