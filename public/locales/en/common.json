@@ -45,6 +45,24 @@
     "description": "Description",
     "related-books": {
       "heading": "Related Books"
-    }
+    },
+    "highlight-badge": "Featured",
+    "price-label": "Price",
+    "quantity": "Quantity",
+    "storage-location": "Storage Location",
+    "publisher": "Publisher",
+    "published-date": "Published Date",
+    "ISBN_13": "ISBN 13",
+    "ISBN_10": "ISBN 10",
+    "page-count": "Page Count",
+    "about-the-author": "About the author"
+  },
+  "language": {
+    "en": "English",
+    "zh": "Chinese",
+    "ja": "Japanese",
+    "ru": "Russian",
+    "ko": "Korean",
+    "de": "German"
   }
 }

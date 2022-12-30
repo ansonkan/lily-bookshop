@@ -76,16 +76,20 @@ export const Full = ({
 
         <SimpleGrid columns={[1, 1, 2, 3]} gap={2}>
           {[
-            { caption: 'priceLabel', v: priceLabel },
+            { caption: 'price-label', v: priceLabel },
             { caption: 'quantity', v: quantity },
-            { caption: 'storageLocation', v: storageLocation },
+            { caption: 'storage-location', v: storageLocation },
             { caption: 'publisher', v: publisher },
-            { caption: 'publishedDate', v: publishedDate },
-            { caption: 'ISBN_13', v: ISBN_13 },
-            { caption: 'ISBN_10', v: ISBN_10 },
-            { caption: 'pageCount', v: pageCount },
-          ].map(({ caption, v }) => (
-            <Kvp key={caption} k={t(`book-detailed-page.${caption}`)}>
+            { caption: 'published-date', v: publishedDate },
+            { caption: 'ISBN_13', v: ISBN_13, useBadge: true },
+            { caption: 'ISBN_10', v: ISBN_10, useBadge: true },
+            { caption: 'page-count', v: pageCount },
+          ].map(({ caption, v, useBadge }) => (
+            <Kvp
+              key={caption}
+              k={t(`book-detailed-page.${caption}`)}
+              useBadge={useBadge}
+            >
               {v}
             </Kvp>
           ))}

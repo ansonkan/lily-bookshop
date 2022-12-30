@@ -42,9 +42,27 @@
     "last": "最後一頁"
   },
   "book-detailed-page": {
-    "description": "摘要",
+    "description": "概要",
     "related-books": {
       "heading": "相關圖書"
-    }
+    },
+    "highlight-badge": "精選",
+    "price-label": "價錢",
+    "quantity": "數量",
+    "storage-location": "存儲位置",
+    "publisher": "出版商",
+    "published-date": "出版日期",
+    "ISBN_13": "ISBN 13",
+    "ISBN_10": "ISBN 10",
+    "page-count": "頁數",
+    "about-the-author": "關於作者"
+  },
+  "language": {
+    "en": "英文",
+    "zh": "中文",
+    "ja": "日文",
+    "ru": "俄文",
+    "ko": "韓文",
+    "de": "德文"
   }
 }
