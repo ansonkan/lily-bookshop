@@ -1,15 +1,6 @@
 import type { BookItemProps } from '../types'
 
-import {
-  Box,
-  Heading,
-  Link,
-  Flex,
-  SimpleGrid,
-  Text,
-  Badge,
-} from '@chakra-ui/react'
-import NextLink from 'next/link'
+import { Badge, Box, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 
 import { Kvp } from '../../Kvp'
