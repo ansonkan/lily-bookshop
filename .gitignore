@@ -38,3 +38,6 @@ next-env.d.ts
 scripts/**/*.json
 scripts/**/*.csv
 scripts/data/*
+
+# Sentry
+.sentryclirc

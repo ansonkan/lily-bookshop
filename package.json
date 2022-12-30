@@ -17,6 +17,7 @@
     "@chakra-ui/react": "2.4.3",
     "@emotion/react": "11.10.5",
     "@emotion/styled": "11.10.5",
+    "@sentry/nextjs": "7.28.1",
     "animejs": "3.2.1",
     "aws-amplify": "5.0.8",
     "clsx": "1.2.1",
