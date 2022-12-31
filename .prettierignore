@@ -8,3 +8,5 @@ node_modules
 
 scripts/**/*.csv
 scripts/**/*.json
+
+playwright-report/**/*

@@ -4,12 +4,12 @@ import type { GetServerSideProps, NextPage } from 'next'
 import { Center, Flex, Text, VStack } from '@chakra-ui/react'
 import { WarningTwoIcon } from '@chakra-ui/icons'
 // import { captureException } from '@sentry/nextjs'
+import { MongoClient } from 'mongodb'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
 import { ArrowBreadcrumb, BookItem, Pagination } from 'components'
 import { BaseLayout } from 'layouts'
-import clientPromise from 'utils/mongodb'
 import { formatDirectusBook } from 'utils'
 
 interface BooksPageQuery {
@@ -96,7 +96,15 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
 
   const skip = (pageInt - 1) * LIMIT
 
-  const client = await clientPromise
+  if (!process.env.MONGODB_URL_READ_WRITE) {
+    throw new Error(
+      'Invalid/Missing environment variable: "MONGODB_URL_READ_WRITE"'
+    )
+  }
+
+  const client = await new MongoClient(
+    process.env.MONGODB_URL_READ_WRITE
+  ).connect()
   const books = client.db('bookshop').collection<DirectusBook>('books')
   // need to cast books from `Directus`/`MongoDB Atlas` to `DirectusBook`, then remove all of the `null` properties
 
