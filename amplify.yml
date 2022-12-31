@@ -1,18 +1,5 @@
 version: 1
 
-test:
-  phases:
-    preTest:
-      commands:
-        - npm ci
-    test:
-      commands:
-        - npx playwright install --with-deps
-        - npx playwright test
-    artifacts:
-      baseDirectory: playwright-report
-      files:
-        - '**/*'
 frontend:
   phases:
     preBuild:
