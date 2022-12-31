@@ -2,9 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 // import { captureException, captureMessage } from '@sentry/nextjs'
-import { ObjectId } from 'mongodb'
-
-import clientPromise from 'utils/mongodb'
+import { MongoClient, ObjectId } from 'mongodb'
 
 const trimReq = ({
   url,
@@ -38,7 +36,15 @@ export default async function handler(
 
     const { event, collection, keys, key, payload } = req.body
 
-    const client = await clientPromise
+    if (!process.env.MONGODB_URL_READ_WRITE) {
+      throw new Error(
+        'Invalid/Missing environment variable: "MONGODB_URL_READ_WRITE"'
+      )
+    }
+
+    const client = await new MongoClient(
+      process.env.MONGODB_URL_READ_WRITE
+    ).connect()
     const dbCollection = client.db('bookshop').collection(collection)
 
     switch (event) {
