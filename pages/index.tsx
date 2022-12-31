@@ -3,7 +3,6 @@ import type { GetStaticProps, NextPage } from 'next'
 
 import { Container, Flex } from '@chakra-ui/react'
 // import { captureException } from '@sentry/nextjs'
-import { MongoClient } from 'mongodb'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import {
@@ -13,6 +12,7 @@ import {
   LandingSection,
   LatestAdditionSection,
 } from 'components'
+import clientPromise from 'utils/mongodb'
 import { formatDirectusBook } from 'utils'
 
 interface HomePageProps {
@@ -77,16 +77,7 @@ const LIMIT = 20
 export const getStaticProps: GetStaticProps<HomePageProps> = async ({
   locale,
 }) => {
-  if (!process.env.MONGODB_URL_READ_WRITE) {
-    throw new Error(
-      'Invalid/Missing environment variable: "MONGODB_URL_READ_WRITE"'
-    )
-  }
-
-  const client = await new MongoClient(
-    process.env.MONGODB_URL_READ_WRITE
-  ).connect()
-
+  const client = await clientPromise
   const books = client.db('bookshop').collection<DirectusBook>('books')
 
   const [tranResult, highResult, latestResult] = await Promise.allSettled([

@@ -2,13 +2,14 @@ import type { Book, DirectusBook } from 'types'
 import type { GetServerSideProps, NextPage } from 'next'
 
 import { Heading, VStack } from '@chakra-ui/react'
-import { MongoClient, ObjectId } from 'mongodb'
+import { ObjectId } from 'mongodb'
 // import { captureException } from '@sentry/nextjs'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
 import { ArrowBreadcrumb, BookItem } from 'components'
 import { BaseLayout } from 'layouts'
+import clientPromise from 'utils/mongodb'
 import { formatDirectusBook } from 'utils'
 
 interface BookPageProps {
@@ -66,15 +67,7 @@ export const getServerSideProps: GetServerSideProps<
     return { notFound: true }
   }
 
-  if (!process.env.MONGODB_URL_READ_WRITE) {
-    throw new Error(
-      'Invalid/Missing environment variable: "MONGODB_URL_READ_WRITE"'
-    )
-  }
-
-  const client = await new MongoClient(
-    process.env.MONGODB_URL_READ_WRITE
-  ).connect()
+  const client = await clientPromise
   const books = client.db('bookshop').collection<DirectusBook>('books')
 
   const book = await books.findOne({ _id: new ObjectId(params.id) })
