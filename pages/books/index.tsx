@@ -3,7 +3,7 @@ import type { GetServerSideProps, NextPage } from 'next'
 
 import { Center, Flex, Text, VStack } from '@chakra-ui/react'
 import { WarningTwoIcon } from '@chakra-ui/icons'
-// import { captureException } from '@sentry/nextjs'
+import { captureException } from '@sentry/nextjs'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
@@ -145,13 +145,13 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
       .toArray(),
   ])
 
-  // if (tranResult.status === 'rejected') {
-  //   captureException(tranResult.reason)
-  // }
+  if (tranResult.status === 'rejected') {
+    captureException(tranResult.reason)
+  }
 
-  // if (searchResult.status === 'rejected') {
-  //   captureException(searchResult.reason)
-  // }
+  if (searchResult.status === 'rejected') {
+    captureException(searchResult.reason)
+  }
 
   return {
     props: {

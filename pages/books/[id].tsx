@@ -3,7 +3,7 @@ import type { GetServerSideProps, NextPage } from 'next'
 
 import { Heading, VStack } from '@chakra-ui/react'
 import { ObjectId } from 'mongodb'
-// import { captureException } from '@sentry/nextjs'
+import { captureException } from '@sentry/nextjs'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
@@ -118,13 +118,13 @@ export const getServerSideProps: GetServerSideProps<
       .toArray(),
   ])
 
-  // if (tranResult.status === 'rejected') {
-  //   captureException(tranResult.reason)
-  // }
+  if (tranResult.status === 'rejected') {
+    captureException(tranResult.reason)
+  }
 
-  // if (searchResult.status === 'rejected') {
-  //   captureException(searchResult.reason)
-  // }
+  if (searchResult.status === 'rejected') {
+    captureException(searchResult.reason)
+  }
 
   return {
     props: {

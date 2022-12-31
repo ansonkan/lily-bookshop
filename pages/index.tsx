@@ -2,7 +2,7 @@ import type { Book, DirectusBook } from 'types'
 import type { GetStaticProps, NextPage } from 'next'
 
 import { Container, Flex } from '@chakra-ui/react'
-// import { captureException } from '@sentry/nextjs'
+import { captureException } from '@sentry/nextjs'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import {
@@ -99,17 +99,17 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
       .toArray(),
   ])
 
-  // if (tranResult.status === 'rejected') {
-  //   captureException(tranResult.reason)
-  // }
+  if (tranResult.status === 'rejected') {
+    captureException(tranResult.reason)
+  }
 
-  // if (highResult.status === 'rejected') {
-  //   captureException(highResult.reason)
-  // }
+  if (highResult.status === 'rejected') {
+    captureException(highResult.reason)
+  }
 
-  // if (latestResult.status === 'rejected') {
-  //   captureException(latestResult.reason)
-  // }
+  if (latestResult.status === 'rejected') {
+    captureException(latestResult.reason)
+  }
 
   return {
     props: {
