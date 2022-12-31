@@ -102,7 +102,9 @@ async function main() {
             casing: 'upper',
           })}`,
           quantity: 1,
-          // highlightOrder: -1
+          highlightOrder: faker.datatype.boolean()
+            ? faker.datatype.number({ min: -10, max: 10 })
+            : undefined,
           price: faker.datatype.float({ min: 20, max: 200, precision: 0.01 }),
           currency: 'HKD',
           status: 'published',
@@ -267,55 +269,4 @@ async function importToDirectus(books: CreateDirectusBookProps[]) {
       fails.push({ book: b, err: JSON.stringify(err) })
     }
   }
-
-  // try {
-  //   console.log('Start importing books to Directus...')
-
-  //   const results = await Promise.allSettled(
-  //     books.map((b) =>
-  //       fetch(process.env.DIRECTUS_URL + 'files/import', {
-  //         method: 'POST',
-  //         headers: {
-  //           Accept: 'application/json',
-  //           'Content-Type': 'application/json',
-  //           Authorization: `Bearer ${process.env.DIRECTUS_API_KEY}`,
-  //         },
-  //         body: JSON.stringify({
-  //           url: b.thumbnail,
-  //           data: {
-  //             title: b.title,
-  //             // folder `public`
-  //             folder: '5a16839a-d3fd-4e24-a03d-4f184ed67e8f',
-  //           },
-  //         }),
-  //       })
-  //     )
-  //   )
-
-  //   for (let i = 0; i < results.length; i++) {
-  //     const result = results[i]
-  //     if (result.status === 'fulfilled') {
-  //       const value = await result.value.json()
-  //       books[i].thumbnail = value.data.id
-  //     }
-  //   }
-
-  //   const result = await fetch(process.env.DIRECTUS_URL + 'items/books', {
-  //     method: 'POST',
-  //     body: JSON.stringify(books),
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //       Authorization: `Bearer ${process.env.DIRECTUS_API_KEY}`,
-  //     },
-  //   })
-
-  //   console.log(
-  //     `Imported ${results.length} books to Directus!`,
-  //     JSON.stringify(result, null, 2),
-  //     '\n\n'
-  //   )
-  // } catch (error) {
-  //   console.error(error)
-  // }
 }

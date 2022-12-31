@@ -2,7 +2,7 @@ import type { Book, MongoDbBook } from 'types'
 import type { GetServerSideProps, NextPage } from 'next'
 
 import { Heading, VStack } from '@chakra-ui/react'
-import { MongoClient, ObjectId } from 'mongodb'
+import { MongoClient } from 'mongodb'
 import { captureException } from '@sentry/nextjs'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
@@ -35,7 +35,7 @@ const BookPage: NextPage<BookPageProps> = ({
       <BookItem
         variant="full"
         detailsLink={`/books/${book.directusId}`}
-        {...book}
+        book={book}
       />
 
       {moreBooks.length && (
@@ -49,7 +49,7 @@ const BookPage: NextPage<BookPageProps> = ({
               variant="detailed"
               key={book.directusId}
               detailsLink={`/books/${book.directusId}`}
-              {...book}
+              book={book}
             />
           ))}
         </VStack>
@@ -80,7 +80,10 @@ export const getServerSideProps: GetServerSideProps<
     await client.connect()
     const books = client.db('bookshop').collection<MongoDbBook>('books')
 
-    const book = await books.findOne({ directusId: params.id })
+    const book = await books.findOne(
+      { directusId: params.id },
+      { projection: { _id: 0 } }
+    )
 
     if (!book) {
       return { notFound: true }
@@ -118,9 +121,10 @@ export const getServerSideProps: GetServerSideProps<
           },
           {
             $match: {
-              _id: { $ne: new ObjectId(book._id) },
+              directusId: { $ne: book.directusId },
             },
           },
+          { $project: { _id: 0 } },
           {
             $limit: LIMIT,
           },

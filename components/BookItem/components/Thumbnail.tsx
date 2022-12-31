@@ -27,7 +27,6 @@ export const Thumbnail = ({
       src={src ?? placeholderImageSrc}
       alt={`Thumbnail of ${bookTitle}`}
       fill={true}
-      placeholder="blur"
     />
   </AspectRatio>
 )

@@ -34,7 +34,7 @@ export const BookScrollXCard = ({
           flexShrink={0}
           flexGrow={0}
           detailsLink={`/books/${book.directusId}`}
-          {...book}
+          book={book}
         />
       ))}
     </CardBody>

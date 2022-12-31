@@ -13,13 +13,9 @@ export interface DetailedProps
 }
 
 export const Detailed = ({
-  title,
-  subtitle,
-  authors,
-  description,
+  book: { title, subtitle, authors, description, thumbnail },
   priceLabel,
   detailsLink,
-  thumbnail,
   descriptionWorkCount = 100,
   ...linkBoxProps
 }: DetailedProps): JSX.Element => {

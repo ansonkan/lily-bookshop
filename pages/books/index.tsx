@@ -2,9 +2,9 @@ import type { Book, MongoDbBook } from 'types'
 import type { GetServerSideProps, NextPage } from 'next'
 
 import { Center, Flex, Text, VStack } from '@chakra-ui/react'
-import { captureException, captureMessage } from '@sentry/nextjs'
 import { MongoClient } from 'mongodb'
 import { WarningTwoIcon } from '@chakra-ui/icons'
+import { captureException } from '@sentry/nextjs'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
@@ -24,6 +24,8 @@ interface BooksPageProps {
   books: Book[]
   total: number
 }
+
+const LIMIT = 20
 
 const BooksPage: NextPage<BooksPageProps> = ({
   query,
@@ -49,14 +51,16 @@ const BooksPage: NextPage<BooksPageProps> = ({
                 variant="detailed"
                 key={book.directusId}
                 detailsLink={`/books/${book.directusId}`}
-                {...book}
+                book={book}
               />
             ))}
           </VStack>
 
-          <Flex justifyContent="center">
-            <Pagination page={query.page} limit={query.limit} total={total} />
-          </Flex>
+          {!(query.page === 1 && books.length < LIMIT) && (
+            <Flex justifyContent="center">
+              <Pagination page={query.page} limit={query.limit} total={total} />
+            </Flex>
+          )}
         </>
       ) : (
         <Center flexDirection="column" minH="30vh">
@@ -69,14 +73,6 @@ const BooksPage: NextPage<BooksPageProps> = ({
 }
 
 export default BooksPage
-
-interface SearchMeta {
-  meta: {
-    count: { lowerBound: number }
-  }
-}
-
-const LIMIT = 20
 
 export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
   query,
@@ -112,12 +108,12 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
     const [tranResult, searchResult] = await Promise.allSettled([
       serverSideTranslations(locale ?? 'en', ['common']),
       books
-        .aggregate<MongoDbBook & SearchMeta>([
+        .aggregate([
           {
             $search: {
               index: 'default',
               count: {
-                type: 'lowerBound',
+                type: 'total',
               },
               compound: {
                 should: [
@@ -139,41 +135,41 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
               },
             },
           },
+          { $project: { _id: 0 } },
           {
-            $project: {
-              meta: '$$SEARCH_META',
+            $facet: {
+              books: [{ $skip: skip }, { $limit: LIMIT }],
+              meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
             },
-          },
-          { $skip: skip },
-          {
-            $limit: LIMIT,
           },
         ])
         .toArray(),
     ])
 
-    if (searchResult.status === 'fulfilled') {
-      captureMessage(JSON.stringify(searchResult.value))
+    let total = 0
+    let searchedBooks: Book[] = []
+
+    if (searchResult.status === 'fulfilled' && searchResult.value.length) {
+      const value = searchResult.value[0] as unknown as {
+        books: MongoDbBook[]
+        meta: { count: { total: number } }[]
+      }
+
+      total = value.meta[0] ? value.meta[0].count.total : 0
+      searchedBooks = value.books.map((v) => formatDirectusBook(v))
     }
 
     return {
       props: {
         ...(tranResult.status === 'fulfilled' ? tranResult.value : {}),
-        books:
-          searchResult.status === 'fulfilled'
-            ? searchResult.value.map((v) => formatDirectusBook(v))
-            : [],
+        books: searchedBooks,
+        total,
         query: {
           q,
           // 1 based
           page: pageInt,
           limit: LIMIT,
         },
-        // a placeholder - https://stackoverflow.com/questions/21803290/get-a-count-of-total-documents-with-mongodb-when-using-limit
-        total:
-          searchResult.status === 'fulfilled' && searchResult.value.length
-            ? searchResult.value[0].meta.count.lowerBound
-            : 0,
       },
     }
   } catch (err) {

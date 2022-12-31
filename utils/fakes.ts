@@ -36,7 +36,9 @@ export const fakeBook = (): Book => {
     // googleBookLink: 'googleBookLink',
     storageLocation: faker.random.words(),
     quantity: faker.datatype.number({ min: 0, max: 2 }),
-    highlightOrder: faker.datatype.number({ min: -10, max: 10 }),
+    highlightOrder: faker.datatype.boolean()
+      ? faker.datatype.number({ min: -10, max: 10 })
+      : undefined,
     price: faker.datatype.number({ min: 20, max: 500 }),
     currency: 'HKD',
   }

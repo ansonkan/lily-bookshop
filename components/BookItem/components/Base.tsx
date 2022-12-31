@@ -10,12 +10,9 @@ export interface BaseProps extends Omit<BookItemProps, 'variant' | 'price'> {
 }
 
 export const Base = ({
-  title,
-  subtitle,
-  authors,
+  book: { title, subtitle, thumbnail, authors },
   priceLabel,
   detailsLink,
-  thumbnail,
   ...linkBoxProps
 }: BaseProps): JSX.Element => (
   <LinkBox

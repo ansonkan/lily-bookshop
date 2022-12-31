@@ -38,7 +38,7 @@ const HomePage: NextPage<HomePageProps> = ({
               rounded="3xl"
               overflow="hidden"
               boxShadow="xl"
-              minH="500"
+              minH="350"
               // https://stackoverflow.com/questions/49066011/overflow-hidden-with-border-radius-not-working-on-safari
               isolation="isolate"
               books={highlights}
@@ -50,7 +50,7 @@ const HomePage: NextPage<HomePageProps> = ({
               rounded="3xl"
               overflow="hidden"
               boxShadow="xl"
-              minH="500"
+              minH="350"
               isolation="isolate"
               books={latestAdditions}
             />
@@ -93,7 +93,11 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
       books
         .find(
           { highlightOrder: { $ne: null }, quantity: { $gt: 0 } },
-          { limit: LIMIT, sort: { highlightOrder: 'ascending' } }
+          {
+            limit: LIMIT,
+            sort: { highlightOrder: 'ascending' },
+            projection: { _id: 0 },
+          }
         )
         .toArray(),
       books
@@ -102,6 +106,7 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
           {
             limit: LIMIT,
             sort: { dateRestocked: 'descending', date_updated: 'descending' },
+            projection: { _id: 0 },
           }
         )
         .toArray(),

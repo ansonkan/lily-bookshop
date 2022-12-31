@@ -3,11 +3,12 @@ import type { BookItemProps } from './types'
 import { Base, Detailed, Full } from './components'
 
 export const BookItem = ({
-  price,
-  currency = 'HKD',
+  book,
   variant = 'base',
   ...others
 }: BookItemProps): JSX.Element => {
+  const { price, currency = 'HKD' } = book
+
   // `navigator.language` doesn't exist on the server side, so let's use `en-GB` for now
   const priceLabel = price
     ? new Intl.NumberFormat('en-GB', {
@@ -17,12 +18,12 @@ export const BookItem = ({
     : undefined
 
   if (variant === 'full') {
-    return <Full priceLabel={priceLabel} {...others} />
+    return <Full priceLabel={priceLabel} {...others} book={book} />
   }
 
   if (variant === 'detailed') {
-    return <Detailed priceLabel={priceLabel} {...others} />
+    return <Detailed priceLabel={priceLabel} {...others} book={book} />
   }
 
-  return <Base priceLabel={priceLabel} {...others} />
+  return <Base priceLabel={priceLabel} {...others} book={book} />
 }
