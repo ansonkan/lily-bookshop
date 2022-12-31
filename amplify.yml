@@ -7,6 +7,8 @@ test:
         - npm ci
     test:
       commands:
+        - npm run type-check
+        - npm run lint
         - npx playwright install --with-deps
         - npx playwright test
   artifacts:
