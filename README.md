@@ -21,23 +21,24 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
     - [x] verify the existing links are working with the i18n setup
   - [ ] Blog post list page
   - [ ] Blog post page
+  - [ ] Investigate on how to transition from next/image blur data URL to actual image
 - [ ] CMS
   - [x] create a new Directus project
   - [x] create a basic scripts to load Google books by on ISBN into Directus
-  - [ ] setup a Directus webbook to sync book entries to MongoDB Atlas
-  - [ ] create a script the read Array<{`ISBN` + images}> -> look up details through [Google Books search API](https://developers.google.com/books/docs/v1/using#PerformingSearch) -> import the details and images to Directus (-> import the same set of data to MongoDB Atlas if the webhook doesn't work for imports)
+  - [x] setup a Directus webbook to sync book entries to MongoDB Atlas
+  - [x] create a script the read Array<{`ISBN` + images}> -> look up details through [Google Books search API](https://developers.google.com/books/docs/v1/using#PerformingSearch) -> import the details and images to Directus (-> import the same set of data to MongoDB Atlas if the webhook doesn't work for imports)
 - [ ] Integration
-  - [ ] Home page
-    - [ ] search
-    - [ ] Highlights
-    - [ ] Latest Additions
-  - [ ] Book details page
-    - [ ] details section
-    - [ ] related books section
-  - [ ] Search result page
-    - [ ] result section
-- [ ] Platform
-  - [ ] Investigate `SSR` vs `SSG` + `ISR` because Netlify doesn't support caching on `SSR` pages (https://docs.netlify.com/integrations/frameworks/next-js/overview/#limitations) and AWS Amplify seems to support that and most of the Next.js 12 & 13 features (https://aws.amazon.com/about-aws/whats-new/2022/11/aws-amplify-hosting-support-next-js-12-13/)
+  - [x] Home page
+    - [x] search
+    - [x] Highlights
+    - [x] Latest Additions
+  - [x] Book details page
+    - [x] details section
+    - [x] related books section
+  - [x] Search result page
+    - [x] result section
+- [x] Platform
+  - [x] Investigate `SSR` vs `SSG` + `ISR` because Netlify doesn't support caching on `SSR` pages (https://docs.netlify.com/integrations/frameworks/next-js/overview/#limitations) and AWS Amplify seems to support that and most of the Next.js 12 & 13 features (https://aws.amazon.com/about-aws/whats-new/2022/11/aws-amplify-hosting-support-next-js-12-13/)
   - [ ] buy a domain
   - [ ] deploy
 - [ ] Import the real books from the Lily Bookshop
