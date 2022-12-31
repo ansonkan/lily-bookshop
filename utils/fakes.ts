@@ -7,7 +7,7 @@ export const fakeBook = (): Book => {
   const randomNum = faker.datatype.number({ min: 0, max: 2 })
 
   return {
-    id,
+    directusId: id,
     status:
       randomNum === 0 ? 'published' : randomNum === 1 ? 'draft' : 'archived',
     user_created: faker.datatype.uuid(),

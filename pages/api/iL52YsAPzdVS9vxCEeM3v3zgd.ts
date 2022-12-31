@@ -1,8 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { MongoClient, ObjectId } from 'mongodb'
 import { captureException, captureMessage } from '@sentry/nextjs'
+import { MongoClient } from 'mongodb'
 
 const trimReq = ({
   url,
@@ -49,36 +49,25 @@ export default async function handler(
 
     switch (event) {
       case 'items.create':
-        await dbCollection.insertOne({
-          _id: new ObjectId(key),
-          id: key,
-          ...payload,
-        })
+        await dbCollection.insertOne({ directusId: key, ...payload })
         break
 
       case 'items.update':
         if (keys) {
           await dbCollection.updateMany(
-            {
-              _id: { $in: keys.map((k: string) => new ObjectId(k)) },
-            },
+            { directusId: { $in: keys } },
             { $set: payload }
           )
         } else {
-          await dbCollection.updateOne(
-            { _id: new ObjectId(key) },
-            { $set: payload }
-          )
+          await dbCollection.updateOne({ directusId: key }, { $set: payload })
         }
         break
 
       case 'items.delete':
         if (keys) {
-          await dbCollection.deleteMany({
-            _id: { $in: keys.map((k: string) => new ObjectId(k)) },
-          })
+          await dbCollection.deleteMany({ directusId: { $in: keys } })
         } else {
-          await dbCollection.deleteOne({ _id: new ObjectId(key) })
+          await dbCollection.deleteOne({ directusId: key })
         }
         break
     }

@@ -1,4 +1,4 @@
-import type { Book, DirectusBook } from 'types'
+import type { Book, MongoDbBook } from 'types'
 import type { GetServerSideProps, NextPage } from 'next'
 
 import { Center, Flex, Text, VStack } from '@chakra-ui/react'
@@ -47,8 +47,8 @@ const BooksPage: NextPage<BooksPageProps> = ({
             {books.map((book) => (
               <BookItem
                 variant="detailed"
-                key={book.id}
-                detailsLink={`/books/${book.id}`}
+                key={book.directusId}
+                detailsLink={`/books/${book.directusId}`}
                 {...book}
               />
             ))}
@@ -104,7 +104,7 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
 
   try {
     await client.connect()
-    const books = client.db('bookshop').collection<DirectusBook>('books')
+    const books = client.db('bookshop').collection<MongoDbBook>('books')
     // need to cast books from `Directus`/`MongoDB Atlas` to `DirectusBook`, then remove all of the `null` properties
 
     // const books = many(fakeBook, LIMIT)
@@ -112,7 +112,7 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
     const [tranResult, searchResult] = await Promise.allSettled([
       serverSideTranslations(locale ?? 'en', ['common']),
       books
-        .aggregate<DirectusBook & SearchMeta>([
+        .aggregate<MongoDbBook & SearchMeta>([
           {
             $search: {
               index: 'default',

@@ -29,11 +29,11 @@ export const BookScrollXCard = ({
     <CardBody display="flex" flexDir="row" gap={4} overflowX="scroll">
       {books.map((book) => (
         <BookItem
-          key={book.id}
+          key={book.directusId}
           w={[125, 130]}
           flexShrink={0}
           flexGrow={0}
-          detailsLink={`/books/${book.id}`}
+          detailsLink={`/books/${book.directusId}`}
           {...book}
         />
       ))}

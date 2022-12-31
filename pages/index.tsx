@@ -1,4 +1,4 @@
-import type { Book, DirectusBook } from 'types'
+import type { Book, MongoDbBook } from 'types'
 import type { GetStaticProps, NextPage } from 'next'
 
 import { Container, Flex } from '@chakra-ui/react'
@@ -86,7 +86,7 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
 
   try {
     await client.connect()
-    const books = client.db('bookshop').collection<DirectusBook>('books')
+    const books = client.db('bookshop').collection<MongoDbBook>('books')
 
     const [tranResult, highResult, latestResult] = await Promise.allSettled([
       serverSideTranslations(locale ?? 'en', ['common']),

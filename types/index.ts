@@ -28,6 +28,10 @@ export interface DirectusBook {
   dateRestocked?: string | null
 }
 
+export interface MongoDbBook extends Omit<DirectusBook, 'id'> {
+  directusId: string
+}
+
 export type NonNullableFields<T> = {
   [P in keyof T]: NonNullable<T[P]>
 }
@@ -37,7 +41,7 @@ export type NonNullableFields<T> = {
  * but `undefined` works better in JS I think, so let's use `DirectusBook` for everything returned from
  * `Directus` or `MongoDB Atlas`
  */
-export type Book = NonNullableFields<DirectusBook>
+export type Book = NonNullableFields<MongoDbBook>
 
 export interface DirectusArticle {
   id: string // uuid

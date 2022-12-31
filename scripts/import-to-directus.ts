@@ -63,9 +63,10 @@ main()
 
 // https://www.googleapis.com/books/v1/volumes?q=isbn:9780006380832
 
+const fails: Array<Record<string, unknown>> = []
+
 async function main() {
   let books: CreateDirectusBookProps[] = []
-  const fails: Array<{ id: BookId; reason?: string; error?: unknown }> = []
 
   let parsed: CreateDirectusBookProps[] = []
 
@@ -89,6 +90,7 @@ async function main() {
 
       if (result.totalItems === 0) {
         fails.push({ id, reason: 'totalItems === 0' })
+        continue
       } else if (result.totalItems === 1) {
         books.push({
           ...(await populateAboutTheAuthor(
@@ -107,6 +109,7 @@ async function main() {
         })
       } else {
         fails.push({ id, reason: 'multiple matches' })
+        continue
       }
     } catch (err) {
       fails.push({ id, error: JSON.stringify(err) })
@@ -223,54 +226,96 @@ async function populateAboutTheAuthor(
 }
 
 async function importToDirectus(books: CreateDirectusBookProps[]) {
-  try {
-    console.log('Start importing books to Directus...')
-
-    const results = await Promise.allSettled(
-      books.map((b) =>
-        fetch(process.env.DIRECTUS_URL + 'files/import', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.DIRECTUS_API_KEY}`,
-          },
-          body: JSON.stringify({
-            url: b.thumbnail,
-            data: {
-              title: b.title,
-              // folder `public`
-              folder: '5a16839a-d3fd-4e24-a03d-4f184ed67e8f',
+  for (const b of books) {
+    try {
+      if (b.title) {
+        const thumbnailResult = await fetch(
+          process.env.DIRECTUS_URL + 'files/import',
+          {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${process.env.DIRECTUS_API_KEY}`,
             },
-          }),
-        })
-      )
-    )
+            body: JSON.stringify({
+              url: b.thumbnail,
+              data: {
+                title: b.title,
+                // folder `public`
+                folder: '5a16839a-d3fd-4e24-a03d-4f184ed67e8f',
+              },
+            }),
+          }
+        )
 
-    for (let i = 0; i < results.length; i++) {
-      const result = results[i]
-      if (result.status === 'fulfilled') {
-        const value = await result.value.json()
-        books[i].thumbnail = value.data.id
+        const value = await thumbnailResult.json()
+
+        b.thumbnail = value.data.id
       }
+
+      await fetch(process.env.DIRECTUS_URL + 'items/books', {
+        method: 'POST',
+        body: JSON.stringify(b),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.DIRECTUS_API_KEY}`,
+        },
+      })
+    } catch (err) {
+      fails.push({ book: b, err: JSON.stringify(err) })
     }
-
-    const result = await fetch(process.env.DIRECTUS_URL + 'items/Books', {
-      method: 'POST',
-      body: JSON.stringify(books),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.DIRECTUS_API_KEY}`,
-      },
-    })
-
-    console.log(
-      `Imported ${results.length} books to Directus!`,
-      JSON.stringify(result, null, 2),
-      '\n\n'
-    )
-  } catch (error) {
-    console.error(error)
   }
+
+  // try {
+  //   console.log('Start importing books to Directus...')
+
+  //   const results = await Promise.allSettled(
+  //     books.map((b) =>
+  //       fetch(process.env.DIRECTUS_URL + 'files/import', {
+  //         method: 'POST',
+  //         headers: {
+  //           Accept: 'application/json',
+  //           'Content-Type': 'application/json',
+  //           Authorization: `Bearer ${process.env.DIRECTUS_API_KEY}`,
+  //         },
+  //         body: JSON.stringify({
+  //           url: b.thumbnail,
+  //           data: {
+  //             title: b.title,
+  //             // folder `public`
+  //             folder: '5a16839a-d3fd-4e24-a03d-4f184ed67e8f',
+  //           },
+  //         }),
+  //       })
+  //     )
+  //   )
+
+  //   for (let i = 0; i < results.length; i++) {
+  //     const result = results[i]
+  //     if (result.status === 'fulfilled') {
+  //       const value = await result.value.json()
+  //       books[i].thumbnail = value.data.id
+  //     }
+  //   }
+
+  //   const result = await fetch(process.env.DIRECTUS_URL + 'items/books', {
+  //     method: 'POST',
+  //     body: JSON.stringify(books),
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //       Authorization: `Bearer ${process.env.DIRECTUS_API_KEY}`,
+  //     },
+  //   })
+
+  //   console.log(
+  //     `Imported ${results.length} books to Directus!`,
+  //     JSON.stringify(result, null, 2),
+  //     '\n\n'
+  //   )
+  // } catch (error) {
+  //   console.error(error)
+  // }
 }

@@ -1,4 +1,4 @@
-import type { Book, DirectusBook } from 'types'
+import type { Book, MongoDbBook } from 'types'
 import type { GetServerSideProps, NextPage } from 'next'
 
 import { Heading, VStack } from '@chakra-ui/react'
@@ -28,11 +28,15 @@ const BookPage: NextPage<BookPageProps> = ({
         items={[
           { label: t('breadcrumb.home'), href: '/' },
           { label: t('breadcrumb.books'), href: '/books' },
-          { label: book.id },
+          { label: book.directusId },
         ]}
       />
 
-      <BookItem variant="full" detailsLink={`/books/${book.id}`} {...book} />
+      <BookItem
+        variant="full"
+        detailsLink={`/books/${book.directusId}`}
+        {...book}
+      />
 
       {moreBooks.length && (
         <VStack gap={[2, 4]} alignItems="stretch" mt={[8, 16]}>
@@ -43,8 +47,8 @@ const BookPage: NextPage<BookPageProps> = ({
           {moreBooks.map((book) => (
             <BookItem
               variant="detailed"
-              key={book.id}
-              detailsLink={`/books/${book.id}`}
+              key={book.directusId}
+              detailsLink={`/books/${book.directusId}`}
               {...book}
             />
           ))}
@@ -74,9 +78,9 @@ export const getServerSideProps: GetServerSideProps<
 
   try {
     await client.connect()
-    const books = client.db('bookshop').collection<DirectusBook>('books')
+    const books = client.db('bookshop').collection<MongoDbBook>('books')
 
-    const book = await books.findOne({ _id: new ObjectId(params.id) })
+    const book = await books.findOne({ directusId: params.id })
 
     if (!book) {
       return { notFound: true }
@@ -85,7 +89,7 @@ export const getServerSideProps: GetServerSideProps<
     const [tranResult, searchResult] = await Promise.allSettled([
       serverSideTranslations(locale ?? 'en', ['common']),
       books
-        .aggregate<DirectusBook>([
+        .aggregate<MongoDbBook>([
           {
             $search: {
               index: 'default',
