@@ -2,6 +2,7 @@ import type { Book, DirectusBook } from 'types'
 import type { GetStaticProps, NextPage } from 'next'
 
 import { Container, Flex } from '@chakra-ui/react'
+import { MongoClient } from 'mongodb'
 import { captureException } from '@sentry/nextjs'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
@@ -12,7 +13,7 @@ import {
   LandingSection,
   LatestAdditionSection,
 } from 'components'
-import clientPromise from 'utils/mongodb'
+// import clientPromise from 'utils/mongodb'
 import { formatDirectusBook } from 'utils'
 
 interface HomePageProps {
@@ -77,53 +78,54 @@ const LIMIT = 20
 export const getStaticProps: GetStaticProps<HomePageProps> = async ({
   locale,
 }) => {
-  const client = await clientPromise
-  const books = client.db('bookshop').collection<DirectusBook>('books')
-
-  const [tranResult, highResult, latestResult] = await Promise.allSettled([
-    serverSideTranslations(locale ?? 'en', ['common']),
-    books
-      .find(
-        { highlightOrder: { $ne: null }, quantity: { $gt: 0 } },
-        { limit: LIMIT, sort: { highlightOrder: 'ascending' } }
-      )
-      .toArray(),
-    books
-      .find(
-        { quantity: { $gt: 0 } },
-        {
-          limit: LIMIT,
-          sort: { dateRestocked: 'descending', date_updated: 'descending' },
-        }
-      )
-      .toArray(),
-  ])
-
-  if (tranResult.status === 'rejected') {
-    captureException(tranResult.reason)
+  if (!process.env.MONGODB_URL_READ_ONLY) {
+    throw new Error('Invalid/Missing environment variable')
   }
 
-  if (highResult.status === 'rejected') {
-    captureException(highResult.reason)
-  }
+  const client = new MongoClient(process.env.MONGODB_URL_READ_ONLY)
 
-  if (latestResult.status === 'rejected') {
-    captureException(latestResult.reason)
-  }
+  try {
+    await client.connect()
+    const books = client.db('bookshop').collection<DirectusBook>('books')
 
-  return {
-    props: {
-      ...(tranResult.status === 'fulfilled' ? tranResult.value : {}),
-      // need to cast books from `Directus`/`MongoDB Atlas` to `DirectusBook`, then remove all of the `null` properties
-      highlights:
-        highResult.status === 'fulfilled'
-          ? highResult.value.map((v) => formatDirectusBook(v))
-          : [],
-      latestAdditions:
-        latestResult.status === 'fulfilled'
-          ? latestResult.value.map((v) => formatDirectusBook(v))
-          : [],
-    },
-    revalidate: 60 * 15, // 15min
+    const [tranResult, highResult, latestResult] = await Promise.allSettled([
+      serverSideTranslations(locale ?? 'en', ['common']),
+      books
+        .find(
+          { highlightOrder: { $ne: null }, quantity: { $gt: 0 } },
+          { limit: LIMIT, sort: { highlightOrder: 'ascending' } }
+        )
+        .toArray(),
+      books
+        .find(
+          { quantity: { $gt: 0 } },
+          {
+            limit: LIMIT,
+            sort: { dateRestocked: 'descending', date_updated: 'descending' },
+          }
+        )
+        .toArray(),
+    ])
+
+    return {
+      props: {
+        ...(tranResult.status === 'fulfilled' ? tranResult.value : {}),
+        // need to cast books from `Directus`/`MongoDB Atlas` to `DirectusBook`, then remove all of the `null` properties
+        highlights:
+          highResult.status === 'fulfilled'
+            ? highResult.value.map((v) => formatDirectusBook(v))
+            : [],
+        latestAdditions:
+          latestResult.status === 'fulfilled'
+            ? latestResult.value.map((v) => formatDirectusBook(v))
+            : [],
+      },
+      revalidate: 60 * 15, // 15min
+    }
+  } catch (err) {
+    captureException(err)
+    throw err
+  } finally {
+    await client.close()
   }
 }

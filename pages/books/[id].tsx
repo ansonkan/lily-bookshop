@@ -2,14 +2,13 @@ import type { Book, DirectusBook } from 'types'
 import type { GetServerSideProps, NextPage } from 'next'
 
 import { Heading, VStack } from '@chakra-ui/react'
-import { ObjectId } from 'mongodb'
+import { MongoClient, ObjectId } from 'mongodb'
 import { captureException } from '@sentry/nextjs'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
 import { ArrowBreadcrumb, BookItem } from 'components'
 import { BaseLayout } from 'layouts'
-import clientPromise from 'utils/mongodb'
 import { formatDirectusBook } from 'utils'
 
 interface BookPageProps {
@@ -67,74 +66,78 @@ export const getServerSideProps: GetServerSideProps<
     return { notFound: true }
   }
 
-  const client = await clientPromise
-  const books = client.db('bookshop').collection<DirectusBook>('books')
-
-  const book = await books.findOne({ _id: new ObjectId(params.id) })
-
-  if (!book) {
-    return { notFound: true }
+  if (!process.env.MONGODB_URL_READ_ONLY) {
+    throw new Error('Invalid/Missing environment variable')
   }
 
-  const [tranResult, searchResult] = await Promise.allSettled([
-    serverSideTranslations(locale ?? 'en', ['common']),
-    books
-      .aggregate<DirectusBook>([
-        {
-          $search: {
-            index: 'default',
-            compound: {
-              should: [
-                {
-                  text: {
-                    query: [
-                      ...(book.authors || []),
-                      ...(book.categories || []),
-                      ...book.title.split(' '),
-                    ].filter((w) => !!w),
-                    path: [
-                      'title',
-                      'subtitle',
-                      'authors',
-                      'categories',
-                      'description',
-                    ],
-                    fuzzy: {},
+  const client = new MongoClient(process.env.MONGODB_URL_READ_ONLY)
+
+  try {
+    await client.connect()
+    const books = client.db('bookshop').collection<DirectusBook>('books')
+
+    const book = await books.findOne({ _id: new ObjectId(params.id) })
+
+    if (!book) {
+      return { notFound: true }
+    }
+
+    const [tranResult, searchResult] = await Promise.allSettled([
+      serverSideTranslations(locale ?? 'en', ['common']),
+      books
+        .aggregate<DirectusBook>([
+          {
+            $search: {
+              index: 'default',
+              compound: {
+                should: [
+                  {
+                    text: {
+                      query: [
+                        ...(book.authors || []),
+                        ...(book.categories || []),
+                        ...book.title.split(' '),
+                      ].filter((w) => !!w),
+                      path: [
+                        'title',
+                        'subtitle',
+                        'authors',
+                        'categories',
+                        'description',
+                      ],
+                      fuzzy: {},
+                    },
                   },
-                },
-              ],
+                ],
+              },
             },
           },
-        },
-        {
-          $match: {
-            _id: { $ne: new ObjectId(book._id) },
+          {
+            $match: {
+              _id: { $ne: new ObjectId(book._id) },
+            },
           },
-        },
-        {
-          $limit: LIMIT,
-        },
-      ])
-      .toArray(),
-  ])
+          {
+            $limit: LIMIT,
+          },
+        ])
+        .toArray(),
+    ])
 
-  if (tranResult.status === 'rejected') {
-    captureException(tranResult.reason)
-  }
-
-  if (searchResult.status === 'rejected') {
-    captureException(searchResult.reason)
-  }
-
-  return {
-    props: {
-      ...(tranResult.status === 'fulfilled' ? tranResult.value : {}),
-      // need to cast books from `Directus`/`MongoDB Atlas` to `DirectusBook`, then remove all of the `null` properties
-      book: formatDirectusBook(book),
-      moreBooks:
-        searchResult.status === 'fulfilled'
-          ? searchResult.value.map((v) => formatDirectusBook(v))
-          : [],
-    },
+    return {
+      props: {
+        ...(tranResult.status === 'fulfilled' ? tranResult.value : {}),
+        book: formatDirectusBook(book),
+        moreBooks:
+          searchResult.status === 'fulfilled'
+            ? searchResult.value.map((v) => formatDirectusBook(v))
+            : [],
+      },
+    }
+  } catch (err) {
+    captureException(err)
+    throw err
+  } finally {
+    await client.close()
   }
 }

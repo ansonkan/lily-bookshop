@@ -28,6 +28,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (!process.env.MONGODB_URL_READ_WRITE) {
+    throw new Error(
+      'Invalid/Missing environment variable: "MONGODB_URL_READ_WRITE"'
+    )
+  }
+
+  const client = new MongoClient(process.env.MONGODB_URL_READ_WRITE)
+
   try {
     validate(req)
 
@@ -36,15 +44,7 @@ export default async function handler(
 
     const { event, collection, keys, key, payload } = req.body
 
-    if (!process.env.MONGODB_URL_READ_WRITE) {
-      throw new Error(
-        'Invalid/Missing environment variable: "MONGODB_URL_READ_WRITE"'
-      )
-    }
-
-    const client = await new MongoClient(
-      process.env.MONGODB_URL_READ_WRITE
-    ).connect()
+    await client.connect()
     const dbCollection = client.db('bookshop').collection(collection)
 
     switch (event) {
@@ -87,6 +87,8 @@ export default async function handler(
   } catch (err) {
     captureException(err)
     res.status(500).json({ success: false })
+  } finally {
+    await client.close()
   }
 }
 
