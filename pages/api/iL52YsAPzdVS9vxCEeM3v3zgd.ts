@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { captureException, captureMessage } from '@sentry/nextjs'
+// import { captureException, captureMessage } from '@sentry/nextjs'
 import { ObjectId } from 'mongodb'
 
 import clientPromise from 'utils/mongodb'
@@ -34,7 +34,7 @@ export default async function handler(
     validate(req)
 
     // for debugging
-    captureMessage(JSON.stringify(trimReq(req)))
+    // captureMessage(JSON.stringify(trimReq(req)))
 
     const { event, collection, keys, key, payload } = req.body
 
@@ -79,7 +79,7 @@ export default async function handler(
 
     res.status(200).json({ success: true })
   } catch (err) {
-    captureException(err)
+    // captureException(err)
     res.status(500).json({ success: false })
   }
 }
