@@ -4,6 +4,8 @@ test:
   phases:
     preTest:
       commands:
+        - nvm install
+        - nvm use
         - npm ci
     test:
       commands:
@@ -22,6 +24,8 @@ frontend:
   phases:
     preBuild:
       commands:
+        - nvm install
+        - nvm use
         - npm ci
     build:
       commands:
