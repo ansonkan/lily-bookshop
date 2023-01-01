@@ -1,8 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { captureException, captureMessage } from '@sentry/nextjs'
 import { MongoClient } from 'mongodb'
+import { captureException } from '@sentry/nextjs'
 
 const trimReq = ({
   url,
@@ -38,9 +38,6 @@ export default async function handler(
 
   try {
     validate(req)
-
-    // for debugging
-    captureMessage(JSON.stringify(trimReq(req)))
 
     const { event, collection, keys, key, payload } = req.body
 

@@ -30,6 +30,8 @@ export interface DirectusBook {
 
 export interface MongoDbBook extends Omit<DirectusBook, 'id'> {
   directusId: string
+  // add to field just to `books` autocomplete full title search? Since autocomplete only accept `string` path, can't be an array
+  // autocomplete_full_title: string
 }
 
 export type NonNullableFields<T> = {
@@ -52,4 +54,10 @@ export interface DirectusArticle {
   date_updated: string
   title: string
   content: string
+}
+
+export interface AutocompleteBookResult {
+  books: Array<
+    Pick<MongoDbBook, 'title' | 'subtitle' | 'directusId' | 'authors'>
+  >
 }

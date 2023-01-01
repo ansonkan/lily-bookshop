@@ -78,9 +78,9 @@ export const getServerSideProps: GetServerSideProps<
 
   try {
     await client.connect()
-    const books = client.db('bookshop').collection<MongoDbBook>('books')
+    const booksColl = client.db('bookshop').collection<MongoDbBook>('books')
 
-    const book = await books.findOne(
+    const book = await booksColl.findOne(
       { directusId: params.id },
       { projection: { _id: 0 } }
     )
@@ -122,7 +122,7 @@ export const getServerSideProps: GetServerSideProps<
 
     const [tranResult, searchResult] = await Promise.allSettled([
       serverSideTranslations(locale ?? 'en', ['common']),
-      books
+      booksColl
         .aggregate<MongoDbBook>([
           {
             $search: {

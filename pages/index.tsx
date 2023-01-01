@@ -86,11 +86,11 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
 
   try {
     await client.connect()
-    const books = client.db('bookshop').collection<MongoDbBook>('books')
+    const booksColl = client.db('bookshop').collection<MongoDbBook>('books')
 
     const [tranResult, highResult, latestResult] = await Promise.allSettled([
       serverSideTranslations(locale ?? 'en', ['common']),
-      books
+      booksColl
         .find(
           { highlightOrder: { $ne: null }, quantity: { $gt: 0 } },
           {
@@ -100,7 +100,7 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
           }
         )
         .toArray(),
-      books
+      booksColl
         .find(
           { quantity: { $gt: 0 } },
           {

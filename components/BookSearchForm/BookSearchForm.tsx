@@ -22,6 +22,12 @@ export const BookSearchForm = ({
   const [q, setQ] = useState(defaultValue ? `${defaultValue}` : '')
   const { onClose } = useContext(SearchModalContext)
   const inputRef = useRef<HTMLInputElement>(null)
+  /**
+   * TOOD: this is for the autocomplete options which probably need to be passed to parent to render.
+   * Otherwise, multiple versions of `BookSearchForm` might be needed.
+   * So far `BaseLayout` and `SearchModal` use this but having different visuals
+   */
+  // const [isFocused, setIsFocused] = useState(false)
 
   useEffect(() => {
     /**
@@ -58,12 +64,14 @@ export const BookSearchForm = ({
         flexGrow={1}
         size={size}
         value={q}
+        defaultValue={defaultValue}
         ref={inputRef}
         onChange={(event) => setQ(event.target.value)}
         onKeyUp={(event) => {
           if (event.key === 'Escape') inputRef.current?.blur()
         }}
-        defaultValue={defaultValue}
+        // onFocus={() => setIsFocused(true)}
+        // onBlur={() => setIsFocused(false)}
       />
     </Box>
   )

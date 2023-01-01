@@ -36,7 +36,7 @@ export const Detailed = ({
       as="article"
       display="flex"
       flexDir="row"
-      gap={2}
+      gap={[2, 4]}
       {...linkBoxProps}
     >
       <Box w={[125, 130]}>

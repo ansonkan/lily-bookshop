@@ -39,7 +39,7 @@ const BooksPage: NextPage<BooksPageProps> = ({
       <ArrowBreadcrumb
         items={[
           { label: t('breadcrumb.home'), href: '/' },
-          { label: t('breadcrumb.books') },
+          { label: t('breadcrumb.books'), href: '/books' },
         ]}
       />
 
@@ -100,35 +100,54 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
 
   try {
     await client.connect()
-    const books = client.db('bookshop').collection<MongoDbBook>('books')
+    const booksColl = client.db('bookshop').collection<MongoDbBook>('books')
 
     const [tranResult, searchResult] = await Promise.allSettled([
       serverSideTranslations(locale ?? 'en', ['common']),
-      books
-        .aggregate([
-          {
-            $search: {
-              index: 'default',
-              text: {
-                query: q,
-                path: {
-                  wildcard: '*',
+      booksColl
+        .aggregate(
+          q
+            ? [
+                {
+                  $search: {
+                    index: 'default',
+                    text: {
+                      query: q,
+                      path: {
+                        wildcard: '*',
+                      },
+                      fuzzy: {},
+                    },
+                    count: {
+                      type: 'total',
+                    },
+                  },
                 },
-                fuzzy: {},
-              },
-              count: {
-                type: 'total',
-              },
-            },
-          },
-          { $project: { _id: 0 } },
-          {
-            $facet: {
-              books: [{ $skip: skip }, { $limit: LIMIT }],
-              meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
-            },
-          },
-        ])
+                { $project: { _id: 0 } },
+                {
+                  $facet: {
+                    books: [{ $skip: skip }, { $limit: LIMIT }],
+                    meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
+                  },
+                },
+              ]
+            : [
+                {
+                  $facet: {
+                    books: [
+                      { $project: { _id: 0 } },
+                      { $skip: skip },
+                      { $limit: LIMIT },
+                    ],
+                    meta: [
+                      { $count: 'count' },
+                      // mimic the shape of `$$SEARCH_META`
+                      { $project: { count: { total: '$count' } } },
+                    ],
+                  },
+                },
+              ]
+        )
         .toArray(),
     ])
 

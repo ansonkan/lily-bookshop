@@ -9,3 +9,18 @@ export function removeNullProps<T extends Record<string, any>>(obj: T) {
       {} as NonNullableFields<T>
     )
 }
+
+export const debounce = (
+  func: (...arg: unknown[]) => unknown,
+  duration = 1000
+) => {
+  let timeout: NodeJS.Timeout | undefined
+
+  return (...args: unknown[]) => {
+    clearTimeout(timeout)
+
+    timeout = setTimeout(() => {
+      return func.apply(this, args)
+    }, duration)
+  }
+}
