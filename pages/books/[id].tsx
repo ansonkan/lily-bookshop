@@ -60,7 +60,7 @@ const BookPage: NextPage<BookPageProps> = ({
 
 export default BookPage
 
-const LIMIT = 3
+const LIMIT = 5
 
 export const getServerSideProps: GetServerSideProps<
   BookPageProps,
@@ -89,6 +89,37 @@ export const getServerSideProps: GetServerSideProps<
       return { notFound: true }
     }
 
+    const searchShoulds: Record<string, unknown>[] = [
+      {
+        text: {
+          query: book.title.split(' ').filter((w) => !!w),
+          path: {
+            wildcard: '*',
+          },
+          fuzzy: {},
+        },
+      },
+    ]
+
+    if (book.authors?.length) {
+      searchShoulds.push({
+        text: {
+          query: book.authors,
+          path: 'authors',
+        },
+      })
+    }
+
+    if (book.categories?.length) {
+      searchShoulds.push({
+        text: {
+          query: book.categories,
+          path: 'categories',
+          fuzzy: {},
+        },
+      })
+    }
+
     const [tranResult, searchResult] = await Promise.allSettled([
       serverSideTranslations(locale ?? 'en', ['common']),
       books
@@ -97,25 +128,7 @@ export const getServerSideProps: GetServerSideProps<
             $search: {
               index: 'default',
               compound: {
-                should: [
-                  {
-                    text: {
-                      query: [
-                        ...(book.authors || []),
-                        ...(book.categories || []),
-                        ...book.title.split(' '),
-                      ].filter((w) => !!w),
-                      path: [
-                        'title',
-                        'subtitle',
-                        'authors',
-                        'categories',
-                        'description',
-                      ],
-                      fuzzy: {},
-                    },
-                  },
-                ],
+                should: searchShoulds,
               },
             },
           },
@@ -125,9 +138,7 @@ export const getServerSideProps: GetServerSideProps<
             },
           },
           { $project: { _id: 0 } },
-          {
-            $limit: LIMIT,
-          },
+          { $limit: LIMIT },
         ])
         .toArray(),
     ])

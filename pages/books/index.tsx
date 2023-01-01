@@ -101,9 +101,6 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
   try {
     await client.connect()
     const books = client.db('bookshop').collection<MongoDbBook>('books')
-    // need to cast books from `Directus`/`MongoDB Atlas` to `DirectusBook`, then remove all of the `null` properties
-
-    // const books = many(fakeBook, LIMIT)
 
     const [tranResult, searchResult] = await Promise.allSettled([
       serverSideTranslations(locale ?? 'en', ['common']),
@@ -112,26 +109,15 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
           {
             $search: {
               index: 'default',
+              text: {
+                query: q,
+                path: {
+                  wildcard: '*',
+                },
+                fuzzy: {},
+              },
               count: {
                 type: 'total',
-              },
-              compound: {
-                should: [
-                  {
-                    text: {
-                      query: q,
-                      path: [
-                        'title',
-                        'subtitle',
-                        'authors',
-                        'ISBN_13',
-                        'ISBN_10',
-                        'categories',
-                      ],
-                      fuzzy: {},
-                    },
-                  },
-                ],
               },
             },
           },
