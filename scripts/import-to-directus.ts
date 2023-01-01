@@ -63,15 +63,13 @@ main()
 
 // https://www.googleapis.com/books/v1/volumes?q=isbn:9780006380832
 
-const fails: Array<Record<string, unknown>> = []
-
 async function main() {
   let books: CreateDirectusBookProps[] = []
-
+  const fails: Array<Record<string, unknown>> = []
   let parsed: CreateDirectusBookProps[] = []
 
-  // for (let i = 0; i < bookIds.length; i++) {
-  for (let i = 0; i < 55; i++) {
+  for (let i = 0; i < bookIds.length; i++) {
+    // for (let i = 0; i < 10; i++) {
     const id = bookIds[i]
     const { isbn13, isbn10 } = id
 
@@ -84,9 +82,12 @@ async function main() {
     const queryUrl = GOOGLE_BOOK_URL + `?q=isbn:${isbn}`
 
     try {
-      const result: GoogleBookSearchResult = await (
-        await fetch(queryUrl)
-      ).json()
+      console.log('queryUrl: ', queryUrl)
+      const fetchResult = await fetch(queryUrl)
+      console.log('fetchResult: ', fetchResult)
+
+      const result: GoogleBookSearchResult = await fetchResult.json()
+      console.log('result: ', result)
 
       if (result.totalItems === 0) {
         fails.push({ id, reason: 'totalItems === 0' })
@@ -101,26 +102,32 @@ async function main() {
             count: 2,
             casing: 'upper',
           })}`,
-          quantity: 1,
+          quantity: faker.datatype.number({ min: 0, max: 10 }),
           highlightOrder: faker.datatype.boolean()
             ? faker.datatype.number({ min: -10, max: 10 })
             : undefined,
           price: faker.datatype.float({ min: 20, max: 200, precision: 0.01 }),
           currency: 'HKD',
           status: 'published',
+          dateRestocked: faker.date.recent().toDateString(),
         })
       } else {
         fails.push({ id, reason: 'multiple matches' })
         continue
       }
     } catch (err) {
-      fails.push({ id, error: JSON.stringify(err) })
+      console.error(err)
+      fails.push({
+        id,
+        error: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+      })
+      continue
     }
 
     if (books.length >= 10) {
       console.log(`Starting batch import, index: ${i} ...`)
 
-      await importToDirectus(books)
+      await importToDirectus(books, fails)
       parsed = [...parsed, ...books]
       books = []
 
@@ -131,7 +138,7 @@ async function main() {
   if (books.length) {
     console.log('Starting the last batch import')
 
-    await importToDirectus(books)
+    await importToDirectus(books, fails)
     parsed = [...parsed, ...books]
 
     console.log('Finished the last batch import')
@@ -227,7 +234,10 @@ async function populateAboutTheAuthor(
   return googleBook
 }
 
-async function importToDirectus(books: CreateDirectusBookProps[]) {
+async function importToDirectus(
+  books: CreateDirectusBookProps[],
+  fails: Array<Record<string, unknown>> = []
+) {
   for (const b of books) {
     try {
       if (b.title) {

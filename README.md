@@ -41,6 +41,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
   - [x] Investigate `SSR` vs `SSG` + `ISR` because Netlify doesn't support caching on `SSR` pages (https://docs.netlify.com/integrations/frameworks/next-js/overview/#limitations) and AWS Amplify seems to support that and most of the Next.js 12 & 13 features (https://aws.amazon.com/about-aws/whats-new/2022/11/aws-amplify-hosting-support-next-js-12-13/)
   - [ ] buy a domain
   - [ ] deploy
+- [ ] Improve import scripts by saving intermediate results/data?
 - [ ] Import the real books from the Lily Bookshop
 
 ## Getting Started
