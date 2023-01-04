@@ -1,0 +1,23 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplify8dc7309efd224-staging-70130-authRole",
+      "UnauthRoleArn": "arn:aws:iam::274271097062:role/amplify-amplify8dc7309efd224-staging-70130-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::274271097062:role/amplify-amplify8dc7309efd224-staging-70130-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-amplify8dc7309efd224-staging-70130-deployment",
+      "UnauthRoleName": "amplify-amplify8dc7309efd224-staging-70130-unauthRole",
+      "StackName": "amplify-amplify8dc7309efd224-staging-70130",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:274271097062:stack/amplify-amplify8dc7309efd224-staging-70130/9ddc4a40-8bfd-11ed-af0d-02f6df8f450a",
+      "AmplifyAppId": "d2bp23ib1q7396"
+    },
+    "categories": {
+      "auth": {
+        "lilybookshop": {}
+      },
+      "storage": {
+        "s3lilybookshopstorage135156f8": {}
+      }
+    }
+  }
+}

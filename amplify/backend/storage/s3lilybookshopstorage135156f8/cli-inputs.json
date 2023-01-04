@@ -1,0 +1,8 @@
+{
+  "resourceName": "s3lilybookshopstorage135156f8",
+  "bucketName": "lily-bookshop-storage-135156f8",
+  "policyUUID": "39d73ca5",
+  "storageAccess": "authAndGuest",
+  "guestAccess": ["READ"],
+  "authAccess": ["CREATE_AND_UPDATE", "READ", "DELETE"]
+}
