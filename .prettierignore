@@ -10,3 +10,6 @@ scripts/**/*.csv
 scripts/**/*.json
 
 playwright-report/**/*
+
+# amplify
+amplify/**/*.json

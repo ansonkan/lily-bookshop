@@ -3,7 +3,10 @@
     "apicore": {
       "dependsOn": [
         {
-          "attributes": ["Name", "Arn"],
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
           "category": "function",
           "resourceName": "books"
         }
@@ -18,7 +21,10 @@
       "dependsOn": [],
       "frontendAuthConfig": {
         "mfaConfiguration": "ON",
-        "mfaTypes": ["SMS", "TOTP"],
+        "mfaTypes": [
+          "SMS",
+          "TOTP"
+        ],
         "passwordProtectionSettings": {
           "passwordPolicyCharacters": [
             "REQUIRES_LOWERCASE",
@@ -28,10 +34,16 @@
           ],
           "passwordPolicyMinLength": 10
         },
-        "signupAttributes": ["PREFERRED_USERNAME"],
+        "signupAttributes": [
+          "PREFERRED_USERNAME"
+        ],
         "socialProviders": [],
-        "usernameAttributes": ["EMAIL"],
-        "verificationMechanisms": ["EMAIL"]
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
@@ -42,7 +54,9 @@
       "build": true,
       "dependsOn": [
         {
-          "attributes": ["BucketName"],
+          "attributes": [
+            "BucketName"
+          ],
           "category": "storage",
           "resourceName": "s3lilybookshopstorage135156f8"
         }
