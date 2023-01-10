@@ -19,13 +19,16 @@ test:
   cache:
     paths:
       - node_modules/**/*
+backend:
+  phases:
+    build:
+      commands:
+        - amplifyPush --simple
 frontend:
   phases:
     preBuild:
       commands:
         - node -v
-        - echo 'src/aws-exports.js...'
-        - cat src/aws-exports.js
         - npm ci
     build:
       commands:
