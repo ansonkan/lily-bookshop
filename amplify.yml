@@ -25,7 +25,8 @@ frontend:
       commands:
         - node -v
         - npm ci
-        - echo aws-exports.js
+        - echo 'aws-exports.js...'
+        - cat aws-exports.js
     build:
       commands:
         - env >> .env.production
