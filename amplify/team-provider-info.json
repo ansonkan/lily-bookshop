@@ -9,7 +9,8 @@
       "UnauthRoleName": "amplify-amplify8dc7309efd224-staging-70130-unauthRole",
       "StackName": "amplify-amplify8dc7309efd224-staging-70130",
       "StackId": "arn:aws:cloudformation:ap-southeast-1:274271097062:stack/amplify-amplify8dc7309efd224-staging-70130/9ddc4a40-8bfd-11ed-af0d-02f6df8f450a",
-      "AmplifyAppId": "d2bp23ib1q7396"
+      "AmplifyAppId": "d2bp23ib1q7396",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-amplify8dc7309efd224-staging-70130-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
@@ -17,6 +18,16 @@
       },
       "storage": {
         "s3lilybookshopstorage135156f8": {}
+      },
+      "function": {
+        "books": {
+          "secretsPathAmplifyAppId": "d2bp23ib1q7396",
+          "deploymentBucketName": "amplify-amplify8dc7309efd224-staging-70130-deployment",
+          "s3Key": "amplify-builds/books-364d796c503734666450-build.zip"
+        }
+      },
+      "api": {
+        "apicore": {}
       }
     }
   }

@@ -1,4 +1,4 @@
-import type { Book } from 'types'
+import type { BookFE } from 'types'
 import type { CardProps } from '@chakra-ui/react'
 
 import { Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
@@ -8,7 +8,7 @@ import { BookItem } from '../BookItem'
 export interface BookScrollXCardProps extends CardProps {
   heading: string
   headingClassName?: string
-  books: Book[]
+  books: BookFE[]
   children?: React.ReactNode
 }
 
@@ -29,11 +29,11 @@ export const BookScrollXCard = ({
     <CardBody display="flex" flexDir="row" gap={4} overflowX="scroll">
       {books.map((book) => (
         <BookItem
-          key={book.directusId}
+          key={book.id}
           w={[125, 130]}
           flexShrink={0}
           flexGrow={0}
-          detailsLink={`/books/${book.directusId}`}
+          detailsLink={`/books/${book.id}`}
           book={book}
         />
       ))}

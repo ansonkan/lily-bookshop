@@ -27,5 +27,22 @@
       }
     }
   ],
-  "ignorePatterns": ["scripts/**"]
+  "ignorePatterns": [
+    "scripts/**",
+    // amplify-do-not-edit-begin
+    "amplify/#current-cloud-backend",
+    "amplify/.config/local-*",
+    "amplify/logs",
+    "amplify/mock-data",
+    "amplify/mock-api-resources",
+    "build/",
+    "dist/",
+    "node_modules/",
+    "aws-exports.js",
+    ".secret-*",
+    "**.sample",
+    // amplify-do-not-edit-end
+    // ignore the built JS files
+    "amplify/backend/function/*/src/**/*.js"
+  ]
 }

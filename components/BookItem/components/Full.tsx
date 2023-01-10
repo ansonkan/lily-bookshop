@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { BookItemProps } from '../types'
 
 import { Badge, Box, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react'
@@ -16,18 +17,23 @@ export const Full = ({
     title,
     subtitle,
     authors,
+    // @ts-ignore - remove this when the new document schema is used
     aboutTheAuthor,
     publisher,
+    // @ts-ignore
     publishedDate,
     description,
     ISBN_13,
     ISBN_10,
+    // @ts-ignore
     pageCount,
     categories,
     thumbnail,
     language,
+    // @ts-ignore
     storageLocation,
     quantity,
+    // @ts-ignore
     highlightOrder,
   },
   priceLabel,

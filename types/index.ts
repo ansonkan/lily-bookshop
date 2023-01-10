@@ -1,3 +1,7 @@
+import type { InferType } from 'yup'
+
+import { BookDocumentSchema } from '@lily-bookshop/schemas'
+
 // would be perfect if I found a way to generate types from Directus data models
 export interface DirectusBook {
   id: string // uuid
@@ -60,4 +64,25 @@ export interface AutocompleteBookResult {
   books: Array<
     Pick<MongoDbBook, 'title' | 'subtitle' | 'directusId' | 'authors'>
   >
+}
+
+export type BookDocument = InferType<typeof BookDocumentSchema>
+
+// Book front-end
+export interface BookFE extends BookDocument {
+  id: string // MongoDB ObjectId.toString()
+}
+
+export interface ArticleDocument {
+  status: 'published' | 'draft' | 'archived'
+  user_created: string // user sub id
+  date_created: number // new Date().getTime()
+  user_updated: string // user sub id
+  date_updated: number // new Date().getTime()
+  title: string
+  content: string
+}
+
+export interface ArticleFE extends ArticleDocument {
+  id: string // MongoDB ObjectId.toString()
 }

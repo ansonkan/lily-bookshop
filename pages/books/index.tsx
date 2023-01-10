@@ -1,12 +1,11 @@
-import type { Book, MongoDbBook } from 'types'
 import type { GetServerSideProps, NextPage } from 'next'
+import type { BookFE } from 'types'
 
 import { Center, Flex, Text, VStack } from '@chakra-ui/react'
-import { MongoClient } from 'mongodb'
 import { WarningTwoIcon } from '@chakra-ui/icons'
-import { captureException } from '@sentry/nextjs'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import { withSSRContext } from 'aws-amplify'
 
 import { ArrowBreadcrumb, BookItem, Pagination } from 'components'
 import { BaseLayout } from 'layouts'
@@ -21,11 +20,11 @@ interface BooksPageQuery {
 
 interface BooksPageProps {
   query: BooksPageQuery
-  books: Book[]
+  books: BookFE[]
   total: number
 }
 
-const LIMIT = 20
+const LIMIT = 10
 
 const BooksPage: NextPage<BooksPageProps> = ({
   query,
@@ -49,8 +48,8 @@ const BooksPage: NextPage<BooksPageProps> = ({
             {books.map((book) => (
               <BookItem
                 variant="detailed"
-                key={book.directusId}
-                detailsLink={`/books/${book.directusId}`}
+                key={book.id}
+                detailsLink={`/books/${book.id}`}
                 book={book}
               />
             ))}
@@ -77,110 +76,38 @@ export default BooksPage
 export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
   query,
   locale,
+  req,
 }) => {
-  if (!process.env.MONGODB_URL_READ_ONLY) {
-    throw new Error('Invalid/Missing environment variable')
-  }
-
-  const client = new MongoClient(process.env.MONGODB_URL_READ_ONLY)
+  const SSR = withSSRContext({ req })
 
   const { q = '', page = '1' } = query
 
   // need to investigate how `ParsedUrlQuery` works, for now just expect all parameters to be `string`
   if (typeof page !== 'string' || typeof q !== 'string') {
-    throw new Error('400: Bad Request')
-  }
-
-  const pageInt = Number.parseInt(page)
-  if (pageInt <= 0) {
-    throw new Error('400: Bad Request')
-  }
-
-  const skip = (pageInt - 1) * LIMIT
-
-  try {
-    await client.connect()
-    const booksColl = client.db('bookshop').collection<MongoDbBook>('books')
-
-    const [tranResult, searchResult] = await Promise.allSettled([
-      serverSideTranslations(locale ?? 'en', ['common']),
-      booksColl
-        .aggregate(
-          q
-            ? [
-                {
-                  $search: {
-                    index: 'default',
-                    text: {
-                      query: q,
-                      path: {
-                        wildcard: '*',
-                      },
-                      fuzzy: {},
-                    },
-                    count: {
-                      type: 'total',
-                    },
-                  },
-                },
-                { $project: { _id: 0 } },
-                {
-                  $facet: {
-                    books: [{ $skip: skip }, { $limit: LIMIT }],
-                    meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
-                  },
-                },
-              ]
-            : [
-                {
-                  $facet: {
-                    books: [
-                      { $project: { _id: 0 } },
-                      { $skip: skip },
-                      { $limit: LIMIT },
-                    ],
-                    meta: [
-                      { $count: 'count' },
-                      // mimic the shape of `$$SEARCH_META`
-                      { $project: { count: { total: '$count' } } },
-                    ],
-                  },
-                },
-              ]
-        )
-        .toArray(),
-    ])
-
-    let total = 0
-    let searchedBooks: Book[] = []
-
-    if (searchResult.status === 'fulfilled' && searchResult.value.length) {
-      const value = searchResult.value[0] as unknown as {
-        books: MongoDbBook[]
-        meta: { count: { total: number } }[]
-      }
-
-      total = value.meta[0] ? value.meta[0].count.total : 0
-      searchedBooks = value.books.map((v) => formatDirectusBook(v))
-    }
-
     return {
+      statusCode: 400,
       props: {
-        ...(tranResult.status === 'fulfilled' ? tranResult.value : {}),
-        books: searchedBooks,
-        total,
+        books: [],
+        total: 0,
         query: {
-          q,
-          // 1 based
-          page: pageInt,
+          q: '',
+          page: 1,
           limit: LIMIT,
         },
       },
     }
-  } catch (err) {
-    captureException(err)
-    throw err
-  } finally {
-    await client.close()
+  }
+
+  const [translations, searchResult] = await Promise.all([
+    serverSideTranslations(locale ?? 'en', ['common']),
+    SSR.API.get('apicore', `/books?q=${q}&limit=${LIMIT}&page=${page}`),
+  ])
+
+  return {
+    props: {
+      ...translations,
+      ...searchResult,
+      books: searchResult.books.map((v: BookFE) => formatDirectusBook(v)),
+    },
   }
 }

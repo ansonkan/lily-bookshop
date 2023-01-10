@@ -1,8 +1,8 @@
-import type { MongoDbBook } from 'types'
+import type { BookFE } from 'types'
 
 import { removeNullProps } from './common'
 
-export const formatDirectusBook = (book: MongoDbBook) => {
+export const formatDirectusBook = (book: BookFE) => {
   const cleaned = removeNullProps(book)
 
   if (cleaned.thumbnail) {

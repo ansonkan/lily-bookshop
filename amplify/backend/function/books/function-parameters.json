@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "storage": {
+      "s3lilybookshopstorage135156f8": ["create", "read", "update", "delete"]
+    }
+  },
+  "lambdaLayers": [],
+  "secretNames": ["MONGODB_URL_READ_ONLY", "MONGODB_URL_READ_WRITE"]
+}

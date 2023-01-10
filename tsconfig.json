@@ -23,5 +23,22 @@
     "baseUrl": "."
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    // amplify-do-not-edit-begin
+    "amplify/#current-cloud-backend",
+    "amplify/.config/local-*",
+    "amplify/logs",
+    "amplify/mock-data",
+    "amplify/mock-api-resources",
+    "build/",
+    "dist/",
+    "node_modules/",
+    "aws-exports.js",
+    ".secret-*",
+    "**.sample",
+    // amplify-do-not-edit-end
+    // let's investigate how to type-check the `amplify` directory in the future
+    "amplify/backend/function/*/src/**/*"
+  ]
 }

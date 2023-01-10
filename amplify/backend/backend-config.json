@@ -1,4 +1,17 @@
 {
+  "api": {
+    "apicore": {
+      "dependsOn": [
+        {
+          "attributes": ["Name", "Arn"],
+          "category": "function",
+          "resourceName": "books"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
   "auth": {
     "lilybookshop": {
       "customAuth": false,
@@ -22,6 +35,46 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "books": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": ["BucketName"],
+          "category": "storage",
+          "resourceName": "s3lilybookshopstorage135156f8"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_books_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "books"
+        }
+      ]
+    },
+    "AMPLIFY_function_books_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "books"
+        }
+      ]
+    },
+    "AMPLIFY_function_books_secretsPathAmplifyAppId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "books"
+        }
+      ]
     }
   },
   "storage": {

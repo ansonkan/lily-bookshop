@@ -1,4 +1,4 @@
-import type { Book } from 'types'
+import type { BookFE } from 'types'
 import type { CardProps } from '@chakra-ui/react'
 
 import { useTranslation } from 'next-i18next'
@@ -8,7 +8,7 @@ import { HighlightScene } from '../HighlightScene'
 import styles from './styles.module.scss'
 
 export interface HighlightSectionProps extends CardProps {
-  books: Book[]
+  books: BookFE[]
 }
 
 export const HighlightSection = ({

@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { i18n } = require('./next-i18next.config')
 const { withSentryConfig } = require('@sentry/nextjs')
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -35,4 +38,7 @@ const sentryWebpackPluginOptions = {
 
 // Make sure adding Sentry options is the last code to run before exporting, to
 // ensure that your source maps include changes from all other Webpack plugins
-module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+module.exports = withSentryConfig(
+  withBundleAnalyzer(nextConfig),
+  sentryWebpackPluginOptions
+)
