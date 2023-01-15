@@ -42,6 +42,7 @@ export const BaseLayout = ({
     </Box>
 
     <Container
+      as="main"
       display="flex"
       flexDirection="column"
       gap={4}

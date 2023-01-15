@@ -7,18 +7,10 @@ import { useTranslation } from 'next-i18next'
 const Custom404Page: NextPage = () => {
   const { t } = useTranslation('common')
 
-  /**
-   * Otherwise:
-   * Warning: A title element received an array with more than 1 element as children.
-   *
-   * don't know why
-   */
-  const title = `404 - ${t('head.title')}`
-
   return (
     <div>
       <Head>
-        <title>{title}</title>
+        <title>{`404 - ${t('head.title')}`}</title>
         <meta name="description" content="Lily Bookshop, 404, Page Not Found" />
       </Head>
 

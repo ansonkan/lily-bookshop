@@ -40,10 +40,23 @@ export async function GET(
     limit,
     relatedTo,
     sort,
+    autocomplete,
   } = event.queryStringParameters || {}
 
   const pageInt = page ? parseInt(page) : 1
   const limitInt = limit ? parseInt(limit) : 10
+
+  if (autocomplete) {
+    return {
+      body: JSON.stringify({
+        options: await autocompleteTitle(client, {
+          query: autocomplete,
+          limit: limitInt,
+        }),
+      }),
+    }
+  }
+
   const sortStage = sort
     ? sort
         .split(',')
@@ -269,4 +282,34 @@ async function list(client: MongoClient, { page, limit, sort }: ListOptions) {
       },
     ])
     .toArray()) as BookResults
+}
+
+interface AutocompleteTitleOptions {
+  query: string
+  limit: number
+}
+
+async function autocompleteTitle(
+  client: MongoClient,
+  { query, limit }: AutocompleteTitleOptions
+) {
+  return (
+    await client
+      .db('bookshop')
+      .collection('books')
+      .aggregate([
+        {
+          $search: {
+            index: 'autocomplete',
+            autocomplete: {
+              query,
+              path: 'title',
+            },
+          },
+        },
+        { $limit: limit },
+        { $project: { _id: 0, title: 1 } },
+      ])
+      .toArray()
+  ).map((item) => item.title) as string[]
 }

@@ -12,8 +12,14 @@ interface VHelperProps {
   useBadge?: boolean
 }
 
-const VHelper = ({ children, useBadge }: VHelperProps): JSX.Element =>
-  useBadge ? <Badge as="dd">{children}</Badge> : <Text as="dd">{children}</Text>
+const VHelper = ({ children, useBadge }: VHelperProps): JSX.Element => {
+  const Component = useBadge ? Badge : Text
+  return (
+    <Component as="dd" fontSize={['sm', 'md']}>
+      {children}
+    </Component>
+  )
+}
 
 const V = ({
   children,

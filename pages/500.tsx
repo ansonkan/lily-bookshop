@@ -10,7 +10,7 @@ const Custom500Page: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>500 - {t('head.title')}</title>
+        <title>{`500 - ${t('head.title')}`}</title>
         <meta
           name="description"
           content="Lily Bookshop, 500, Server-side error occurred"

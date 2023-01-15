@@ -13,3 +13,7 @@ playwright-report/**/*
 
 # amplify
 amplify/**/*.json
+amplify/#current-cloud-backend
+amplify/backend/function/**/*.js
+amplify/backend/types/
+aws-exports.js
