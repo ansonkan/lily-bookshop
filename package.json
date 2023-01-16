@@ -23,6 +23,7 @@
     "@emotion/styled": "11.10.5",
     "@lily-bookshop/schemas": "file:packages/schemas",
     "@sentry/nextjs": "7.28.1",
+    "@tanstack/react-table": "8.7.6",
     "animejs": "3.2.1",
     "aws-amplify": "5.0.8",
     "clsx": "1.2.1",

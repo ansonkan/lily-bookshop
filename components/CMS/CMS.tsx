@@ -1,15 +1,18 @@
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 
 import { BooksTabPanel, MyAccountTabPanel } from './components'
 
 export const CMS = () => {
+  const { t } = useTranslation()
+
   return (
     <Tabs isLazy>
       <Box overflow="auto">
         <TabList>
-          <Tab>Books</Tab>
-          <Tab>Articles</Tab>
-          <Tab>My Account</Tab>
+          <Tab>{t('cms.tab.books')}</Tab>
+          <Tab>{t('cms.tab.blog-posts')}</Tab>
+          <Tab>{t('cms.tab.my-account')}</Tab>
         </TabList>
       </Box>
 

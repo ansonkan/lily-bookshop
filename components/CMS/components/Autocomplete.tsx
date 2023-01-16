@@ -89,6 +89,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             py={2}
             borderRadius="md"
             boxShadow="sm"
+            bg="white"
           >
             {options.map((s, index) => (
               <Box

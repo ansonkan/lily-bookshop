@@ -1,3 +1,5 @@
+import type { TypographyProps } from '@chakra-ui/react'
+
 import { Badge, Flex, Text } from '@chakra-ui/react'
 import { MinusIcon } from '@chakra-ui/icons'
 
@@ -5,26 +7,39 @@ export interface KvpProps {
   k: string
   children?: string | number | string[] | number[]
   useBadge?: boolean
+  fontSize?: TypographyProps['fontSize']
 }
 
 interface VHelperProps {
   children: string | number
   useBadge?: boolean
+  fontSize?: TypographyProps['fontSize']
 }
 
-const VHelper = ({ children, useBadge }: VHelperProps): JSX.Element => {
+const VHelper = ({
+  children,
+  useBadge,
+  fontSize = ['xs', 'sm'],
+}: VHelperProps): JSX.Element => {
   const Component = useBadge ? Badge : Text
   return (
-    <Component as="dd" fontSize={['sm', 'md']}>
+    <Component
+      as="dd"
+      fontSize={fontSize}
+      whiteSpace="nowrap"
+      overflow="hidden"
+      textOverflow="ellipsis"
+    >
       {children}
     </Component>
   )
 }
 
-const V = ({
+export const V = ({
   children,
   useBadge,
-}: Pick<KvpProps, 'children' | 'useBadge'>): JSX.Element => {
+  fontSize,
+}: Omit<KvpProps, 'k'>): JSX.Element => {
   if (children === undefined || children === '')
     return <MinusIcon as="dd" role="none" />
 
@@ -34,7 +49,7 @@ const V = ({
     return (
       <>
         {children.map((item) => (
-          <VHelper key={item} useBadge={useBadge}>
+          <VHelper key={item} useBadge={useBadge} fontSize={fontSize}>
             {item}
           </VHelper>
         ))}

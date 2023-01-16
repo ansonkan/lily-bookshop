@@ -35,7 +35,8 @@
   },
   "breadcrumb": {
     "home": "Home",
-    "books": "Books"
+    "books": "Books",
+    "cms": "Content Management System"
   },
   "pagination": {
     "first": "First",
@@ -67,5 +68,12 @@
   },
   "book-search-page": {
     "zero-result": "No books found"
+  },
+  "cms": {
+    "tab": {
+      "books": "Books",
+      "blog-posts": "Blog Posts",
+      "my-account": "My Account"
+    }
   }
 }

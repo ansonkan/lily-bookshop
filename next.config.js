@@ -13,6 +13,9 @@ const nextConfig = {
   images: {
     domains: ['wcy0wine.directus.app'],
   },
+}
+
+const sentryConfig = {
   sentry: {
     // Use `hidden-source-map` rather than `source-map` as the Webpack `devtool`
     // for client-side builds. (This will be the default starting in
@@ -36,9 +39,14 @@ const sentryWebpackPluginOptions = {
   // https://github.com/getsentry/sentry-webpack-plugin#options.
 }
 
+const config = withBundleAnalyzer(nextConfig)
+
 // Make sure adding Sentry options is the last code to run before exporting, to
 // ensure that your source maps include changes from all other Webpack plugins
-module.exports = withSentryConfig(
-  withBundleAnalyzer(nextConfig),
-  sentryWebpackPluginOptions
-)
+module.exports =
+  process.env.NODE_ENV === 'development'
+    ? config
+    : withSentryConfig(
+        { ...config, ...sentryConfig },
+        sentryWebpackPluginOptions
+      )

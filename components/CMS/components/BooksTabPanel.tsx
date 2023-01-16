@@ -5,20 +5,15 @@ import { API } from 'aws-amplify'
 import useSWR from 'swr'
 import { useState } from 'react'
 
-import { Autocomplete } from '../Autocomplete'
+import { Autocomplete } from './Autocomplete'
+import { BookTable } from './BookTable'
 
 export const BooksTabPanel = (): JSX.Element => {
   const [value, setValue] = useState('')
-  const [options, setOptions] = useState<string[]>([])
 
-  useSWR(
+  const { data } = useSWR(
     value ? ['apicore', `/books?autocomplete=${value}`] : null,
-    ([apiName, url]) => API.get(apiName, url, {}),
-    {
-      onSuccess(data) {
-        data?.options && setOptions(data.options)
-      },
-    }
+    ([apiName, url]) => API.get(apiName, url, {})
   )
 
   return (
@@ -32,11 +27,13 @@ export const BooksTabPanel = (): JSX.Element => {
         }}
       >
         <Autocomplete
-          options={value ? options : []}
+          options={data?.options || []}
           value={value}
           onChange={(value) => setValue(value)}
         />
       </Box>
+
+      <BookTable w="full" />
     </VStack>
   )
 }

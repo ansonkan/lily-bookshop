@@ -26,14 +26,16 @@ export const Base = ({
 
     <Box w="full" flexGrow={1} display="flex" flexDirection="column">
       <LinkOverlay as={NextLink} href={detailsLink}>
-        <Text as="b">{title}</Text>
+        <Text as="b" fontSize="sm">
+          {title}
+        </Text>
       </LinkOverlay>
 
       {subtitle && <Text fontSize="xs">{subtitle}</Text>}
 
       {authors && <Text fontSize="xs">{authors.join(', ')}</Text>}
 
-      <Text as="b" alignSelf="end" mt="auto">
+      <Text as="b" alignSelf="end" mt="auto" fontSize="sm">
         {priceLabel}
       </Text>
     </Box>

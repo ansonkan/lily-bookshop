@@ -40,6 +40,7 @@ export async function GET(
     limit,
     relatedTo,
     sort,
+    sortOnlyExist,
     autocomplete,
   } = event.queryStringParameters || {}
 
@@ -77,6 +78,8 @@ export async function GET(
         query: q,
         page: pageInt,
         limit: limitInt,
+        sort: sortStage,
+        sortOnlyExist: sortOnlyExist === '1',
       })
     }
 
@@ -96,6 +99,7 @@ export async function GET(
       page: pageInt,
       limit: limitInt,
       sort: sortStage,
+      sortOnlyExist: sortOnlyExist === '1',
     })
   })()
 
@@ -130,11 +134,13 @@ interface SearchOptions {
   query: string
   page: number
   limit: number
+  sort?: Sort
+  sortOnlyExist?: boolean
 }
 
 async function search(
   client: MongoClient,
-  { query, page, limit }: SearchOptions
+  { query, page, limit, sort, sortOnlyExist }: SearchOptions
 ) {
   const skip = (page - 1) * limit
 
@@ -159,7 +165,11 @@ async function search(
       },
       {
         $facet: {
-          books: [{ $skip: skip }, { $limit: limit }],
+          books: [
+            ...(sort ? getSortStages(sort, sortOnlyExist) : []),
+            { $skip: skip },
+            { $limit: limit },
+          ],
           meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
         },
       },
@@ -242,29 +252,35 @@ async function listRelated(
     .toArray()) as BookResults
 }
 
+function getSortStages(sort: Sort, sortOnlyExist?: boolean) {
+  const stages: Document[] = [{ $sort: sort }]
+
+  if (sortOnlyExist) {
+    const keys = Object.keys(sort)
+    stages.unshift({
+      $match: keys.reduce((acc, cur) => {
+        // ignore documents that have `null` sorting properties, because I think it makes more sense that way
+        acc[cur] = { $ne: null }
+        return acc
+      }, {} as Document),
+    })
+  }
+
+  return stages
+}
+
 interface ListOptions {
   page: number
   limit: number
   sort?: Sort
+  sortOnlyExist?: boolean
 }
 
-async function list(client: MongoClient, { page, limit, sort }: ListOptions) {
+async function list(
+  client: MongoClient,
+  { page, limit, sort, sortOnlyExist }: ListOptions
+) {
   const skip = (page - 1) * limit
-  const bookStages: Document[] = [{ $skip: skip }, { $limit: limit }]
-
-  if (sort) {
-    const keys = Object.keys(sort)
-    bookStages.unshift(
-      {
-        $match: keys.reduce((acc, cur) => {
-          // ignore documents that have `null` sorting properties, because I think it makes more sense that way
-          acc[cur] = { $ne: null }
-          return acc
-        }, {} as Document),
-      },
-      { $sort: sort }
-    )
-  }
 
   return (await client
     .db('bookshop')
@@ -272,7 +288,11 @@ async function list(client: MongoClient, { page, limit, sort }: ListOptions) {
     .aggregate([
       {
         $facet: {
-          books: bookStages,
+          books: [
+            ...(sort ? getSortStages(sort, sortOnlyExist) : []),
+            { $skip: skip },
+            { $limit: limit },
+          ],
           meta: [
             { $count: 'count' },
             // mimic the shape of `$$SEARCH_META`
@@ -304,6 +324,7 @@ async function autocompleteTitle(
             autocomplete: {
               query,
               path: 'title',
+              fuzzy: {},
             },
           },
         },

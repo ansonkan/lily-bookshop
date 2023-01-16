@@ -73,7 +73,10 @@ export const getServerSideProps: GetServerSideProps<
 
   const [translations, searchRes] = await Promise.all([
     serverSideTranslations(locale ?? 'en', ['common']),
-    SSR.API.get('apicore', `/books?relatedTo=${params.id}&limit=5`),
+    SSR.API.get(
+      'apicore',
+      `/books?relatedTo=${params.id}&sortOnlyExist=1&limit=5`
+    ),
   ])
 
   return {

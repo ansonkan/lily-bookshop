@@ -10,18 +10,27 @@ export interface PaginationProps extends ButtonGroupProps {
   limit: number
   total: number
   neighbors?: number
+  onPageChange?: (page: number) => void
 }
 export const Pagination = ({
   page,
   limit,
   total,
   neighbors = 4,
+  onPageChange,
   ...others
 }: PaginationProps): JSX.Element => {
   const lastPageInt = Math.ceil(total / limit)
   const neighborsEachSide = Math.round(neighbors / 2)
 
-  const buttons = [<PageLink key={1} page={1} />]
+  const buttons = [
+    <PageLink
+      key={1}
+      page={1}
+      currentPage={page}
+      onPageChange={onPageChange}
+    />,
+  ]
 
   const start = Math.max(page - neighborsEachSide, 2)
   const end = Math.min(page + neighborsEachSide, lastPageInt - 1)
@@ -32,7 +41,14 @@ export const Pagination = ({
 
   for (let i = start; i <= end; i++) {
     if (i > 1 && i < lastPageInt) {
-      buttons.push(<PageLink key={i} page={i} />)
+      buttons.push(
+        <PageLink
+          key={i}
+          page={i}
+          currentPage={page}
+          onPageChange={onPageChange}
+        />
+      )
     }
   }
 
@@ -40,7 +56,15 @@ export const Pagination = ({
     buttons.push(<Text key="end-gap">...</Text>)
   }
 
-  buttons.push(<PageLink key={lastPageInt} page={lastPageInt} isLastPage />)
+  buttons.push(
+    <PageLink
+      key={lastPageInt}
+      page={lastPageInt}
+      currentPage={page}
+      onPageChange={onPageChange}
+      isLastPage
+    />
+  )
 
   return (
     <ButtonGroup {...others} size={['xs', 'sm']}>

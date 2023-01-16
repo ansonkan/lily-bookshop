@@ -6,28 +6,51 @@ import { useTranslation } from 'next-i18next'
 
 export interface PageLinkProps {
   page: number
+  currentPage?: number
   isLastPage?: boolean
+  onPageChange?: (page: number) => void
 }
 
-export const PageLink = ({ page, isLastPage }: PageLinkProps): JSX.Element => {
+export const PageLink = ({
+  page,
+  currentPage,
+  isLastPage,
+  onPageChange,
+}: PageLinkProps): JSX.Element => {
   const { pathname, query, locale } = useRouter()
   const { t } = useTranslation('common')
 
+  const commonProps = {
+    locale: locale,
+    disabled:
+      onPageChange && currentPage !== undefined
+        ? currentPage === page
+        : `${page}` === (query.page ?? '1'),
+    leftIcon: page === 1 ? <ArrowLeftIcon /> : undefined,
+    rightIcon: isLastPage ? <ArrowRightIcon /> : undefined,
+  }
+
+  const content =
+    page === 1
+      ? t('pagination.first')
+      : isLastPage
+      ? t('pagination.last')
+      : page
+
+  if (onPageChange)
+    return (
+      <Button onClick={() => onPageChange(page)} {...commonProps}>
+        {content}
+      </Button>
+    )
+
   return (
     <Button
-      key={1}
       as={NextLink}
       href={{ pathname, query: { ...query, page } }}
-      locale={locale}
-      disabled={`${page}` === (query.page ?? '1')}
-      leftIcon={page === 1 ? <ArrowLeftIcon /> : undefined}
-      rightIcon={isLastPage ? <ArrowRightIcon /> : undefined}
+      {...commonProps}
     >
-      {page === 1
-        ? t('pagination.first')
-        : isLastPage
-        ? t('pagination.last')
-        : page}
+      {content}
     </Button>
   )
 }
