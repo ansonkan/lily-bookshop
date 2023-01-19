@@ -109,7 +109,16 @@ export const BookTable = ({
         id: 'date_updated',
         header: 'Updated at',
         accessorKey: 'date_updated',
-        cell: (info) => <V>{info.getValue<string | undefined>()}</V>,
+        cell: (info) => {
+          const dateValue = info.getValue<number | undefined>()
+          return (
+            <V>
+              {typeof dateValue === 'number'
+                ? new Date(dateValue).toDateString()
+                : undefined}
+            </V>
+          )
+        },
       },
     ],
     []
