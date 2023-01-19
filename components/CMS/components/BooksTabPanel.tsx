@@ -5,11 +5,14 @@ import { API } from 'aws-amplify'
 import useSWR from 'swr'
 import { useState } from 'react'
 
+import { useDebounce } from 'hooks'
+
 import { Autocomplete } from './Autocomplete'
 import { BookTable } from './BookTable'
 
 export const BooksTabPanel = (): JSX.Element => {
   const [value, setValue] = useState('')
+  const debouncedValue = useDebounce(value)
 
   const { data } = useSWR(
     value ? ['apicore', `/books?autocomplete=${value}`] : null,
@@ -33,7 +36,7 @@ export const BooksTabPanel = (): JSX.Element => {
         />
       </Box>
 
-      <BookTable w="full" />
+      <BookTable w="full" query={debouncedValue} />
     </VStack>
   )
 }

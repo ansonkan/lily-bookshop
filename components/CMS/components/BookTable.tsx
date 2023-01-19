@@ -23,7 +23,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { API } from 'aws-amplify'
 import useSWR from 'swr'
 
@@ -43,6 +43,10 @@ export const BookTable = ({
     pageIndex: 0,
     pageSize: 25,
   })
+
+  useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }))
+  }, [query])
 
   const [sorting, setSorting] = useState<SortingState>([])
 

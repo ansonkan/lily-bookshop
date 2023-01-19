@@ -90,6 +90,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             borderRadius="md"
             boxShadow="sm"
             bg="white"
+            zIndex="popover"
           >
             {options.map((s, index) => (
               <Box
