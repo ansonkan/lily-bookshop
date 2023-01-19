@@ -29,6 +29,8 @@ const VHelper = ({
       whiteSpace="nowrap"
       overflow="hidden"
       textOverflow="ellipsis"
+      maxW={400}
+      title={children ? `${children}` : undefined}
     >
       {children}
     </Component>

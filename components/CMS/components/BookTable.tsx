@@ -8,9 +8,8 @@ import type { TableContainerProps } from '@chakra-ui/react'
 
 import {
   Box,
-  Center,
   Fade,
-  Spinner,
+  Progress,
   Table,
   TableContainer,
   Tbody,
@@ -29,6 +28,7 @@ import { API } from 'aws-amplify'
 import useSWR from 'swr'
 
 import { Pagination } from '../../Pagination'
+import { TableSkeleton } from './TableSkeleton'
 import { V } from '../../Kvp'
 
 export interface BookTableProps extends TableContainerProps {
@@ -54,7 +54,7 @@ export const BookTable = ({
   if (sorting.length)
     params.append('sort', `${sorting[0].id}:${sorting[0].desc ? -1 : 1}`)
 
-  const { data, isValidating } = useSWR(
+  const { data, isLoading, isValidating } = useSWR(
     ['apicore', `/books?${params.toString()}`],
     ([apiName, url]) => API.get(apiName, url, {}),
     { keepPreviousData: true }
@@ -134,65 +134,71 @@ export const BookTable = ({
   })
 
   return (
-    <TableContainer {...tableContainerProps} position="relative" minH="200">
-      <Fade in={isValidating} unmountOnExit>
-        <Center position="absolute" w="full" h="full">
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-          />
-        </Center>
-      </Fade>
-
-      <Table variant="simple" size="sm">
-        <Thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <Th key={header.id} colSpan={header.colSpan}>
-                  {header.isPlaceholder ? null : (
-                    <Box
-                      cursor={header.column.getCanSort() ? 'pointer' : ''}
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {{
-                        asc: ' 🔼',
-                        desc: ' 🔽',
-                      }[header.column.getIsSorted() as string] ?? null}
-                    </Box>
-                  )}
-                </Th>
-              ))}
-            </Tr>
-          ))}
-        </Thead>
-
-        <Tbody>
-          {table.getRowModel().rows.map((row) => {
-            return (
-              <Tr key={row.id}>
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <Td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </Td>
-                  )
-                })}
+    <>
+      <TableContainer {...tableContainerProps}>
+        <Table variant="simple" size="sm" position="relative">
+          <Thead position="relative">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <Tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <Th key={header.id} colSpan={header.colSpan}>
+                    {header.isPlaceholder ? null : (
+                      <Box
+                        cursor={header.column.getCanSort() ? 'pointer' : ''}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {{
+                          asc: ' 🔼',
+                          desc: ' 🔽',
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </Box>
+                    )}
+                  </Th>
+                ))}
               </Tr>
-            )
-          })}
-        </Tbody>
-      </Table>
+            ))}
+
+            <Fade in={isValidating} unmountOnExit>
+              <Progress
+                size="xs"
+                isIndeterminate
+                position="absolute"
+                w="full"
+              />
+            </Fade>
+          </Thead>
+
+          <Tbody>
+            {isLoading ? (
+              <TableSkeleton
+                col={table.getAllColumns().length}
+                row={pageSize}
+              />
+            ) : (
+              table.getRowModel().rows.map((row) => {
+                return (
+                  <Tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => {
+                      return (
+                        <Td key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </Td>
+                      )
+                    })}
+                  </Tr>
+                )
+              })
+            )}
+          </Tbody>
+        </Table>
+      </TableContainer>
 
       <Pagination
         w="full"
@@ -203,6 +209,6 @@ export const BookTable = ({
         total={table.getPageCount()}
         onPageChange={(page) => table.setPageIndex(page - 1)}
       />
-    </TableContainer>
+    </>
   )
 }

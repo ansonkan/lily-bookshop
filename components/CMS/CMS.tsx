@@ -7,7 +7,7 @@ export const CMS = () => {
   const { t } = useTranslation()
 
   return (
-    <Tabs isLazy>
+    <Tabs>
       <Box overflow="auto">
         <TabList>
           <Tab>{t('cms.tab.books')}</Tab>
