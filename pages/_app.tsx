@@ -1,7 +1,8 @@
 import type { AppProps } from 'next/app'
 
-import { Box, ChakraProvider } from '@chakra-ui/react'
+import { Box, ChakraProvider, Fade, Progress } from '@chakra-ui/react'
 import { appWithTranslation, useTranslation } from 'next-i18next'
+import { useEffect, useState } from 'react'
 import { Amplify } from 'aws-amplify'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -27,7 +28,22 @@ Amplify.configure({ ...awsConfig, ssr: true })
 
 function App({ Component, pageProps }: AppProps) {
   const { t } = useTranslation('common')
-  const { pathname } = useRouter()
+  const { pathname, events } = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    const start = () => setIsLoading(true)
+    const end = () => setIsLoading(false)
+    events.on('routeChangeStart', start)
+    events.on('routeChangeComplete', end)
+    events.on('routeChangeError', end)
+
+    return () => {
+      events.off('routeChangeStart', start)
+      events.off('routeChangeComplete', end)
+      events.off('routeChangeError', end)
+    }
+  }, [events])
 
   return (
     <ChakraProvider theme={theme}>
@@ -57,6 +73,18 @@ function App({ Component, pageProps }: AppProps) {
           />
           <link rel="manifest" href="/site.webmanifest" />
         </Head>
+
+        <Fade in={isLoading} unmountOnExit>
+          <Progress
+            size="sm"
+            isIndeterminate
+            position="fixed"
+            w="full"
+            zIndex="overlay"
+            background="transparent"
+            colorScheme="purple"
+          />
+        </Fade>
 
         <Header showAllThreshold={pathname === '/' ? undefined : 50} />
 
