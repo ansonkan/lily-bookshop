@@ -1,7 +1,20 @@
 import type { FormEvent } from 'react'
 
-import { Box, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  HStack,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  VStack,
+} from '@chakra-ui/react'
 import { API } from 'aws-amplify'
+import { HamburgerIcon } from '@chakra-ui/icons'
+import { PlusSquareIcon } from '@chakra-ui/icons'
 import useSWR from 'swr'
 import { useState } from 'react'
 
@@ -21,20 +34,46 @@ export const BooksTabPanel = (): JSX.Element => {
 
   return (
     <VStack gap={[2, 4]}>
-      <Box
-        as="form"
-        w="full"
-        onSubmit={(event: FormEvent<HTMLFormElement | HTMLDivElement>) => {
-          event.preventDefault()
-          // console.log(value)
-        }}
-      >
-        <Autocomplete
-          options={data?.options || []}
-          value={value}
-          onChange={(value) => setValue(value)}
-        />
-      </Box>
+      <HStack w="full">
+        <Box
+          as="form"
+          flexGrow={1}
+          onSubmit={(event: FormEvent<HTMLFormElement | HTMLDivElement>) => {
+            event.preventDefault()
+          }}
+        >
+          <Autocomplete
+            options={data?.options || []}
+            value={value}
+            onChange={(value) => setValue(value)}
+          />
+        </Box>
+
+        <ButtonGroup isAttached>
+          <Button
+            leftIcon={<PlusSquareIcon />}
+            onClick={() => {
+              // show create modal
+            }}
+          >
+            Create
+          </Button>
+          <Menu>
+            <MenuButton as={IconButton}>
+              <HamburgerIcon />
+            </MenuButton>
+            <MenuList>
+              <MenuItem
+                onClick={() => {
+                  // show quick import modal
+                }}
+              >
+                Quick import
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </ButtonGroup>
+      </HStack>
 
       <BookTable w="full" query={debouncedValue} />
     </VStack>

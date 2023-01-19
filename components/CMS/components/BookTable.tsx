@@ -6,29 +6,14 @@ import type {
 import type { BookFE } from 'types'
 import type { TableContainerProps } from '@chakra-ui/react'
 
-import {
-  Box,
-  Fade,
-  Progress,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from '@chakra-ui/react'
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+import { ButtonGroup, IconButton } from '@chakra-ui/react'
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useEffect, useMemo, useState } from 'react'
 import { API } from 'aws-amplify'
 import useSWR from 'swr'
 
-import { Pagination } from '../../Pagination'
-import { TableSkeleton } from './TableSkeleton'
+import { SimpleTable } from '../../SimpleTable'
 import { V } from '../../Kvp'
 
 export interface BookTableProps extends TableContainerProps {
@@ -120,6 +105,27 @@ export const BookTable = ({
           )
         },
       },
+      {
+        id: '_actions',
+        cell: () => (
+          <ButtonGroup size="xs">
+            <IconButton aria-label="Edit book">
+              <EditIcon
+                onClick={() => {
+                  // show edit modal
+                }}
+              />
+            </IconButton>
+            <IconButton aria-label="Delete book">
+              <DeleteIcon
+                onClick={() => {
+                  // show confirmation modal
+                }}
+              />
+            </IconButton>
+          </ButtonGroup>
+        ),
+      },
     ],
     []
   )
@@ -147,81 +153,11 @@ export const BookTable = ({
   })
 
   return (
-    <>
-      <TableContainer {...tableContainerProps}>
-        <Table variant="simple" size="sm" position="relative">
-          <Thead position="relative">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <Tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <Th key={header.id} colSpan={header.colSpan}>
-                    {header.isPlaceholder ? null : (
-                      <Box
-                        cursor={header.column.getCanSort() ? 'pointer' : ''}
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        {{
-                          asc: ' 🔼',
-                          desc: ' 🔽',
-                        }[header.column.getIsSorted() as string] ?? null}
-                      </Box>
-                    )}
-                  </Th>
-                ))}
-              </Tr>
-            ))}
-
-            <Fade in={isValidating} unmountOnExit>
-              <Progress
-                size="xs"
-                isIndeterminate
-                position="absolute"
-                w="full"
-              />
-            </Fade>
-          </Thead>
-
-          <Tbody>
-            {isLoading ? (
-              <TableSkeleton
-                col={table.getAllColumns().length}
-                row={pageSize}
-              />
-            ) : (
-              table.getRowModel().rows.map((row) => {
-                return (
-                  <Tr key={row.id}>
-                    {row.getVisibleCells().map((cell) => {
-                      return (
-                        <Td key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </Td>
-                      )
-                    })}
-                  </Tr>
-                )
-              })
-            )}
-          </Tbody>
-        </Table>
-      </TableContainer>
-
-      <Pagination
-        w="full"
-        mt={[2, 4]}
-        justifyContent="center"
-        page={pageIndex + 1}
-        limit={pageSize}
-        total={table.getPageCount()}
-        onPageChange={(page) => table.setPageIndex(page - 1)}
-      />
-    </>
+    <SimpleTable
+      table={table}
+      isLoading={isLoading}
+      isValidating={isValidating}
+      {...tableContainerProps}
+    />
   )
 }
