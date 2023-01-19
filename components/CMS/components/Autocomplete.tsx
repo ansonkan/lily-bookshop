@@ -38,7 +38,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     }, [])
 
     return (
-      <InputGroup ref={rootRef}>
+      <InputGroup ref={rootRef} size={inputProps.size}>
         <InputLeftElement pointerEvents="none">
           <SearchIcon />
         </InputLeftElement>

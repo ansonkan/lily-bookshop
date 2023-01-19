@@ -43,13 +43,14 @@ export const BooksTabPanel = (): JSX.Element => {
           }}
         >
           <Autocomplete
+            size="sm"
             options={data?.options || []}
             value={value}
             onChange={(value) => setValue(value)}
           />
         </Box>
 
-        <ButtonGroup isAttached>
+        <ButtonGroup isAttached size="sm">
           <Button
             leftIcon={<PlusSquareIcon />}
             onClick={() => {

@@ -67,7 +67,7 @@ export const Pagination = ({
   )
 
   return (
-    <ButtonGroup {...others} size={['xs', 'sm']}>
+    <ButtonGroup {...others} size="sm">
       {buttons}
     </ButtonGroup>
   )

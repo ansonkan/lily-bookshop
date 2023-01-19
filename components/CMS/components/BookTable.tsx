@@ -108,7 +108,7 @@ export const BookTable = ({
       {
         id: '_actions',
         cell: () => (
-          <ButtonGroup size="xs">
+          <ButtonGroup size="xs" variant="ghost">
             <IconButton aria-label="Edit book">
               <EditIcon
                 onClick={() => {
