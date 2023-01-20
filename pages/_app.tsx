@@ -88,7 +88,7 @@ function App({ Component, pageProps }: AppProps) {
 
         <Header showAllThreshold={pathname === '/' ? undefined : 50} />
 
-        <Box as="main" minH="100vh" overflowX="hidden" pb={20}>
+        <Box as="main" minH="100vh" pb={20}>
           <Component {...pageProps} />
         </Box>
 

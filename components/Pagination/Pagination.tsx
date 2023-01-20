@@ -10,6 +10,7 @@ export interface PaginationProps extends ButtonGroupProps {
   limit: number
   total: number
   neighbors?: number
+  disabled?: boolean
   onPageChange?: (page: number) => void
 }
 export const Pagination = ({
@@ -17,6 +18,7 @@ export const Pagination = ({
   limit,
   total,
   neighbors = 4,
+  disabled,
   onPageChange,
   ...others
 }: PaginationProps): JSX.Element => {
@@ -28,6 +30,7 @@ export const Pagination = ({
       key={1}
       page={1}
       currentPage={page}
+      disabled={disabled}
       onPageChange={onPageChange}
     />,
   ]
@@ -46,6 +49,7 @@ export const Pagination = ({
           key={i}
           page={i}
           currentPage={page}
+          disabled={disabled}
           onPageChange={onPageChange}
         />
       )
@@ -61,6 +65,7 @@ export const Pagination = ({
       key={lastPageInt}
       page={lastPageInt}
       currentPage={page}
+      disabled={disabled}
       onPageChange={onPageChange}
       isLastPage
     />

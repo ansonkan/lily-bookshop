@@ -8,6 +8,7 @@ export interface PageLinkProps {
   page: number
   currentPage?: number
   isLastPage?: boolean
+  disabled?: boolean
   onPageChange?: (page: number) => void
 }
 
@@ -15,6 +16,7 @@ export const PageLink = ({
   page,
   currentPage,
   isLastPage,
+  disabled,
   onPageChange,
 }: PageLinkProps): JSX.Element => {
   const { pathname, query, locale } = useRouter()
@@ -23,9 +25,10 @@ export const PageLink = ({
   const commonProps = {
     locale: locale,
     disabled:
-      onPageChange && currentPage !== undefined
+      disabled ||
+      (onPageChange && currentPage !== undefined
         ? currentPage === page
-        : `${page}` === (query.page ?? '1'),
+        : `${page}` === (query.page ?? '1')),
     leftIcon: page === 1 ? <ArrowLeftIcon /> : undefined,
     rightIcon: isLastPage ? <ArrowRightIcon /> : undefined,
   }

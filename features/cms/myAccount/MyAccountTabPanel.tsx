@@ -1,7 +1,7 @@
 import { Box, Button } from '@chakra-ui/react'
 import { useAuthenticator } from '@aws-amplify/ui-react'
 
-import { Kvp } from '../../Kvp'
+import { Kvp } from 'components'
 
 export const MyAccountTabPanel = (): JSX.Element => {
   const { user, signOut } = useAuthenticator()

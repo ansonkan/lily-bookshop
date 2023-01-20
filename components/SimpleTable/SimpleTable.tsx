@@ -10,6 +10,7 @@ import {
   TableContainer,
   Tbody,
   Td,
+  Tfoot,
   Th,
   Thead,
   Tr,
@@ -34,30 +35,8 @@ export const SimpleTable = <T,>({
   <>
     <TableContainer {...others}>
       <Table variant="simple" size="sm" position="relative">
-        <Thead position="relative">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <Th key={header.id} colSpan={header.colSpan}>
-                  {header.isPlaceholder ? null : (
-                    <Box
-                      cursor={header.column.getCanSort() ? 'pointer' : ''}
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {{
-                        asc: <ArrowUpIcon />,
-                        desc: <ArrowDownIcon />,
-                      }[header.column.getIsSorted() as string] ?? null}
-                    </Box>
-                  )}
-                </Th>
-              ))}
-            </Tr>
-          ))}
+        <Thead>
+          <Headers table={table} />
 
           <Fade in={isValidating} unmountOnExit>
             <Progress size="xs" isIndeterminate position="absolute" w="full" />
@@ -70,7 +49,7 @@ export const SimpleTable = <T,>({
               col={table.getAllColumns().length}
               row={table.getState().pagination?.pageSize ?? 25}
             />
-          ) : (
+          ) : table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => {
               return (
                 <Tr key={row.id}>
@@ -87,8 +66,25 @@ export const SimpleTable = <T,>({
                 </Tr>
               )
             })
+          ) : (
+            <div>nothing found</div>
           )}
         </Tbody>
+
+        <Tfoot position="relative">
+          <Fade in={isValidating} unmountOnExit>
+            <Progress
+              size="xs"
+              isIndeterminate
+              position="absolute"
+              w="full"
+              top={0}
+              transform="translateY(-100%)"
+            />
+          </Fade>
+
+          <Headers table={table} />
+        </Tfoot>
       </Table>
     </TableContainer>
 
@@ -100,8 +96,43 @@ export const SimpleTable = <T,>({
         page={table.getState().pagination.pageIndex + 1}
         limit={table.getState().pagination.pageSize}
         total={table.getPageCount()}
+        disabled={isLoading || isValidating}
         onPageChange={(page) => table.setPageIndex(page - 1)}
       />
     )}
   </>
 )
+
+export interface HeadersProps<T> {
+  table: TTable<T>
+}
+
+function Headers<T>({ table }: HeadersProps<T>): JSX.Element {
+  return (
+    <>
+      {table.getHeaderGroups().map((headerGroup) => (
+        <Tr key={headerGroup.id}>
+          {headerGroup.headers.map((header) => (
+            <Th key={header.id} colSpan={header.colSpan}>
+              {header.isPlaceholder ? null : (
+                <Box
+                  cursor={header.column.getCanSort() ? 'pointer' : ''}
+                  onClick={header.column.getToggleSortingHandler()}
+                >
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+                  {{
+                    asc: <ArrowUpIcon />,
+                    desc: <ArrowDownIcon />,
+                  }[header.column.getIsSorted() as string] ?? null}
+                </Box>
+              )}
+            </Th>
+          ))}
+        </Tr>
+      ))}
+    </>
+  )
+}

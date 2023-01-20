@@ -1,13 +1,8 @@
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalOverlay,
-  useDisclosure,
-} from '@chakra-ui/react'
 import React, { createContext, useContext, useEffect } from 'react'
+import { useDisclosure } from '@chakra-ui/react'
 
 import { BookSearchForm } from '../BookSearchForm'
+import { SimpleModal } from '../SimpleModal'
 
 export const SearchModalContext = createContext({
   isOpen: false,
@@ -62,14 +57,8 @@ export const SearchModal = (): JSX.Element => {
   }, [onOpen])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay backdropFilter="auto" backdropBlur="sm" />
-
-      <ModalContent>
-        <ModalBody>
-          <BookSearchForm />
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+    <SimpleModal isOpen={isOpen} onClose={onClose} hideCloseButton>
+      <BookSearchForm />
+    </SimpleModal>
   )
 }

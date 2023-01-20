@@ -9,17 +9,3 @@ export function removeNullProps<T extends Record<string, any>>(obj: T) {
       {} as NonNullableFields<T>
     )
 }
-
-export const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
-  fn: F,
-  delay = 1000
-) => {
-  let timeout: ReturnType<typeof setTimeout>
-  return (...args: Parameters<F>) => {
-    clearTimeout(timeout)
-
-    timeout = setTimeout(() => {
-      fn(...args)
-    }, delay)
-  }
-}

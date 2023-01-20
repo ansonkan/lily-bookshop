@@ -11,24 +11,31 @@ import {
   MenuItem,
   MenuList,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
+import { HamburgerIcon, PlusSquareIcon } from '@chakra-ui/icons'
 import { API } from 'aws-amplify'
-import { HamburgerIcon } from '@chakra-ui/icons'
-import { PlusSquareIcon } from '@chakra-ui/icons'
 import useSWR from 'swr'
 import { useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
+import { Autocomplete } from 'components'
 import { useDebounce } from 'hooks'
 
-import { Autocomplete } from './Autocomplete'
-import { BookTable } from './BookTable'
+import { BooksCreateModal } from './BooksCreateModal'
+import { BooksTable } from './BooksTable'
 
 export const BooksTabPanel = (): JSX.Element => {
+  const { t } = useTranslation()
   const [value, setValue] = useState('')
   const debouncedValue = useDebounce(value)
 
+  const disclosure = useDisclosure()
+
   const { data } = useSWR(
-    value ? ['apicore', `/books?autocomplete=${value}`] : null,
+    debouncedValue
+      ? ['apicore', `/books?autocomplete=${debouncedValue}`]
+      : null,
     ([apiName, url]) => API.get(apiName, url, {})
   )
 
@@ -46,6 +53,7 @@ export const BooksTabPanel = (): JSX.Element => {
             size="sm"
             options={data?.options || []}
             value={value}
+            placeholder={t('book-search-form.placeholder') ?? ''}
             onChange={(value) => setValue(value)}
           />
         </Box>
@@ -53,12 +61,11 @@ export const BooksTabPanel = (): JSX.Element => {
         <ButtonGroup isAttached size="sm">
           <Button
             leftIcon={<PlusSquareIcon />}
-            onClick={() => {
-              // show create modal
-            }}
+            onClick={() => disclosure.onOpen()}
           >
             Create
           </Button>
+
           <Menu>
             <MenuButton as={IconButton}>
               <HamburgerIcon />
@@ -76,7 +83,9 @@ export const BooksTabPanel = (): JSX.Element => {
         </ButtonGroup>
       </HStack>
 
-      <BookTable w="full" query={debouncedValue} />
+      <BooksTable w="full" query={debouncedValue} />
+
+      <BooksCreateModal {...disclosure} />
     </VStack>
   )
 }

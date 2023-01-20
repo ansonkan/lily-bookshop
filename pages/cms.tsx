@@ -10,9 +10,7 @@ import { useTranslation } from 'next-i18next'
 import { ArrowBreadcrumb } from 'components'
 import { BaseLayout } from 'layouts'
 
-const CMS = dynamic(() => import('../components/CMS').then((mod) => mod.CMS), {
-  ssr: false,
-})
+const CMS = dynamic(() => import('../features/cms/CMS').then((mod) => mod.CMS))
 
 const CMSPage: NextPage = () => {
   const { t } = useTranslation('common')

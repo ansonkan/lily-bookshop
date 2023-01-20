@@ -7,7 +7,6 @@ import {
 } from '@chakra-ui/react'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { SearchIcon } from '@chakra-ui/icons'
-import { useTranslation } from 'next-i18next'
 
 export interface AutocompleteProps extends Omit<InputProps, 'onChange'> {
   options: string[]
@@ -16,7 +15,6 @@ export interface AutocompleteProps extends Omit<InputProps, 'onChange'> {
 
 export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
   ({ options, onChange, ...inputProps }, ref) => {
-    const { t } = useTranslation()
     const rootRef = useRef<HTMLDivElement>(null)
 
     const [opened, setOpened] = useState(false)
@@ -44,7 +42,6 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         </InputLeftElement>
 
         <Input
-          placeholder={t('book-search-form.placeholder') ?? ''}
           autoComplete="off"
           onKeyDown={(event) => {
             switch (event.key) {
