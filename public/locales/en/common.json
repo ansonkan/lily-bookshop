@@ -66,14 +66,14 @@
     "ko": "Korean",
     "de": "German"
   },
-  "book-search-page": {
-    "zero-result": "No books found"
-  },
   "cms": {
     "tab": {
       "books": "Books",
       "blog-posts": "Blog Posts",
       "my-account": "My Account"
     }
+  },
+  "generic": {
+    "no-data": "No data found"
   }
 }

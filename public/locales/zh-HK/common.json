@@ -66,14 +66,14 @@
     "ko": "韓文",
     "de": "德文"
   },
-  "book-search-page": {
-    "zero-result": "沒有搜尋結果"
-  },
   "cms": {
     "tab": {
       "books": "圖書",
       "blog-posts": "博客文章",
       "my-account": "我的賬戶"
     }
+  },
+  "generic": {
+    "no-data": "沒有搜尋結果"
   }
 }

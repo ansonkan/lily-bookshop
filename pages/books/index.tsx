@@ -1,13 +1,12 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import type { BookFE } from 'types'
 
-import { Center, Flex, Text, VStack } from '@chakra-ui/react'
-import { WarningTwoIcon } from '@chakra-ui/icons'
+import { Center, Flex, VStack } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 import { withSSRContext } from 'aws-amplify'
 
-import { ArrowBreadcrumb, BookItem, Pagination } from 'components'
+import { ArrowBreadcrumb, BookItem, NoData, Pagination } from 'components'
 import { BaseLayout } from 'layouts'
 import { formatDirectusBook } from 'utils'
 
@@ -63,8 +62,7 @@ const BooksPage: NextPage<BooksPageProps> = ({
         </>
       ) : (
         <Center flexDirection="column" minH="30vh">
-          <WarningTwoIcon boxSize={['20']} color="orange" />
-          <Text as="b">{t('book-search-page.zero-result')}</Text>
+          <NoData />
         </Center>
       )}
     </BaseLayout>

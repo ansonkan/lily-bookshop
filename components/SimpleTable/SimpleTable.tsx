@@ -4,6 +4,7 @@ import type { TableContainerProps } from '@chakra-ui/react'
 import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons'
 import {
   Box,
+  Center,
   Fade,
   Progress,
   Table,
@@ -17,6 +18,7 @@ import {
 } from '@chakra-ui/react'
 import { flexRender } from '@tanstack/react-table'
 
+import { NoData } from '../NoData'
 import { Pagination } from '../Pagination'
 import { TableSkeleton } from '../TableSkeleton'
 
@@ -67,7 +69,13 @@ export const SimpleTable = <T,>({
               )
             })
           ) : (
-            <div>nothing found</div>
+            <Tr>
+              <Td colSpan={42} h={100}>
+                <Center>
+                  <NoData />
+                </Center>
+              </Td>
+            </Tr>
           )}
         </Tbody>
 
