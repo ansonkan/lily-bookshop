@@ -1,14 +1,17 @@
-import type { CenterProps } from '@chakra-ui/react'
+import { CenterProps } from '@chakra-ui/react'
 
 import {
   Button,
   ButtonGroup,
   Center,
   Flex,
+  HStack,
   Heading,
   Kbd,
   Link,
+  Text,
 } from '@chakra-ui/react'
+import { SearchIcon } from '@chakra-ui/icons'
 import { useContext } from 'react'
 import { useTranslation } from 'next-i18next'
 
@@ -20,7 +23,7 @@ export const LandingSection = (props: CenterProps): JSX.Element => {
 
   return (
     <Center {...props}>
-      <Flex direction="column" gap={4}>
+      <Flex direction="column" gap={4} maxW="full">
         <Heading
           as="h1"
           fontSize={['2xl', '4xl', '4xl', '5xl']}
@@ -36,8 +39,12 @@ export const LandingSection = (props: CenterProps): JSX.Element => {
           justifyContent="space-between"
           color="chakra-placeholder-color"
           fontWeight="normal"
+          overflow="hidden"
         >
-          {t('landing-section.search-button')}
+          <HStack>
+            <SearchIcon />
+            <Text>{t('landing-section.search-button')}</Text>
+          </HStack>
         </Button>
 
         <ButtonGroup alignSelf="center">

@@ -6,11 +6,18 @@ import {
   Fade,
   HStack,
   Heading,
+  IconButton,
   Kbd,
+  Link,
+  useBreakpoint,
 } from '@chakra-ui/react'
 import { useContext, useEffect, useState } from 'react'
+import Image from 'next/image'
 import NextLink from 'next/link'
+import { SearchIcon } from '@chakra-ui/icons'
 import { useTranslation } from 'next-i18next'
+
+import Logo from 'public/favicon.ico'
 
 import { LocaleSwitcher } from '../LocaleSwitcher'
 import { SearchModalContext } from '../SearchModal'
@@ -24,6 +31,7 @@ export const Header = ({
   showAllThreshold,
   showAllThresholdRatio = 0.5,
 }: HeaderProps): JSX.Element => {
+  const bp = useBreakpoint()
   const { t } = useTranslation('common')
   const { onOpen } = useContext(SearchModalContext)
   const [showAll, setShowAll] = useState(false)
@@ -66,20 +74,39 @@ export const Header = ({
     >
       <Container py={[2, 4]}>
         <HStack justifyContent="space-between">
-          <NextLink href="/">
+          <Link
+            as={NextLink}
+            href="/"
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+          >
+            <Image src={Logo} alt="Lily Bookshop logo" width={32} />
             <Heading size={['sm', 'md']}>{t('header.heading')}</Heading>
-          </NextLink>
+          </Link>
 
           <ButtonGroup>
-            <Fade in={showAll}>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => onOpen()}
-                rightIcon={<Kbd>/</Kbd>}
-              >
-                {t('header.search-button')}
-              </Button>
+            <Fade in={showAll} unmountOnExit>
+              {['base', 'sm'].includes(bp) ? (
+                <IconButton
+                  aria-label="Search"
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => onOpen()}
+                >
+                  <SearchIcon />
+                </IconButton>
+              ) : (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => onOpen()}
+                  leftIcon={<SearchIcon />}
+                  rightIcon={<Kbd>/</Kbd>}
+                >
+                  {t('header.search-button')}
+                </Button>
+              )}
             </Fade>
 
             <LocaleSwitcher />

@@ -26,7 +26,7 @@ export const Thumbnail = ({
     <Image
       src={src ?? placeholderImageSrc}
       alt={`Thumbnail of ${bookTitle}`}
-      fill={true}
+      fill
     />
   </AspectRatio>
 )

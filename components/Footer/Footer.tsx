@@ -7,8 +7,11 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import Image from 'next/image'
 import { PhoneIcon } from '@chakra-ui/icons'
 import { useTranslation } from 'next-i18next'
+
+import FullLogo from 'public/favicon.ico'
 
 import { MapPinIcon } from '../MapPinIcon'
 
@@ -18,6 +21,7 @@ export const Footer = (): JSX.Element => {
   return (
     <Box as="footer" bgColor="purple.800" color="white">
       <Container py={8}>
+        <Image src={FullLogo} width={100} alt="lily Bookshop" />
         <Heading size={['sm', 'md']} mb={8}>
           {t('footer.heading')}
         </Heading>
