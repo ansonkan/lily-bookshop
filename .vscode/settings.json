@@ -8,5 +8,12 @@
     "amplify/backend/amplify-meta.json": true,
     "amplify/backend/awscloudformation": true
   },
-  "cSpell.words": ["Chakra", "clsx", "Directus", "zdog"]
+  "cSpell.words": [
+    "Chakra",
+    "clsx",
+    "Directus",
+    "Formik",
+    "tanstack",
+    "zdog"
+  ]
 }

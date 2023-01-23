@@ -17,3 +17,6 @@ amplify/#current-cloud-backend
 amplify/backend/function/**/*.js
 amplify/backend/types/
 aws-exports.js
+
+# vscode
+settings.json

@@ -6,14 +6,14 @@ import { BookScrollXCard } from '../BookScrollXCard'
 import { LatestAdditionsScene } from '../LatestAdditionsScene'
 import styles from './styles.module.scss'
 
-export interface LatestAdditionSectionProps extends CardProps {
+export interface LatestAdditionsSectionProps extends CardProps {
   books: BookFE[]
 }
 
-export const LatestAdditionSection = ({
+export const LatestAdditionsSection = ({
   books,
   ...cardProps
-}: LatestAdditionSectionProps): JSX.Element => {
+}: LatestAdditionsSectionProps): JSX.Element => {
   const { t } = useTranslation('common')
 
   return (

@@ -3,7 +3,6 @@ import type { TableContainerProps } from '@chakra-ui/react'
 
 import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons'
 import {
-  Box,
   Center,
   Fade,
   Progress,
@@ -40,9 +39,20 @@ export const SimpleTable = <T,>({
         <Thead>
           <Headers table={table} />
 
-          <Fade in={isValidating} unmountOnExit>
-            <Progress size="xs" isIndeterminate position="absolute" w="full" />
-          </Fade>
+          {/* next-dev.js?3515:20 Warning: validateDOMNesting(...): <div> cannot appear as a child of <tr>. */}
+          <Tr>
+            <Td position="absolute" w="full" border="none" p={0}>
+              <Fade in={isValidating} unmountOnExit>
+                <Progress
+                  size="xs"
+                  isIndeterminate
+                  position="absolute"
+                  w="full"
+                  top={0}
+                />
+              </Fade>
+            </Td>
+          </Tr>
         </Thead>
 
         <Tbody>
@@ -80,16 +90,20 @@ export const SimpleTable = <T,>({
         </Tbody>
 
         <Tfoot position="relative">
-          <Fade in={isValidating} unmountOnExit>
-            <Progress
-              size="xs"
-              isIndeterminate
-              position="absolute"
-              w="full"
-              top={0}
-              transform="translateY(-100%)"
-            />
-          </Fade>
+          <Tr>
+            <Td w="full" border="none" p={0}>
+              <Fade in={isValidating} unmountOnExit>
+                <Progress
+                  size="xs"
+                  isIndeterminate
+                  position="absolute"
+                  w="full"
+                  top={0}
+                  transform="translateY(-100%)"
+                />
+              </Fade>
+            </Td>
+          </Tr>
 
           <Headers table={table} />
         </Tfoot>
@@ -121,12 +135,14 @@ function Headers<T>({ table }: HeadersProps<T>): JSX.Element {
       {table.getHeaderGroups().map((headerGroup) => (
         <Tr key={headerGroup.id}>
           {headerGroup.headers.map((header) => (
-            <Th key={header.id} colSpan={header.colSpan}>
+            <Th
+              key={header.id}
+              colSpan={header.colSpan}
+              cursor={header.column.getCanSort() ? 'pointer' : ''}
+              onClick={header.column.getToggleSortingHandler()}
+            >
               {header.isPlaceholder ? null : (
-                <Box
-                  cursor={header.column.getCanSort() ? 'pointer' : ''}
-                  onClick={header.column.getToggleSortingHandler()}
-                >
+                <>
                   {flexRender(
                     header.column.columnDef.header,
                     header.getContext()
@@ -135,7 +151,7 @@ function Headers<T>({ table }: HeadersProps<T>): JSX.Element {
                     asc: <ArrowUpIcon />,
                     desc: <ArrowDownIcon />,
                   }[header.column.getIsSorted() as string] ?? null}
-                </Box>
+                </>
               )}
             </Th>
           ))}

@@ -58,7 +58,7 @@ function App({ Component, pageProps }: AppProps) {
 
         <Fade in={isLoading} unmountOnExit>
           <Progress
-            size="sm"
+            size="xs"
             isIndeterminate
             position="fixed"
             w="full"

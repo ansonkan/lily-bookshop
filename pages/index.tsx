@@ -10,7 +10,7 @@ import {
   HighlightSection,
   LandingScene,
   LandingSection,
-  LatestAdditionSection,
+  LatestAdditionsSection,
 } from 'components'
 import { formatDirectusBook } from 'utils'
 
@@ -44,7 +44,7 @@ const HomePage: NextPage<HomePageProps> = ({
           )}
 
           {latestAdditions.length > 0 && (
-            <LatestAdditionSection
+            <LatestAdditionsSection
               rounded="3xl"
               overflow="hidden"
               boxShadow="xl"

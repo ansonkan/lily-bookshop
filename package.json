@@ -38,6 +38,7 @@
     "react-i18next": "12.1.1",
     "swr": "2.0.0",
     "typescript": "4.9.4",
+    "yup": "1.0.0-beta.8",
     "zdog": "1.1.3"
   },
   "devDependencies": {
