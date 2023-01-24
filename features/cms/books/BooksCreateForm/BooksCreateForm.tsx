@@ -131,9 +131,19 @@ export function BookCreateFields({
       />
 
       <SimpleField
+        label="Authors"
+        name={`${namePrefix}authors`}
+        type="text"
+        multiline
+        format={(value) => `${value}`.split('\n')}
+        parse={(value) => (Array.isArray(value) ? value.join('\n') : '')}
+      />
+
+      <SimpleField
         label="Quantity"
         name={`${namePrefix}quantity`}
         type="number"
+        min={0}
       />
     </>
   )

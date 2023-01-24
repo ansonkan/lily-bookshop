@@ -1,5 +1,4 @@
-import type { FieldInputProps } from 'formik'
-import type { FormControlProps } from '@chakra-ui/react'
+import type { SimpleFieldHelperProps, SimpleFieldProps, Value } from './types'
 
 import {
   FormControl,
@@ -13,22 +12,9 @@ import {
   NumberInputField,
   NumberInputStepper,
   Select,
+  Textarea,
 } from '@chakra-ui/react'
 import { useField } from 'formik'
-
-export interface Option {
-  value: string
-  label?: string
-}
-
-export interface SimpleFieldProps extends FormControlProps {
-  name: string
-  type?: string
-  label?: string
-  placeholder?: string
-  helperText?: string
-  options?: Option[]
-}
 
 export const SimpleField = ({
   name,
@@ -36,10 +22,17 @@ export const SimpleField = ({
   label,
   placeholder,
   helperText,
+  format,
+  parse,
+  multiline,
   options,
+  min,
+  max,
+  step,
+  precision,
   ...formControlProps
 }: SimpleFieldProps): JSX.Element => {
-  const [field, meta] = useField({ name, type })
+  const [field, meta, helper] = useField({ name, type })
   const isError = meta.touched && !!meta.error
 
   return (
@@ -49,8 +42,16 @@ export const SimpleField = ({
       <SimpleFieldHelper
         type={type}
         placeholder={placeholder}
+        field={field}
+        helper={helper}
+        format={format}
+        parse={parse}
+        multiline={multiline}
         options={options}
-        {...field}
+        min={min}
+        max={max}
+        step={step}
+        precision={precision}
       />
 
       {isError ? (
@@ -62,26 +63,18 @@ export const SimpleField = ({
   )
 }
 
-// might need to change `FieldInputProps`'s generic type when more input types are supported by this `SimpleField`
-interface SimpleFieldHelperProps extends FieldInputProps<string | number> {
-  type?: string
-  placeholder?: string
-  options?: Option[]
-  // for `NumberInput`
-  min?: number
-  max?: number
-  step?: number
-  precision?: number
-}
-
 function SimpleFieldHelper({
   type,
+  format = (value: Value) => value,
+  parse,
+  multiline,
   options,
   min,
   max,
   step,
   precision,
-  ...field
+  field,
+  helper,
 }: SimpleFieldHelperProps) {
   /**
    * TODO:
@@ -89,9 +82,15 @@ function SimpleFieldHelper({
    * 2. `Textarea` + newline split might be the easier workaround for multi-free-text-value (e.g. authors)
    */
 
+  const _value = parse ? parse(field.value) : field.value
+
   if (options) {
     return (
-      <Select {...field}>
+      <Select
+        {...field}
+        value={_value}
+        onChange={(event) => helper.setValue(format(event.target.value))}
+      >
         {options.map(({ value, label }) => (
           <option value={value} key={value}>
             {label || value}
@@ -109,6 +108,8 @@ function SimpleFieldHelper({
         step={step}
         precision={precision}
         {...field}
+        value={_value}
+        onChange={(str, num) => helper.setValue(format(isNaN(num) ? '' : num))}
       >
         <NumberInputField />
         <NumberInputStepper>
@@ -119,12 +120,23 @@ function SimpleFieldHelper({
     )
   }
 
+  if (multiline) {
+    return (
+      <Textarea
+        {...field}
+        value={_value}
+        onChange={(event) => helper.setValue(format(event.target.value))}
+      />
+    )
+  }
+
   return (
     <Input
       type={type}
       {...field}
       // next-dev.js?3515:20 Warning: A component is changing an uncontrolled input to be controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled input element for the lifetime of the component.
-      value={field.value || ''}
+      value={_value || ''}
+      onChange={(event) => helper.setValue(format(event.target.value))}
     />
   )
 }
