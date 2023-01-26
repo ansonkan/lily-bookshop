@@ -27,6 +27,8 @@ export const BooksCreateForm = (): JSX.Element => {
     <Formik<BooksCreateFormik>
       initialValues={initialBooks}
       validationSchema={BooksCreateFormikSchema}
+      // otherwise, when the list grows large, typing in a field will become very laggy
+      validateOnChange={false}
       onSubmit={(values, { setSubmitting }) => {
         // console.log(JSON.stringify(values, null, 2))
         setSubmitting(false)
@@ -40,6 +42,8 @@ export const BooksCreateForm = (): JSX.Element => {
               typeof index === 'number' && setExpandedIndex(index)
               Array.isArray(index) && setExpandedIndex(index[0])
             }}
+            // because the field is not being rendered unless `expandedIndex === index`, otherwise opening/closing will looks janky
+            reduceMotion
           >
             <FieldArray name="books">
               {({ remove, push }) => {
@@ -58,10 +62,13 @@ export const BooksCreateForm = (): JSX.Element => {
                         </AccordionButton>
 
                         <AccordionPanel>
-                          <BookCreateFields
-                            index={index}
-                            parentFieldName="books"
-                          />
+                          {/* otherwise, when the list grows large, typing in a field will become very laggy */}
+                          {expandedIndex === index && (
+                            <BookCreateFields
+                              index={index}
+                              parentFieldName="books"
+                            />
+                          )}
 
                           <Button
                             leftIcon={<DeleteIcon />}
