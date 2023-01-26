@@ -11,14 +11,13 @@ import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import { FieldArray, Form, Formik } from 'formik'
 import { useState } from 'react'
 
-import { SimpleField } from 'components'
-
 import {
   BooksCreateFormik,
   BooksCreateFormikSchema,
   initialBook,
   initialBooks,
 } from './utils'
+import { BookCreateFields } from './BookCreateFields'
 
 export const BooksCreateForm = (): JSX.Element => {
   const [expandedIndex, setExpandedIndex] = useState(0)
@@ -101,57 +100,5 @@ export const BooksCreateForm = (): JSX.Element => {
         </Form>
       )}
     </Formik>
-  )
-}
-
-export interface BookCreateFieldsProps {
-  parentFieldName?: string
-  index?: number
-}
-
-export function BookCreateFields({
-  index,
-  parentFieldName,
-}: BookCreateFieldsProps) {
-  const namePrefix =
-    typeof index === 'number' && parentFieldName
-      ? `${parentFieldName}[${index}].`
-      : ''
-
-  return (
-    <>
-      <SimpleField
-        label="Status"
-        name={`${namePrefix}status`}
-        options={[
-          { value: 'published', label: 'Published' },
-          { value: 'draft', label: 'Draft' },
-          { value: 'archived', label: 'Archived' },
-        ]}
-      />
-
-      <SimpleField label="Title" name={`${namePrefix}title`} type="text" />
-      <SimpleField
-        label="Subtitle"
-        name={`${namePrefix}subtitle`}
-        type="text"
-      />
-
-      <SimpleField
-        label="Authors"
-        name={`${namePrefix}authors`}
-        type="text"
-        multiline
-        format={(value) => `${value}`.split('\n')}
-        parse={(value) => (Array.isArray(value) ? value.join('\n') : '')}
-      />
-
-      <SimpleField
-        label="Quantity"
-        name={`${namePrefix}quantity`}
-        type="number"
-        min={0}
-      />
-    </>
   )
 }
