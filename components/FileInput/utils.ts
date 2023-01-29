@@ -1,3 +1,4 @@
+// Copied from https://github.com/aws-amplify/amplify-ui/tree/main/packages/react/src/components/Storage/FileUploader
 export const returnAcceptedFiles = (
   files: File[],
   acceptedFileTypes: string[]
@@ -28,6 +29,7 @@ export const fileListToArray = (list: FileList) => {
   return files
 }
 
+// Copied from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#examples
 export const returnFileSize = (number: number) => {
   if (number < 1024) {
     return `${number} bytes`

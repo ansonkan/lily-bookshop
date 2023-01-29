@@ -30,6 +30,7 @@ export const FileInput = (props: FileInputProps): JSX.Element => {
     onChange?.(newFiles)
   }
 
+  // Copied from https://github.com/aws-amplify/amplify-ui/tree/main/packages/react/src/components/Storage/FileUploader
   const onDragStart = (event: React.DragEvent<HTMLDivElement>) => {
     event.dataTransfer.clearData()
   }
