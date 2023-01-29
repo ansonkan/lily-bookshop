@@ -7,7 +7,7 @@ import type { BookFE } from 'types'
 import type { TableContainerProps } from '@chakra-ui/react'
 
 import { ButtonGroup, IconButton } from '@chakra-ui/react'
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
+import { CloseIcon, EditIcon } from '@chakra-ui/icons'
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { API } from 'aws-amplify'
@@ -122,7 +122,7 @@ export const BooksTable = memo(
               </IconButton>
 
               <IconButton aria-label="Delete" title="Delete" colorScheme="red">
-                <DeleteIcon onClick={() => onDelete?.(row.original)} />
+                <CloseIcon onClick={() => onDelete?.(row.original)} />
               </IconButton>
             </ButtonGroup>
           ),

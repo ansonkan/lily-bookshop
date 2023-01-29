@@ -25,7 +25,7 @@ export async function POST(
   if (book) {
     const cleanBook = BookDocumentSchema.validateSync(
       { ...book, ...meta },
-      { stripUnknown: true }
+      { stripUnknown: true, strict: true }
     )
 
     const result = await insertOne(client, cleanBook)
@@ -44,7 +44,7 @@ export async function POST(
     const cleanBooks = books.map((book: Partial<BookDocument>) =>
       BookDocumentSchema.validateSync(
         { ...book, ...meta },
-        { stripUnknown: true }
+        { stripUnknown: true, strict: true }
       )
     )
 

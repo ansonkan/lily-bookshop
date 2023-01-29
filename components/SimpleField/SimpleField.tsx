@@ -1,4 +1,4 @@
-import type { SimpleFieldHelperProps, SimpleFieldProps, Value } from './types'
+import type { SimpleFieldHelperProps, SimpleFieldProps } from './types'
 
 import {
   FormControl,
@@ -16,6 +16,8 @@ import {
 } from '@chakra-ui/react'
 import { useField } from 'formik'
 
+import { FileInput } from '../FileInput'
+
 export const SimpleField = ({
   name,
   type,
@@ -30,6 +32,8 @@ export const SimpleField = ({
   max,
   step,
   precision,
+  multiple,
+  accept,
   ...formControlProps
 }: SimpleFieldProps): JSX.Element => {
   const [field, meta, helper] = useField({ name, type })
@@ -52,6 +56,8 @@ export const SimpleField = ({
         max={max}
         step={step}
         precision={precision}
+        multiple={multiple}
+        accept={accept}
       />
 
       {isError ? (
@@ -63,26 +69,54 @@ export const SimpleField = ({
   )
 }
 
-function SimpleFieldHelper({
+function cleanValue(value: unknown): string | number | undefined {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return !['undefined', 'string', 'number'].includes(typeof value)
+    ? undefined
+    : value
+}
+
+function SimpleFieldHelper<V>({
   type,
-  format = (value: Value) => value,
-  parse,
+  format = (value) => value,
+  parse = (value) => value,
   multiline,
   options,
   min,
   max,
   step,
   precision,
+  multiple,
+  accept = ['image/*'],
   field,
   helper,
-}: SimpleFieldHelperProps) {
+}: SimpleFieldHelperProps<V>) {
   /**
    * TODO:
    * 1. `Menu` might be the easier workaround for multi-select (e.g. categories)
    * 2. `Textarea` + newline split might be the easier workaround for multi-free-text-value (e.g. authors)
    */
 
-  const _value = parse ? parse(field.value) : field.value
+  if (options && multiple) {
+    // use `Menu` (for desktop view)?
+  }
+
+  if (type === 'file') {
+    const _value = Array.isArray(field.value)
+      ? field.value.filter((v) => v instanceof File)
+      : undefined
+    return (
+      <FileInput
+        onChange={(files) => helper.setValue(files)}
+        value={_value}
+        multiple={multiple}
+        accept={accept}
+      />
+    )
+  }
+
+  const _value = cleanValue(parse(field.value))
 
   if (options) {
     return (
@@ -109,7 +143,7 @@ function SimpleFieldHelper({
         precision={precision}
         {...field}
         value={_value}
-        onChange={(str, num) => helper.setValue(format(isNaN(num) ? '' : num))}
+        onChange={(str) => helper.setValue(format(str))}
       >
         <NumberInputField />
         <NumberInputStepper>

@@ -13,19 +13,7 @@ export const NewBookSchema = BookDocumentSchema.omit([
 export type NewBook = InferType<typeof NewBookSchema>
 
 export const BooksCreateFormikSchema = object({
-  books: array().of(NewBookSchema).required(),
+  books: array().required().min(1).of(NewBookSchema),
 })
 
 export type BooksCreateFormik = InferType<typeof BooksCreateFormikSchema>
-
-export const initialBook: NewBook = {
-  status: 'draft',
-  title: '',
-  authors: [],
-  categories: [],
-  quantity: 1,
-}
-
-export const initialBooks: BooksCreateFormik = {
-  books: [initialBook],
-}

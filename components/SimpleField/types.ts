@@ -1,9 +1,6 @@
 import type { FieldHelperProps, FieldInputProps } from 'formik'
 import type { FormControlProps, NumberInputProps } from '@chakra-ui/react'
 
-export type Value = string | number
-export type RealValue = unknown
-
 export interface Option {
   value: string
   label?: string
@@ -13,12 +10,17 @@ interface CommonProps
   extends Pick<NumberInputProps, 'min' | 'max' | 'step' | 'precision'> {
   type?: string
   placeholder?: string
-  format?: (value: Value) => RealValue
-  parse?: (value: RealValue) => Value
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  format?: (value: string) => any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  parse?: (value: any) => string | number | undefined
   // Multi-value version of text input, using `Textarea` as a easy workaround
   multiline?: boolean
   // for `Select`
   options?: Option[]
+  multiple?: boolean
+  // for `FileInput`
+  accept?: string[]
 }
 
 export interface SimpleFieldProps extends FormControlProps, CommonProps {
@@ -29,8 +31,8 @@ export interface SimpleFieldProps extends FormControlProps, CommonProps {
 }
 
 // might need to change `FieldInputProps`'s generic type when more input types are supported by this `SimpleField`
-export interface SimpleFieldHelperProps extends CommonProps {
-  field: FieldInputProps<Value>
+export interface SimpleFieldHelperProps<V> extends CommonProps {
+  field: FieldInputProps<V>
   // I don't know how to type is to make the `setValue` accept anything, just let it with `unknown` for now
-  helper: FieldHelperProps<RealValue>
+  helper: FieldHelperProps<unknown>
 }
