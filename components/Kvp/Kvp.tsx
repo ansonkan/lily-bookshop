@@ -1,3 +1,4 @@
+import type { IconProps } from '@chakra-ui/icons'
 import type { TypographyProps } from '@chakra-ui/react'
 
 import { Badge, Flex, Text } from '@chakra-ui/react'
@@ -37,16 +38,19 @@ const VHelper = ({
   )
 }
 
+export const None = (props: IconProps) => (
+  <MinusIcon as="dd" role="none" color="gray.300" {...props} />
+)
+
 export const V = ({
   children,
   useBadge,
   fontSize,
 }: Omit<KvpProps, 'k'>): JSX.Element => {
-  if (children === undefined || children === '')
-    return <MinusIcon as="dd" role="none" />
+  if (children === undefined || children === '') return <None />
 
   if (Array.isArray(children)) {
-    if (children.length === 0) return <MinusIcon as="dd" role="none" />
+    if (children.length === 0) return <None />
 
     return (
       <>

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import type { GetServerSideProps, NextPage } from 'next'
 
-import { API } from 'aws-amplify'
+import { API, Storage } from 'aws-amplify'
 import { Authenticator } from '@aws-amplify/ui-react'
 import { Button } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -29,6 +29,16 @@ const TestPage: NextPage = () => {
       console.log(res)
     })
   }
+  // testing%20thumbnail!!!%2F1675007982791%2F0%2F_KEUNG%20XXX%20XXX%20Medical%20card.png
+
+  const testStorage = async () => {
+    const result = await Storage.get(
+      'testing%20thumbnail!!!%2F1675007982791%2F0%2F_KEUNG%20XXX%20XXX%20Medical%20card.png',
+      { download: true }
+    )
+
+    console.log(result)
+  }
 
   return (
     <InternalLayout>
@@ -46,6 +56,7 @@ const TestPage: NextPage = () => {
         Test GET /books/63bd1136b5b4cf50045ac19d
       </Button>
       <Button onClick={testPostBook}>Test POST /books</Button>
+      <Button onClick={testStorage}>test Storage</Button>
     </InternalLayout>
   )
 }

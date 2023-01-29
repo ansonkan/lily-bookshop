@@ -119,12 +119,13 @@ export const BookCreateFields = ({
             value: c,
           }))}
           multiple
+          // this is a placeholder until the `book_categories` collection and APIs are ready
+          format={(value?: string) => (value ? [value] : undefined)}
+          parse={(value?: string[]) => value?.[0]}
         />
       </GridItem>
 
       {/* `categories` use `Menu` + a new collection for categories CRUD */}
-
-      {/* `thumbnail` needs a custom file input + link upload */}
 
       <GridItem>
         <SimpleField

@@ -1,6 +1,4 @@
-import type { InferType } from 'yup'
-
-import { array, object } from 'yup'
+import { ValidationError, array, mixed, object } from 'yup'
 import { BookDocumentSchema } from '@lily-bookshop/schemas'
 
 export const NewBookSchema = BookDocumentSchema.omit([
@@ -8,12 +6,28 @@ export const NewBookSchema = BookDocumentSchema.omit([
   'user_created',
   'date_updated',
   'user_updated',
-])
+  'thumbnail',
+]).concat(
+  object({
+    thumbnail: array()
+      .length(1)
+      .of(mixed<File>().required())
+      .test('file-check', (value, { path }) => {
+        if (!value || value.length === 0) return true
 
-export type NewBook = InferType<typeof NewBookSchema>
+        if (value[0] instanceof File) {
+          return true
+        }
+
+        return new ValidationError(
+          `${path} is not a valid File array`,
+          value,
+          path
+        )
+      }),
+  })
+)
 
 export const BooksCreateFormikSchema = object({
   books: array().required().min(1).of(NewBookSchema),
 })
-
-export type BooksCreateFormik = InferType<typeof BooksCreateFormikSchema>

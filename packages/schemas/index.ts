@@ -36,8 +36,14 @@ export const BookDocumentSchema = object({
   publisher: string().optional(),
   published_date: string().optional(), // not using number timestamp because some `published_date` only has year
   description: string().optional(),
-  ISBN_13: string().length(13).optional(),
-  ISBN_10: string().length(10).optional(),
+  ISBN_13: string()
+    .length(13)
+    .optional()
+    .transform((value) => (value ? value : undefined)),
+  ISBN_10: string()
+    .length(10)
+    .optional()
+    .transform((value) => (value ? value : undefined)),
   page_count: number().integer().min(1).optional(),
   categories: array(string().required()).required(),
   /**

@@ -1,5 +1,8 @@
-import type { BookFE } from 'types'
 import type { ModalProps } from '@chakra-ui/react'
+
+import type { BookFE } from 'types'
+
+import type { BooksCreateFormik } from './types'
 
 import {
   Accordion,
@@ -16,14 +19,18 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useToast,
 } from '@chakra-ui/react'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import { FieldArray, Form, Formik } from 'formik'
+import { captureException } from '@sentry/nextjs'
+import { mutate } from 'swr'
 import { useState } from 'react'
 
-import { BooksCreateFormik, BooksCreateFormikSchema } from './utils'
 import { INITIAL_BOOK, INITIAL_BOOKS } from './constants'
 import { BookCreateFields } from './BookCreateFields'
+import { BooksCreateFormikSchema } from './utils'
+import { createBooks } from './queries'
 
 export interface BooksCreateModalProps extends Omit<ModalProps, 'children'> {
   initialBooks?: BookFE[]
@@ -34,6 +41,7 @@ export const BooksCreateModal = ({
   ...modalProps
 }: BooksCreateModalProps): JSX.Element => {
   const [expandedIndex, setExpandedIndex] = useState(0)
+  const toast = useToast()
 
   return (
     <Modal size="4xl" closeOnOverlayClick={false} {...modalProps}>
@@ -46,12 +54,44 @@ export const BooksCreateModal = ({
         validateOnChange={false}
         onSubmit={(values, { setSubmitting }) => {
           // Because of `stripUnknown` and also cast numeric strings back to number.
-          // const cleaned = BooksCreateFormikSchema.cast(values, {
-          //   stripUnknown: true,
-          // })
+          const cleaned = BooksCreateFormikSchema.cast(values, {
+            stripUnknown: true,
+          })
 
-          // console.log('cleaned: ', cleaned)
-          setSubmitting(false)
+          createBooks(cleaned)
+            .then(() => {
+              setSubmitting(false)
+
+              mutate(
+                (key) =>
+                  Array.isArray(key) &&
+                  typeof key[1] === 'string' &&
+                  key[1].startsWith('/books')
+              )
+
+              toast({
+                title: 'New books added',
+                // description: "We've created your account for you.",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+              })
+
+              modalProps.onClose()
+            })
+            .catch((err) => {
+              captureException(err)
+              toast({
+                title: 'Failed to add new books',
+                description: 'Something went wrong. Please try again later.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+              })
+            })
+            .finally(() => {
+              setSubmitting(false)
+            })
         }}
       >
         {({ isSubmitting, values, errors, touched }) => (
@@ -112,7 +152,12 @@ export const BooksCreateModal = ({
               </ModalBody>
 
               <ModalFooter>
-                <Button size="sm" type="submit" disabled={isSubmitting}>
+                <Button
+                  size="sm"
+                  type="submit"
+                  disabled={isSubmitting}
+                  isLoading={isSubmitting}
+                >
                   Submit
                 </Button>
               </ModalFooter>

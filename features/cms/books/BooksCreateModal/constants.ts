@@ -1,4 +1,4 @@
-import type { BooksCreateFormik, NewBook } from './utils'
+import type { BooksCreateFormik, NewBook } from './types'
 
 export const INITIAL_BOOK: NewBook = {
   status: 'draft',
