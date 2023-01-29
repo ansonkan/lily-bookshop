@@ -19,6 +19,11 @@ const validateDate = (value: number, path: string) => {
   return true
 }
 
+const cleanStrArray = (value: unknown) =>
+  Array.isArray(value) ? value.filter((v) => !!v) : undefined
+
+const cleanStr = (value?: string) => (value ? value : undefined)
+
 export const BookDocumentSchema = object({
   status: mixed<typeof STATUSES[number]>().oneOf(STATUSES).required(),
   user_created: string().required(), // user sub id
@@ -31,21 +36,15 @@ export const BookDocumentSchema = object({
     .test('is-not-future', (value, { path }) => validateDate(value, path)), // new Date().getTime()
   title: string().required(),
   subtitle: string().optional(),
-  authors: array(string().required()).required(),
+  authors: array(string()).transform(cleanStrArray),
   about_the_authors: string().optional(),
   publisher: string().optional(),
   published_date: string().optional(), // not using number timestamp because some `published_date` only has year
   description: string().optional(),
-  ISBN_13: string()
-    .length(13)
-    .optional()
-    .transform((value) => (value ? value : undefined)),
-  ISBN_10: string()
-    .length(10)
-    .optional()
-    .transform((value) => (value ? value : undefined)),
+  ISBN_13: string().length(13).optional().transform(cleanStr),
+  ISBN_10: string().length(10).optional().transform(cleanStr),
   page_count: number().integer().min(1).optional(),
-  categories: array(string().required()).required(),
+  categories: array(string()).transform(cleanStrArray),
   /**
    * `thumbnail` object key:
    * - when create: `${ISBN_13 || ISBN_10 || title || request_id}/${timestamp}/${book_index}/${file_name}`

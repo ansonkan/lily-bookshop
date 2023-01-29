@@ -1,4 +1,4 @@
-import { Box, Button, Center, Input, Text, VStack } from '@chakra-ui/react'
+import { Button, Center, Input, Text, VStack } from '@chakra-ui/react'
 import { useCallback, useRef, useState } from 'react'
 import { AttachmentIcon } from '@chakra-ui/icons'
 
@@ -93,7 +93,7 @@ export const FileInput = (props: FileInputProps): JSX.Element => {
       : 'var(--chakra-colors-chakra-border-color)'
 
   return (
-    <Box>
+    <VStack alignItems="stretch">
       <Center
         position="relative"
         borderColor={borderColor}
@@ -145,6 +145,6 @@ export const FileInput = (props: FileInputProps): JSX.Element => {
       </Center>
 
       {!!_values?.length && <Previews files={_values} onDelete={onDelete} />}
-    </Box>
+    </VStack>
   )
 }

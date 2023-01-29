@@ -207,9 +207,15 @@ export const BookCreateFields = ({
           label="Date restocked"
           name={`${namePrefix}date_restocked`}
           type="date"
-          format={(value?: string) =>
-            value ? new Date(value).valueOf() : undefined
-          }
+          format={(value?: string) => {
+            if (value) {
+              const d = new Date(value)
+              // otherwise, the time will be set to 8:00 am in HK by default it seems, should to be to the timezone offset GMT+8
+              d.setHours(0, 0, 0, 0)
+              return d.valueOf()
+            }
+            return undefined
+          }}
           parse={(value?: number) => {
             if (typeof value !== 'number') return undefined
 
