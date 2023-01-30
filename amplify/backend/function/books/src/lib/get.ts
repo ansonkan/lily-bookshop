@@ -118,11 +118,19 @@ export async function GET(
   }
 }
 
-async function getById(client: MongoClient, id: string) {
+export async function getById(client: MongoClient, id: string) {
   return await client
     .db('bookshop')
     .collection<BookDocument>('books')
     .findOne({ _id: new ObjectId(id) })
+}
+
+export async function getByIds(client: MongoClient, ids: string[]) {
+  return await client
+    .db('bookshop')
+    .collection<BookDocument>('books')
+    .find({ _id: { $in: ids.map((id) => new ObjectId(id)) } })
+    .toArray()
 }
 
 type BookResults = Array<{

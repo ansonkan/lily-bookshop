@@ -1,16 +1,10 @@
 import type { BookFE } from 'types'
 
-import { API, Storage } from 'aws-amplify'
+import { API } from 'aws-amplify'
 import { mutate } from 'swr'
 
 export async function deleteBook(book: BookFE) {
-  // delete book
   const result = await API.del('apicore', '/books', { body: { id: book.id } })
-
-  // delete images
-  if (book.thumbnail) {
-    await Storage.remove(book.thumbnail, { level: 'public' })
-  }
 
   mutate(
     (key) =>
