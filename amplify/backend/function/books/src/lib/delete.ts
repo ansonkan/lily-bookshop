@@ -1,5 +1,3 @@
-// TODO: create a separated eslint config to lambdas instead because this `no-console` rule is coming from the config file for the FE
-/* eslint-disable no-console */
 import type { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda'
 import type { BookDocument } from '@lily-bookshop/schemas'
 import type { MongoClient } from 'mongodb'
@@ -14,7 +12,6 @@ export async function DELETE(
   event: APIGatewayEvent
 ): Promise<Partial<APIGatewayProxyResult>> {
   const json = JSON.parse(event.body)
-  const s3 = new AWS.S3()
 
   /**
    * 1. maybe restrict DELETE to certain user group?
@@ -31,17 +28,7 @@ export async function DELETE(
        * - create a scheduled lambda to regularly clean up unused images?
        * - revert the delete then throw error?
        */
-      try {
-        await s3
-          .deleteObject({
-            Bucket:
-              process.env.STORAGE_S3LILYBOOKSHOPSTORAGE135156F8_BUCKETNAME,
-            Key: book.thumbnail,
-          })
-          .promise()
-      } catch (err) {
-        console.error(err)
-      }
+      await deletePublicObjects([book.thumbnail])
     }
 
     return {
@@ -50,23 +37,13 @@ export async function DELETE(
   }
 
   if (json.ids) {
-    const books = await getByIds(client, json.ids)
+    const keys = (await getByIds(client, json.ids))
+      .map((b) => b.thumbnail)
+      .filter((t) => !!t)
     const result = await deleteMany(client, json.ids)
 
-    try {
-      await s3
-        .deleteObjects({
-          Bucket: process.env.STORAGE_S3LILYBOOKSHOPSTORAGE135156F8_BUCKETNAME,
-          Delete: {
-            Objects: books
-              .map((b) => b.thumbnail)
-              .filter((t) => !!t)
-              .map((t) => ({ Key: t })),
-          },
-        })
-        .promise()
-    } catch (err) {
-      console.error(err)
+    if (keys.length) {
+      await deletePublicObjects(keys)
     }
 
     return {
@@ -93,4 +70,21 @@ async function deleteMany(client: MongoClient, ids: string[]) {
     .deleteMany({
       _id: { $in: ids.map((id) => new ObjectId(id)) },
     })
+}
+
+async function deletePublicObjects(keys: string[]) {
+  const s3 = new AWS.S3()
+
+  try {
+    await s3
+      .deleteObjects({
+        Bucket: process.env.STORAGE_S3LILYBOOKSHOPSTORAGE135156F8_BUCKETNAME,
+        Delete: {
+          Objects: keys.map((t) => ({ Key: 'public/' + t })),
+        },
+      })
+      .promise()
+  } catch (err) {
+    console.error(err)
+  }
 }
