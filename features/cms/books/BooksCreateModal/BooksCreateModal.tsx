@@ -44,7 +44,7 @@ export const BooksCreateModal = ({
 
   return (
     <Modal size="4xl" closeOnOverlayClick={false} {...modalProps}>
-      <ModalOverlay backdropFilter="auto" backdropBlur="sm" />
+      <ModalOverlay />
 
       <Formik<BooksCreateFormik>
         initialValues={INITIAL_BOOKS}

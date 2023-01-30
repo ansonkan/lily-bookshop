@@ -75,7 +75,7 @@ export const BookDeleteModal = forwardRef<BookDeleteModalRef>((props, ref) => {
       leastDestructiveRef={cancelButtonRef}
       {...disclosure}
     >
-      <AlertDialogOverlay backdropFilter="auto" backdropBlur="sm" />
+      <AlertDialogOverlay />
 
       <AlertDialogContent>
         <AlertDialogHeader>Delete?</AlertDialogHeader>

@@ -63,7 +63,7 @@ export const SearchModal = (): JSX.Element => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay backdropFilter="auto" backdropBlur="sm" />
+      <ModalOverlay />
 
       <ModalContent>
         <ModalBody>
