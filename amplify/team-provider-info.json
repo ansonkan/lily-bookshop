@@ -23,7 +23,8 @@
         "books": {
           "secretsPathAmplifyAppId": "d2bp23ib1q7396",
           "deploymentBucketName": "amplify-amplify8dc7309efd224-staging-70130-deployment",
-          "s3Key": "amplify-builds/books-322f78636a64666c364b-build.zip"
+          "s3Key": "amplify-builds/books-6279624c4c54766c6737-build.zip",
+          "sentryDsn": "https://e8e2d66d55ab4c2c9f015f44f31f8375@o4504415841681408.ingest.sentry.io/4504415888801792"
         }
       },
       "api": {

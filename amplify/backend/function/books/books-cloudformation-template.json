@@ -22,6 +22,9 @@
     },
     "secretsPathAmplifyAppId": {
       "Type": "String"
+    },
+    "sentryDsn": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -123,6 +126,9 @@
                   "MONGODB_URL_READ_WRITE"
                 ]
               ]
+            },
+            "SENTRY_DSN": {
+              "Ref": "sentryDsn"
             }
           }
         },

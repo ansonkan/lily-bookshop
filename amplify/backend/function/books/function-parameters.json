@@ -1,9 +1,23 @@
 {
   "permissions": {
     "storage": {
-      "s3lilybookshopstorage135156f8": ["create", "read", "update", "delete"]
+      "s3lilybookshopstorage135156f8": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
     }
   },
   "lambdaLayers": [],
-  "secretNames": ["MONGODB_URL_READ_ONLY", "MONGODB_URL_READ_WRITE"]
+  "secretNames": [
+    "MONGODB_URL_READ_ONLY",
+    "MONGODB_URL_READ_WRITE"
+  ],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "sentryDsn",
+      "environmentVariableName": "SENTRY_DSN"
+    }
+  ]
 }

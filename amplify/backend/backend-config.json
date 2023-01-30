@@ -89,6 +89,14 @@
           "resourceName": "books"
         }
       ]
+    },
+    "AMPLIFY_function_books_sentryDsn": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "books"
+        }
+      ]
     }
   },
   "storage": {

@@ -27,6 +27,7 @@ import { Autocomplete } from 'components'
 import { useDebounce } from 'hooks'
 
 import { BookDeleteModal } from './BookDeleteModal'
+import { BookEditModal } from './BookEditModal'
 import { BooksCreateModal } from './BooksCreateModal'
 import { BooksTable } from './BooksTable'
 
@@ -96,6 +97,8 @@ export const BooksTabPanel = (): JSX.Element => {
       <BooksTable w="full" query={debouncedValue} onDelete={onDelete} />
 
       <BooksCreateModal {...disclosure} />
+
+      <BookEditModal />
 
       <BookDeleteModal ref={bookDeleteModalRef} />
     </VStack>

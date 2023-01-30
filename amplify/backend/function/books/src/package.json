@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@lily-bookshop/schemas": "file:../../../../../packages/schemas",
+    "@sentry/serverless": "7.34.0",
     "@types/aws-lambda": "^8.10.92",
     "aws-sdk": "^2.1288.0",
     "mongodb": "^4.13.0"

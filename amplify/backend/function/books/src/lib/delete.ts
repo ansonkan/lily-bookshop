@@ -4,6 +4,7 @@ import type { MongoClient } from 'mongodb'
 
 import * as AWS from 'aws-sdk'
 import { ObjectId } from 'mongodb'
+import { captureException } from '@sentry/serverless'
 
 import { getById, getByIds } from './get'
 
@@ -85,6 +86,6 @@ async function deletePublicObjects(keys: string[]) {
       })
       .promise()
   } catch (err) {
-    console.error(err)
+    captureException(err)
   }
 }
