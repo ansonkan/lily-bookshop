@@ -1,6 +1,7 @@
 import type { BooksCreateFormik, BooksCreateQueryInput } from './types'
 
 import { API, Storage } from 'aws-amplify'
+import { mutate } from 'swr'
 
 export async function createBooks(input: BooksCreateFormik) {
   const ts = new Date().valueOf()
@@ -36,6 +37,11 @@ export async function createBooks(input: BooksCreateFormik) {
     )
   }
 
+  /**
+   * TODO:
+   * 1. need to create rollback for uploaded images if the POST failed or some of image uploads failed
+   * 2. should FE submit everything to BE then BE handles the `Storage` calls?
+   */
   await Promise.all(imageUploadPromises)
 
   // create books
@@ -47,6 +53,13 @@ export async function createBooks(input: BooksCreateFormik) {
   const postResult = await API.post('apicore', '/books', {
     body: { books: newBooks },
   })
+
+  mutate(
+    (key) =>
+      Array.isArray(key) &&
+      typeof key[1] === 'string' &&
+      key[1].startsWith('/books')
+  )
 
   return postResult
 }

@@ -1,4 +1,8 @@
-import { FormEvent } from 'react'
+import type { FormEvent } from 'react'
+
+import type { BookFE } from 'types'
+
+import type { BookDeleteModalRef } from './BookDeleteModal'
 
 import {
   Box,
@@ -14,14 +18,15 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { HamburgerIcon, PlusSquareIcon } from '@chakra-ui/icons'
+import { useCallback, useRef, useState } from 'react'
 import { API } from 'aws-amplify'
 import useSWR from 'swr'
-import { useState } from 'react'
 import { useTranslation } from 'next-i18next'
 
 import { Autocomplete } from 'components'
 import { useDebounce } from 'hooks'
 
+import { BookDeleteModal } from './BookDeleteModal'
 import { BooksCreateModal } from './BooksCreateModal'
 import { BooksTable } from './BooksTable'
 
@@ -31,6 +36,7 @@ export const BooksTabPanel = (): JSX.Element => {
   const debouncedValue = useDebounce(value)
 
   const disclosure = useDisclosure()
+  const bookDeleteModalRef = useRef<BookDeleteModalRef>(null)
 
   const { data } = useSWR(
     debouncedValue
@@ -38,6 +44,10 @@ export const BooksTabPanel = (): JSX.Element => {
       : null,
     ([apiName, url]) => API.get(apiName, url, {})
   )
+
+  const onDelete = useCallback((book: BookFE) => {
+    bookDeleteModalRef.current?.askToDelete(book)
+  }, [])
 
   return (
     <VStack gap={[2, 4]}>
@@ -83,9 +93,11 @@ export const BooksTabPanel = (): JSX.Element => {
         </ButtonGroup>
       </HStack>
 
-      <BooksTable w="full" query={debouncedValue} />
+      <BooksTable w="full" query={debouncedValue} onDelete={onDelete} />
 
       <BooksCreateModal {...disclosure} />
+
+      <BookDeleteModal ref={bookDeleteModalRef} />
     </VStack>
   )
 }

@@ -24,7 +24,6 @@ import {
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import { FieldArray, Form, Formik } from 'formik'
 import { captureException } from '@sentry/nextjs'
-import { mutate } from 'swr'
 import { useState } from 'react'
 
 import { INITIAL_BOOK, INITIAL_BOOKS } from './constants'
@@ -62,15 +61,8 @@ export const BooksCreateModal = ({
             .then(() => {
               setSubmitting(false)
 
-              mutate(
-                (key) =>
-                  Array.isArray(key) &&
-                  typeof key[1] === 'string' &&
-                  key[1].startsWith('/books')
-              )
-
               toast({
-                title: 'New books added',
+                title: 'The books has been added',
                 // description: "We've created your account for you.",
                 status: 'success',
                 duration: 3000,
@@ -82,7 +74,7 @@ export const BooksCreateModal = ({
             .catch((err) => {
               captureException(err)
               toast({
-                title: 'Failed to add new books',
+                title: 'Failed to add the books',
                 description: 'Something went wrong. Please try again later.',
                 status: 'error',
                 duration: 3000,
