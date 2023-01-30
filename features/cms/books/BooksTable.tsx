@@ -31,7 +31,7 @@ export const BooksTable = memo(
   }: BooksTableProps): JSX.Element => {
     const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
       pageIndex: 0,
-      pageSize: 25,
+      pageSize: 15,
     })
 
     const prevQuery = usePrevious(query)
