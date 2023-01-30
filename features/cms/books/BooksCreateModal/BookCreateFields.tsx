@@ -57,7 +57,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={2}>
+      <GridItem>
         <SimpleField
           label="Title"
           name={`${namePrefix}title`}
@@ -66,7 +66,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={2}>
+      <GridItem>
         <SimpleField
           label="Subtitle"
           name={`${namePrefix}subtitle`}
@@ -125,71 +125,11 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      {/* `categories` use `Menu` + a new collection for categories CRUD */}
-
-      <GridItem>
-        <SimpleField
-          label="Publisher"
-          name={`${namePrefix}publisher`}
-          type="text"
-        />
-      </GridItem>
-
-      <GridItem>
-        <SimpleField
-          label="Published date"
-          name={`${namePrefix}published_date`}
-          type="text"
-        />
-      </GridItem>
-
-      <GridItem>
-        <SimpleField
-          label="ISBN 13"
-          name={`${namePrefix}ISBN_13`}
-          type="text"
-        />
-      </GridItem>
-
-      <GridItem>
-        <SimpleField
-          label="ISBN 10"
-          name={`${namePrefix}ISBN_10`}
-          type="text"
-        />
-      </GridItem>
-
-      <GridItem>
-        <SimpleField
-          label="Page count"
-          name={`${namePrefix}page_count`}
-          type="number"
-          min={0}
-          precision={0}
-        />
-      </GridItem>
-
       <GridItem>
         <SimpleField
           label="Language"
           name={`${namePrefix}language`}
           options={LANG_CODES.map((c) => ({ value: c, label: c }))}
-        />
-      </GridItem>
-
-      <GridItem>
-        <SimpleField
-          label="Google book link"
-          name={`${namePrefix}google_book_link`}
-          type="url"
-        />
-      </GridItem>
-
-      <GridItem>
-        <SimpleField
-          label="Storage location"
-          name={`${namePrefix}storage_location`}
-          type="text"
         />
       </GridItem>
 
@@ -225,6 +165,64 @@ export const BookCreateFields = ({
               '0'
             )}-${date.getDate().toString().padStart(2, '0')}`
           }}
+        />
+      </GridItem>
+
+      <GridItem>
+        <SimpleField
+          label="Publisher"
+          name={`${namePrefix}publisher`}
+          type="text"
+        />
+      </GridItem>
+
+      <GridItem>
+        <SimpleField
+          label="Published date"
+          name={`${namePrefix}published_date`}
+          type="text"
+        />
+      </GridItem>
+
+      <GridItem>
+        <SimpleField
+          label="ISBN 13"
+          name={`${namePrefix}ISBN_13`}
+          type="text"
+        />
+      </GridItem>
+
+      <GridItem>
+        <SimpleField
+          label="ISBN 10"
+          name={`${namePrefix}ISBN_10`}
+          type="text"
+        />
+      </GridItem>
+
+      <GridItem>
+        <SimpleField
+          label="Storage location"
+          name={`${namePrefix}storage_location`}
+          type="text"
+        />
+      </GridItem>
+
+      <GridItem>
+        <SimpleField
+          label="Page count"
+          name={`${namePrefix}page_count`}
+          type="number"
+          min={0}
+          precision={0}
+        />
+      </GridItem>
+
+      <GridItem>
+        <SimpleField
+          label="Google book link"
+          name={`${namePrefix}google_book_link`}
+          type="url"
         />
       </GridItem>
 
