@@ -23,8 +23,6 @@ backend:
   phases:
     build:
       commands:
-        - echo 'testing...'
-        - ls
         - amplifyPush --simple
 frontend:
   phases:
@@ -42,5 +40,5 @@ frontend:
       - '**/*'
   cache:
     paths:
-      - node_modules/!(@lily-bookshop)/**/*
+      - node_modules/**/*
       - .next/cache/**/*
