@@ -13,7 +13,7 @@
     "format": "prettier -w .",
     "format:check": "prettier -c .",
     "test": "npx playwright test",
-    "amplify:books": "echo 'amplify:books...START' && cd amplify/backend/function/books/src && rm -rf node_modules && ls && npm i && tsc && cd - && echo 'amplify:books...END'"
+    "amplify:books": "cd amplify/backend/function/books/src && rm -rf node_modules && ls && npm i && tsc && cd -"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "4.3.2",
