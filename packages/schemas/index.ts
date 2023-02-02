@@ -43,7 +43,7 @@ export const BookDocumentSchema = object({
   description: string().optional().nullable().transform(cleanStr),
   ISBN_13: string().length(13).optional().nullable().transform(cleanStr),
   ISBN_10: string().length(10).optional().nullable().transform(cleanStr),
-  page_count: number().integer().min(1).optional().nullable(),
+  page_count: number().integer().min(1).optional(),
   categories: array(string()).transform(cleanStrArray),
   /**
    * `thumbnail` object key:

@@ -23,6 +23,7 @@ backend:
   phases:
     build:
       commands:
+        - npm run amplify:books
         - amplifyPush --simple
 frontend:
   phases:
