@@ -34,7 +34,7 @@ export async function PATCH(
     { stripUnknown: true, strict: true }
   )
 
-  console.log('cleanPartialBook: ', JSON.stringify(cleanPartialBook, null, 2))
+  throw new Error('testing')
 
   if (id) {
     const result = await updateOne(client, id, cleanPartialBook)
