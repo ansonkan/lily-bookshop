@@ -20,9 +20,9 @@ const validateDate = (value: number, path: string) => {
 }
 
 const cleanStrArray = (value: unknown) =>
-  Array.isArray(value) ? value.filter((v) => !!v) : undefined
+  Array.isArray(value) ? value.filter((v) => !!v) : []
 
-const cleanStr = (value?: string) => (value ? value : undefined)
+const cleanStr = (value?: string) => (value ? value : null)
 
 export const BookDocumentSchema = object({
   status: mixed<typeof STATUSES[number]>().oneOf(STATUSES).required(),
@@ -35,15 +35,21 @@ export const BookDocumentSchema = object({
     .required()
     .test('is-not-future', (value, { path }) => validateDate(value, path)), // new Date().getTime()
   title: string().required(),
-  subtitle: string().optional(),
+  subtitle: string().optional().nullable(),
   authors: array(string()).transform(cleanStrArray),
-  about_the_authors: string().optional(),
-  publisher: string().optional(),
-  published_date: string().optional(), // not using number timestamp because some `published_date` only has year
-  description: string().optional(),
-  ISBN_13: string().length(13).optional().transform(cleanStr),
-  ISBN_10: string().length(10).optional().transform(cleanStr),
+  about_the_authors: string().optional().nullable(),
+  publisher: string().optional().nullable().transform(cleanStr),
+  published_date: string().optional().nullable().transform(cleanStr), // not using number timestamp because some `published_date` only has year
+  description: string().optional().nullable().transform(cleanStr),
+  ISBN_13: string().length(13).optional().nullable().transform(cleanStr),
+  ISBN_10: string().length(10).optional().nullable().transform(cleanStr),
   page_count: number().integer().min(1).optional(),
+  // page_count: number()
+  //   .integer()
+  //   .min(1)
+  //   .optional()
+  //   .nullable()
+  //   .transform(cleanStr),
   categories: array(string()).transform(cleanStrArray),
   /**
    * `thumbnail` object key:
@@ -51,18 +57,19 @@ export const BookDocumentSchema = object({
    * - use `encodeURIComponent`
    * - more about S3 object key: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html
    */
-  thumbnail: string().optional(),
-  language: mixed<typeof LANG_CODES[number]>().oneOf(LANG_CODES).optional(),
-  google_book_link: string().optional(),
-  storage_location: string().optional(),
-  quantity: number().integer().min(0).required(),
-  highlight_order: number().integer().optional(),
-  price: number().min(0).optional(),
-  currency: mixed<typeof CURRENCIES[number]>().oneOf(CURRENCIES).optional(),
+  thumbnail: string().optional().nullable().transform(cleanStr),
+  language: mixed<typeof LANG_CODES[number]>().oneOf(LANG_CODES),
+  google_book_link: string().optional().nullable().transform(cleanStr),
+  storage_location: string().optional().nullable().transform(cleanStr),
+  quantity: number().integer().min(0).required().nullable(),
+  highlight_order: number().integer().optional().nullable().transform(cleanStr),
+  price: number().min(0).optional().nullable().transform(cleanStr),
+  currency: mixed<typeof CURRENCIES[number]>().oneOf(CURRENCIES),
   date_restocked: number()
     .optional()
+    .nullable()
     .test('is-not-future', (value, { path }) => {
-      if (value === undefined) return true // since this is optional
+      if (value === undefined || value === null) return true // since this is optional
       return validateDate(value, path)
     }),
 })

@@ -107,5 +107,6 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
       ...searchResult,
       books: searchResult.books.map((v: BookFE) => formatDirectusBook(v)),
     },
+    revalidate: 3600, // 1 hour
   }
 }

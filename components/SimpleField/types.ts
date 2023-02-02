@@ -11,9 +11,9 @@ interface CommonProps
   type?: string
   placeholder?: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  format?: (value: string) => any
+  format?: (value: any) => any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  parse?: (value: any) => string | number | undefined
+  parse?: (value: any) => any
   // Multi-value version of text input, using `Textarea` as a easy workaround
   multiline?: boolean
   // for `Select`

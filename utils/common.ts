@@ -9,3 +9,8 @@ export function removeNullProps<T extends Record<string, any>>(obj: T) {
       {} as NonNullableFields<T>
     )
 }
+
+export function getLastSplit(value: string, delimiter: string) {
+  const splits = value.split(delimiter)
+  return splits[splits.length - 1]
+}

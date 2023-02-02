@@ -26,6 +26,7 @@ export const BookCreateFields = ({
           label="Status"
           name={`${namePrefix}status`}
           options={STATUSES.map((s) => ({ value: s, label: s }))}
+          isRequired
         />
       </GridItem>
 
@@ -36,6 +37,7 @@ export const BookCreateFields = ({
           type="number"
           min={0}
           precision={0}
+          isRequired
         />
       </GridItem>
 
@@ -44,6 +46,7 @@ export const BookCreateFields = ({
           label="Currency"
           name={`${namePrefix}currency`}
           options={CURRENCIES.map((c) => ({ value: c, label: c }))}
+          isRequired
         />
       </GridItem>
 
@@ -130,6 +133,7 @@ export const BookCreateFields = ({
           label="Language"
           name={`${namePrefix}language`}
           options={LANG_CODES.map((c) => ({ value: c, label: c }))}
+          isRequired
         />
       </GridItem>
 
@@ -147,24 +151,6 @@ export const BookCreateFields = ({
           label="Date restocked"
           name={`${namePrefix}date_restocked`}
           type="date"
-          format={(value?: string) => {
-            if (value) {
-              const d = new Date(value)
-              // otherwise, the time will be set to 8:00 am in HK by default it seems, should to be to the timezone offset GMT+8
-              d.setHours(0, 0, 0, 0)
-              return d.valueOf()
-            }
-            return undefined
-          }}
-          parse={(value?: number) => {
-            if (typeof value !== 'number') return undefined
-
-            const date = new Date(value)
-            return `${date.getFullYear()}-${(date.getMonth() + 1 + '').padStart(
-              2,
-              '0'
-            )}-${date.getDate().toString().padStart(2, '0')}`
-          }}
         />
       </GridItem>
 
@@ -218,7 +204,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem>
+      <GridItem colSpan={2}>
         <SimpleField
           label="Google book link"
           name={`${namePrefix}google_book_link`}
@@ -226,7 +212,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      {extra && <GridItem colSpan={2}>{extra}</GridItem>}
+      {extra}
     </Grid>
   )
 }

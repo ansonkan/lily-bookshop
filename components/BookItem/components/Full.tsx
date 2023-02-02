@@ -17,34 +17,37 @@ export const Full = ({
     title,
     subtitle,
     authors,
-    // @ts-ignore - remove this when the new document schema is used
-    aboutTheAuthor,
+    // aboutTheAuthor,
+    about_the_authors,
     publisher,
-    // @ts-ignore
-    publishedDate,
+    // publishedDate,
+    published_date,
     description,
     ISBN_13,
     ISBN_10,
-    // @ts-ignore
-    pageCount,
+    // pageCount,
+    page_count,
     categories,
     thumbnail,
     language,
-    // @ts-ignore
-    storageLocation,
+    // storageLocation,
+    storage_location,
     quantity,
-    // @ts-ignore
-    highlightOrder,
+    // highlightOrder,
+    highlight_order,
   },
   priceLabel,
-  ...linkBoxProps
+  // Note: just to pick this out from `boxProps`
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  detailsLink,
+  ...boxProps
 }: FullProps): JSX.Element => {
   const { t } = useTranslation('common')
 
   return (
-    <Box as="article" display="flex" flexDir="row" gap={4} {...linkBoxProps}>
+    <Box as="article" display="flex" flexDir="row" gap={4} {...boxProps}>
       <Box w={[125, 150, 170]}>
-        <Thumbnail src={thumbnail} bookTitle={title} />
+        <Thumbnail src={thumbnail ?? undefined} bookTitle={title} />
       </Box>
 
       <Box
@@ -63,7 +66,7 @@ export const Full = ({
         </Box>
 
         <Flex wrap="wrap" gap={1}>
-          {typeof highlightOrder === 'number' && (
+          {typeof highlight_order === 'number' && (
             // probably better to look into how to theme this and the scenes probably https://chakra-ui.com/docs/styled-system/theme
             <Badge color="9A5B5F" bgColor="var(--highlight-theme)">
               {t('book-detailed-page.highlight-badge')}
@@ -86,30 +89,34 @@ export const Full = ({
           {[
             { caption: 'price-label', v: priceLabel },
             { caption: 'quantity', v: quantity },
-            { caption: 'storage-location', v: storageLocation },
+            { caption: 'storage-location', v: storage_location },
             { caption: 'publisher', v: publisher },
-            { caption: 'published-date', v: publishedDate },
+            { caption: 'published-date', v: published_date },
             { caption: 'ISBN_13', v: ISBN_13, useBadge: true },
             { caption: 'ISBN_10', v: ISBN_10, useBadge: true },
-            { caption: 'page-count', v: pageCount },
+            { caption: 'page-count', v: page_count },
           ].map(({ caption, v, useBadge }) => (
             <Kvp
               key={caption}
               k={t(`book-detailed-page.${caption}`)}
               useBadge={useBadge}
             >
-              {v}
+              {v ?? undefined}
             </Kvp>
           ))}
         </SimpleGrid>
 
-        <Section heading={t('book-detailed-page.description')}>
-          {description}
-        </Section>
+        {description && (
+          <Section heading={t('book-detailed-page.description')}>
+            {description}
+          </Section>
+        )}
 
-        <Section heading={t('book-detailed-page.about-the-author')}>
-          {aboutTheAuthor}
-        </Section>
+        {about_the_authors && (
+          <Section heading={t('book-detailed-page.about-the-author')}>
+            {about_the_authors}
+          </Section>
+        )}
       </Box>
     </Box>
   )

@@ -11,6 +11,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Button,
+  GridItem,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -28,7 +29,7 @@ import { useState } from 'react'
 
 import { INITIAL_BOOK, INITIAL_BOOKS } from './constants'
 import { BookCreateFields } from './BookCreateFields'
-import { BooksCreateFormikSchema } from './utils'
+import { BooksCreateFormikSchema } from './schemas'
 import { createBooks } from './queries'
 
 export interface BooksCreateModalProps extends Omit<ModalProps, 'children'> {
@@ -63,7 +64,6 @@ export const BooksCreateModal = ({
 
               toast({
                 title: 'The books has been added',
-                // description: "We've created your account for you.",
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
@@ -193,15 +193,18 @@ function FieldBook({
             index={index}
             parentFieldName="books"
             extra={
-              <Button
-                size="sm"
-                w="full"
-                variant="ghost"
-                leftIcon={<CloseIcon />}
-                onClick={removeSelf}
-              >
-                Delete draft
-              </Button>
+              <GridItem colSpan={2}>
+                <Button
+                  size="sm"
+                  w="full"
+                  variant="ghost"
+                  leftIcon={<CloseIcon />}
+                  onClick={removeSelf}
+                  disabled={index === 0}
+                >
+                  Delete draft
+                </Button>
+              </GridItem>
             }
           />
         )}

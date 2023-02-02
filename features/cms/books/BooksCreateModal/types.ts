@@ -1,7 +1,7 @@
 import { BookDocument } from '@lily-bookshop/schemas'
 import type { InferType } from 'yup'
 
-import { BooksCreateFormikSchema, NewBookSchema } from './utils'
+import { BooksCreateFormikSchema, NewBookSchema } from './schemas'
 
 export type NewBook = InferType<typeof NewBookSchema>
 

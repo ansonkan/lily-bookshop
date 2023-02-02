@@ -85,5 +85,6 @@ export const getServerSideProps: GetServerSideProps<
       book: formatDirectusBook(book),
       moreBooks: searchRes.books.map((v: BookFE) => formatDirectusBook(v)),
     },
+    revalidate: 3600, // 1 hour
   }
 }

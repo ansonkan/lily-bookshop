@@ -1,3 +1,5 @@
+import type { FileValue, NewFileValue } from './types'
+
 import { Button, Center, Input, Text, VStack } from '@chakra-ui/react'
 import { useCallback, useRef, useState } from 'react'
 import { AttachmentIcon } from '@chakra-ui/icons'
@@ -7,16 +9,17 @@ import { Previews } from './Previews'
 
 export interface FileInputProps {
   name?: string
-  value?: File[]
-  onChange?: (files: File[]) => void
+  value?: FileValue[]
+  onChange?: (files: FileValue[]) => void
   multiple?: boolean
   accept: string[]
 }
 
 export const FileInput = (props: FileInputProps): JSX.Element => {
   const inputRef = useRef<HTMLInputElement>(null)
-  const [files, setFiles] = useState<File[]>([])
+  const [files, setFiles] = useState<FileValue[]>([])
   const [inDropZone, setInDropZone] = useState(false)
+  const [showPreviews, setShowPreviews] = useState(false)
 
   const { name, value, onChange, multiple, accept } = props
 
@@ -24,20 +27,12 @@ export const FileInput = (props: FileInputProps): JSX.Element => {
   const _values = controlled ? value : files
   const canUploadMore = multiple || !_values || _values.length === 0
 
-  const addFiles = (targets: File[]) => {
+  const addFiles = (targets: NewFileValue[]) => {
     const newFiles = [...(_values || []), ...targets]
     setFiles(newFiles)
     onChange?.(newFiles)
   }
 
-  // Copied from https://github.com/aws-amplify/amplify-ui/tree/main/packages/react/src/components/Storage/FileUploader
-  const onDragStart = (event: React.DragEvent<HTMLDivElement>) => {
-    event.dataTransfer.clearData()
-  }
-  const onDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-    event.stopPropagation()
-  }
   const onDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
     event.stopPropagation()
@@ -69,7 +64,7 @@ export const FileInput = (props: FileInputProps): JSX.Element => {
       targets = targets.slice(0, 1)
     }
 
-    addFiles(targets)
+    addFiles(targets.map((v) => ({ type: 'newly-uploaded-file', file: v })))
 
     // const addedFilesLength = addTargetFiles(_files)
     // if (addedFilesLength > 0) {
@@ -79,8 +74,18 @@ export const FileInput = (props: FileInputProps): JSX.Element => {
   }
 
   const onDelete = useCallback(
-    (file: File) => {
-      const newFiles = (_values || []).filter((_f) => _f !== file)
+    (index: number) => {
+      let newFiles = _values || []
+
+      const f = newFiles[index]
+      switch (f.type) {
+        case 's3-object':
+          f.status = 'to-be-removed'
+          break
+        default:
+          newFiles = newFiles.filter((f, i) => i !== index)
+      }
+
       setFiles(newFiles)
       onChange?.(newFiles)
     },
@@ -91,6 +96,10 @@ export const FileInput = (props: FileInputProps): JSX.Element => {
     inDropZone && canUploadMore
       ? 'var(--chakra-colors-gray-300)'
       : 'var(--chakra-colors-chakra-border-color)'
+
+  const displayValues = (_values || []).filter((f) =>
+    f.type === 's3-object' ? f.status !== 'to-be-removed' : true
+  )
 
   return (
     <VStack alignItems="stretch">
@@ -136,7 +145,12 @@ export const FileInput = (props: FileInputProps): JSX.Element => {
 
             const _files = event.currentTarget.files
             if (_files !== null) {
-              addFiles(fileListToArray(_files))
+              addFiles(
+                fileListToArray(_files).map((v) => ({
+                  type: 'newly-uploaded-file',
+                  file: v,
+                }))
+              )
             }
           }}
           multiple={multiple}
@@ -144,7 +158,32 @@ export const FileInput = (props: FileInputProps): JSX.Element => {
         />
       </Center>
 
-      {!!_values?.length && <Previews files={_values} onDelete={onDelete} />}
+      {!!displayValues?.length && (
+        <>
+          <Previews
+            files={displayValues}
+            onDelete={onDelete}
+            // Note: use a prop to render preview items conditionally instead to keep the `infoMap` alive
+            hidden={!showPreviews}
+          />
+
+          <Button onClick={() => setShowPreviews((prev) => !prev)}>{`${
+            showPreviews ? 'Close' : 'Show'
+          } previews (${displayValues.length} file${
+            displayValues.length > 1 ? 's' : ''
+          })`}</Button>
+        </>
+      )}
     </VStack>
   )
+}
+
+// Copied from https://github.com/aws-amplify/amplify-ui/tree/main/packages/react/src/components/Storage/FileUploader
+function onDragStart(event: React.DragEvent<HTMLDivElement>) {
+  event.dataTransfer.clearData()
+}
+
+function onDragEnter(event: React.DragEvent<HTMLDivElement>) {
+  event.preventDefault()
+  event.stopPropagation()
 }

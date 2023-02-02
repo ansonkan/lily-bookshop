@@ -40,7 +40,7 @@ export const Detailed = ({
       {...linkBoxProps}
     >
       <Box w={[125, 130]}>
-        <Thumbnail src={thumbnail} bookTitle={title} />
+        <Thumbnail src={thumbnail ?? undefined} bookTitle={title} />
       </Box>
 
       <Box

@@ -4,6 +4,7 @@ const { withSentryConfig } = require('@sentry/nextjs')
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
+const { awsExports } = require('./read-aws-exports')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -12,6 +13,14 @@ const nextConfig = {
   i18n,
   images: {
     domains: ['wcy0wine.directus.app'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        // hostname: '[bucketname-dev].s3.amazonaws.com',
+        hostname: `${awsExports.aws_user_files_s3_bucket}.s3.${awsExports.aws_user_files_s3_bucket_region}.amazonaws.com`,
+        pathname: '/public/**',
+      },
+    ],
   },
 }
 

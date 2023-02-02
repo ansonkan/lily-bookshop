@@ -24,6 +24,7 @@ export async function PATCH(
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore - only validate only given properties because this is a `PATCH` request, and the `book` can be partial
   const partialBookDocumentSchema = BookDocumentSchema.pick(Object.keys(book))
+
   const cleanPartialBook = partialBookDocumentSchema.validateSync(
     {
       ...book,
@@ -33,6 +34,8 @@ export async function PATCH(
     { stripUnknown: true, strict: true }
   )
 
+  console.log('cleanPartialBook: ', JSON.stringify(cleanPartialBook, null, 2))
+
   if (id) {
     const result = await updateOne(client, id, cleanPartialBook)
 
@@ -40,7 +43,7 @@ export async function PATCH(
       body: JSON.stringify({
         result: {
           ...result,
-          insertedId: result.upsertedId.toString(),
+          insertedId: result.upsertedId?.toString(),
         },
       }),
     }

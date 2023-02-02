@@ -93,9 +93,8 @@ export const Header = ({
                   size="sm"
                   variant="ghost"
                   onClick={() => onOpen()}
-                >
-                  <SearchIcon />
-                </IconButton>
+                  icon={<SearchIcon />}
+                />
               ) : (
                 <Button
                   size="sm"

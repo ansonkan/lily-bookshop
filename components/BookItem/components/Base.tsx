@@ -22,7 +22,7 @@ export const Base = ({
     gap={2}
     {...linkBoxProps}
   >
-    <Thumbnail src={thumbnail} bookTitle={title} />
+    <Thumbnail src={thumbnail ?? undefined} bookTitle={title} />
 
     <Box w="full" flexGrow={1} display="flex" flexDirection="column">
       <LinkOverlay as={NextLink} href={detailsLink}>

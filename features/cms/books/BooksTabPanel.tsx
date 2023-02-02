@@ -3,6 +3,7 @@ import type { FormEvent } from 'react'
 import type { BookFE } from 'types'
 
 import type { BookDeleteModalRef } from './BookDeleteModal'
+import type { BookEditModalRef } from './BookEditModal'
 
 import {
   Box,
@@ -37,7 +38,8 @@ export const BooksTabPanel = (): JSX.Element => {
   const debouncedValue = useDebounce(value)
 
   const disclosure = useDisclosure()
-  const bookDeleteModalRef = useRef<BookDeleteModalRef>(null)
+  const editModalRef = useRef<BookEditModalRef>(null)
+  const deleteModalRef = useRef<BookDeleteModalRef>(null)
 
   const { data } = useSWR(
     debouncedValue
@@ -46,8 +48,12 @@ export const BooksTabPanel = (): JSX.Element => {
     ([apiName, url]) => API.get(apiName, url, {})
   )
 
+  const onEdit = useCallback((book: BookFE) => {
+    editModalRef.current?.edit(book)
+  }, [])
+
   const onDelete = useCallback((book: BookFE) => {
-    bookDeleteModalRef.current?.askToDelete(book)
+    deleteModalRef.current?.askToDelete(book)
   }, [])
 
   return (
@@ -78,9 +84,7 @@ export const BooksTabPanel = (): JSX.Element => {
           </Button>
 
           <Menu>
-            <MenuButton as={IconButton}>
-              <HamburgerIcon />
-            </MenuButton>
+            <MenuButton as={IconButton} icon={<HamburgerIcon />} />
             <MenuList>
               <MenuItem
                 onClick={() => {
@@ -94,13 +98,18 @@ export const BooksTabPanel = (): JSX.Element => {
         </ButtonGroup>
       </HStack>
 
-      <BooksTable w="full" query={debouncedValue} onDelete={onDelete} />
+      <BooksTable
+        w="full"
+        query={debouncedValue}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
 
       <BooksCreateModal {...disclosure} />
 
-      <BookEditModal />
+      <BookEditModal ref={editModalRef} />
 
-      <BookDeleteModal ref={bookDeleteModalRef} />
+      <BookDeleteModal ref={deleteModalRef} />
     </VStack>
   )
 }

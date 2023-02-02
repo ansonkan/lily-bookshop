@@ -90,7 +90,7 @@ export const SimpleTable = <T,>({
         </Tbody>
 
         <Tfoot position="relative">
-          <Tr>
+          {/* <Tr>
             <Td w="full" border="none" p={0}>
               <Fade in={isValidating} unmountOnExit>
                 <Progress
@@ -103,7 +103,7 @@ export const SimpleTable = <T,>({
                 />
               </Fade>
             </Td>
-          </Tr>
+          </Tr> */}
 
           <Headers table={table} />
         </Tfoot>

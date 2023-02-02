@@ -93,6 +93,6 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
         formatDirectusBook(v)
       ),
     },
-    revalidate: 60 * 15, // 15min
+    revalidate: 3600, // 1 hour
   }
 }

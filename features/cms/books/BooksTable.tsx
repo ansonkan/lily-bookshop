@@ -117,13 +117,21 @@ export const BooksTable = memo(
           id: '_actions',
           cell: ({ row }) => (
             <ButtonGroup size="xs" variant="ghost">
-              <IconButton aria-label="Edit" title="Edit" colorScheme="blue">
-                <EditIcon onClick={() => onEdit?.(row.original)} />
-              </IconButton>
+              <IconButton
+                aria-label="Edit"
+                title="Edit"
+                colorScheme="blue"
+                icon={<EditIcon />}
+                onClick={() => onEdit?.(row.original)}
+              />
 
-              <IconButton aria-label="Delete" title="Delete" colorScheme="red">
-                <CloseIcon onClick={() => onDelete?.(row.original)} />
-              </IconButton>
+              <IconButton
+                aria-label="Delete"
+                title="Delete"
+                colorScheme="red"
+                icon={<CloseIcon />}
+                onClick={() => onDelete?.(row.original)}
+              />
             </ButtonGroup>
           ),
         },

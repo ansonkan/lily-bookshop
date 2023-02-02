@@ -1,40 +1,48 @@
 import type { BooksCreateFormik, BooksCreateQueryInput } from './types'
 
 import { API, Storage } from 'aws-amplify'
-import { mutate } from 'swr'
+
+import { guid } from 'utils'
+
+import { mutateBooks } from '../utils'
 
 export async function createBooks(input: BooksCreateFormik) {
-  const ts = new Date().valueOf()
-
   // upload images
   const imageUploadPromises: ReturnType<typeof Storage['put']>[] = []
-  const objectKeyMap = new Map<File, string>()
+  const objectKeyMap = new Map<File | string, string>() // File / URL
 
   for (let i = 0; i < input.books.length; i++) {
     const b = input.books[i]
 
-    if (!b.thumbnail || b.thumbnail.length === 0) continue
+    const thumbnail = b.thumbnail?.[0]
 
-    const thumbnail = b.thumbnail[0]
+    if (!thumbnail) continue
 
-    const thumbnailObjectKey = [
-      'books',
-      'thumbnail',
-      b.ISBN_13 ||
-        b.ISBN_10 ||
-        [b.title, b.subtitle].filter((str) => !!str).join('_'),
-      ts,
-      i,
-      thumbnail.name,
-    ]
-      .map((str) => encodeURIComponent(str))
-      .join('/')
+    switch (thumbnail.type) {
+      case 's3-object':
+        break
+      case 'newly-uploaded-file': {
+        const thumbnailObjectKey = [
+          'books',
+          'create-request',
+          guid(),
+          i,
+          thumbnail.file.name,
+        ]
+          .map((str) => encodeURIComponent(str))
+          .join('/')
 
-    objectKeyMap.set(thumbnail, thumbnailObjectKey)
+        objectKeyMap.set(thumbnail.file, thumbnailObjectKey)
 
-    imageUploadPromises.push(
-      Storage.put(thumbnailObjectKey, thumbnail, { level: 'public' })
-    )
+        imageUploadPromises.push(
+          Storage.put(thumbnailObjectKey, thumbnail.file, { level: 'public' })
+        )
+        break
+      }
+      case 'newly-uploaded-url':
+        // TODO
+        break
+    }
   }
 
   /**
@@ -45,21 +53,23 @@ export async function createBooks(input: BooksCreateFormik) {
   await Promise.all(imageUploadPromises)
 
   // create books
-  const newBooks: BooksCreateQueryInput = input.books.map((b) => ({
-    ...b,
-    thumbnail: b.thumbnail?.[0] ? objectKeyMap.get(b.thumbnail[0]) : undefined,
-  }))
+  const newBooks: BooksCreateQueryInput = input.books.map((b) => {
+    const t = b.thumbnail?.[0]
+
+    return {
+      ...b,
+      thumbnail:
+        t && t.type === 'newly-uploaded-file'
+          ? objectKeyMap.get(t.file)
+          : undefined,
+    }
+  })
 
   const postResult = await API.post('apicore', '/books', {
     body: { books: newBooks },
   })
 
-  mutate(
-    (key) =>
-      Array.isArray(key) &&
-      typeof key[1] === 'string' &&
-      key[1].startsWith('/books')
-  )
+  mutateBooks()
 
   return postResult
 }

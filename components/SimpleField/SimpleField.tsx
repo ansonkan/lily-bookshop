@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useField } from 'formik'
 
+import { formatDate, parseDate } from './utils'
 import { FileInput } from '../FileInput'
 
 export const SimpleField = ({
@@ -77,10 +78,12 @@ function cleanValue(value: unknown): string | number | undefined {
     : value
 }
 
+const proxy = <T,>(v: T): T => v
+
 function SimpleFieldHelper<V>({
   type,
-  format = (value) => value,
-  parse = (value) => value,
+  format = type === 'date' ? formatDate : proxy,
+  parse = type === 'date' ? parseDate : proxy,
   multiline,
   options,
   min,
@@ -103,13 +106,17 @@ function SimpleFieldHelper<V>({
   }
 
   if (type === 'file') {
-    const _value = Array.isArray(field.value)
-      ? field.value.filter((v) => v instanceof File)
-      : undefined
+    // const _value = Array.isArray(field.value)
+    //   ? field.value.filter((v) => v instanceof File)
+    //   : undefined
+
     return (
       <FileInput
         onChange={(files) => helper.setValue(files)}
-        value={_value}
+        // Note: just relay the generic type of `Formik` for now, this component is really hard to type but save me from so many boilerplates
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        value={field.value}
         multiple={multiple}
         accept={accept}
       />
