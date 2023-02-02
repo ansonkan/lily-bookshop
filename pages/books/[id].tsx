@@ -58,7 +58,7 @@ export default BookPage
 export const getServerSideProps: GetServerSideProps<
   BookPageProps,
   { id: string }
-> = async ({ params, locale, req }) => {
+> = async ({ params, locale, req, res }) => {
   if (!params?.id) {
     return { notFound: true }
   }
@@ -79,12 +79,13 @@ export const getServerSideProps: GetServerSideProps<
     ),
   ])
 
+  res.setHeader('Cache-Control', 's-maxage=3600')
+
   return {
     props: {
       ...translations,
       book: formatDirectusBook(book),
       moreBooks: searchRes.books.map((v: BookFE) => formatDirectusBook(v)),
     },
-    revalidate: 3600, // 1 hour
   }
 }

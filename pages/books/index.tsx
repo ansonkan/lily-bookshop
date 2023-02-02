@@ -75,6 +75,7 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
   query,
   locale,
   req,
+  res,
 }) => {
   const SSR = withSSRContext({ req })
 
@@ -101,12 +102,13 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
     SSR.API.get('apicore', `/books?q=${q}&limit=${LIMIT}&page=${page}`),
   ])
 
+  res.setHeader('Cache-Control', 's-maxage=3600')
+
   return {
     props: {
       ...translations,
       ...searchResult,
       books: searchResult.books.map((v: BookFE) => formatDirectusBook(v)),
     },
-    revalidate: 3600, // 1 hour
   }
 }
