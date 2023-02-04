@@ -33,12 +33,12 @@
     "amplify/mock-api-resources",
     "build/",
     "dist/",
-    "node_modules/",
     "aws-exports.js",
     ".secret-*",
     "**.sample",
     // amplify-do-not-edit-end
     // let's investigate how to type-check the `amplify` directory in the future
-    "amplify/backend/function/*/src/**/*"
+    "amplify/backend/function/*/src/**/*",
+    "amplify/backend/auth/**/*"
   ]
 }

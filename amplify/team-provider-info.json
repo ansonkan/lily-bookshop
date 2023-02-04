@@ -43,7 +43,8 @@
       "UnauthRoleName": "amplify-lilybookshop-prod-150407-unauthRole",
       "StackName": "amplify-lilybookshop-prod-150407",
       "StackId": "arn:aws:cloudformation:ap-southeast-1:274271097062:stack/amplify-lilybookshop-prod-150407/22c940e0-a45a-11ed-8503-0ab7678042a0",
-      "AmplifyAppId": "d2bp23ib1q7396"
+      "AmplifyAppId": "d2bp23ib1q7396",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-lilybookshop-prod-150407-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
@@ -52,10 +53,16 @@
       "function": {
         "books": {
           "secretsPathAmplifyAppId": "d2bp23ib1q7396",
-          "deploymentBucketName": "amplify-amplify8dc7309efd224-staging-70130-deployment",
+          "deploymentBucketName": "amplify-lilybookshop-prod-150407-deployment",
           "s3Key": "amplify-builds/books-65477366564b6a424f70-build.zip",
           "sentryDsn": "https://e8e2d66d55ab4c2c9f015f44f31f8375@o4504415841681408.ingest.sentry.io/4504415888801792"
         },
+        "s3lilybookshopstorage135156f8": {}
+      },
+      "api": {
+        "apicore": {}
+      },
+      "storage": {
         "s3lilybookshopstorage135156f8": {}
       }
     }
