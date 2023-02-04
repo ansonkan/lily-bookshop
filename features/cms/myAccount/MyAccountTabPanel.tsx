@@ -9,8 +9,11 @@ export const MyAccountTabPanel = (): JSX.Element => {
   return (
     <Box display="flex" flexDirection="column" gap={[2, 4]}>
       <Kvp k="ID">{user?.username}</Kvp>
-      <Kvp k="Email">{user?.attributes?.email}</Kvp>
       <Kvp k="Username">{user?.attributes?.preferred_username}</Kvp>
+      <Kvp k="Email">{user?.attributes?.email}</Kvp>
+      <Kvp k="Email verified">
+        {user?.attributes?.email_verified ? 'Yes' : 'No'}
+      </Kvp>
 
       <Button onClick={signOut}>Sign out</Button>
     </Box>

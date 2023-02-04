@@ -22,6 +22,8 @@ export const Pagination = ({
   onPageChange,
   ...others
 }: PaginationProps): JSX.Element => {
+  if (!total) return <></>
+
   const lastPageInt = Math.ceil(total / limit)
   const neighborsEachSide = Math.round(neighbors / 2)
 

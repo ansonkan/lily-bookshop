@@ -7,7 +7,10 @@ export const NoData = (): JSX.Element => {
 
   return (
     <VStack>
-      <CloseIcon boxSize={10} />
+      <CloseIcon
+        boxSize={10}
+        color="var(--chakra-colors-chakra-border-color)"
+      />
       <Text>{t('generic.no-data')}</Text>
     </VStack>
   )
