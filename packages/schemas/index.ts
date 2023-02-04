@@ -19,10 +19,23 @@ const validateDate = (value: number, path: string) => {
   return true
 }
 
-const cleanStrArray = (value: unknown) =>
+export const cleanStrArray = (value: unknown) =>
   Array.isArray(value) ? value.filter((v) => !!v) : []
 
-const cleanStr = (value?: string) => (value ? value : null)
+export const cleanStr = (value?: string) => (value ? value : null)
+
+export const hasOnlyNumericChar = (value: string) => /^\d+$/gm.test(value)
+
+export const ISBNSchema = () =>
+  string()
+    .optional()
+    .nullable()
+    .transform(cleanStr)
+    .test(
+      'num-char-check',
+      '${path} must consist of only numeric characters',
+      (v) => (v ? hasOnlyNumericChar(v) : true)
+    )
 
 export const BookDocumentSchema = object({
   status: mixed<typeof STATUSES[number]>().oneOf(STATUSES).required(),
@@ -41,8 +54,8 @@ export const BookDocumentSchema = object({
   publisher: string().optional().nullable().transform(cleanStr),
   published_date: string().optional().nullable().transform(cleanStr), // not using number timestamp because some `published_date` only has year
   description: string().optional().nullable().transform(cleanStr),
-  ISBN_13: string().length(13).optional().nullable().transform(cleanStr),
-  ISBN_10: string().length(10).optional().nullable().transform(cleanStr),
+  ISBN_13: ISBNSchema().length(13),
+  ISBN_10: ISBNSchema().length(10),
   page_count: number()
     .integer()
     .min(1)

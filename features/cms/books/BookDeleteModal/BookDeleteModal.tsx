@@ -23,7 +23,7 @@ export interface BookDeleteModalRef {
 }
 
 export const BookDeleteModal = memo(
-  forwardRef<BookDeleteModalRef>((props, ref) => {
+  forwardRef<BookDeleteModalRef>((props, ref): JSX.Element => {
     const cancelButtonRef = useRef<HTMLButtonElement>(null)
     const disclosure = useDisclosure()
     const [target, setTarget] = useState<BookFE | undefined>()

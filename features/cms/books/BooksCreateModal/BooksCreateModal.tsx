@@ -50,34 +50,31 @@ export const BooksCreateModal = ({
         validationSchema={BooksCreateFormikSchema}
         // otherwise, when the list grows large, typing in a field will become very laggy
         validateOnChange={false}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           // Because of `stripUnknown` and also cast numeric strings back to number.
           const cleaned = BooksCreateFormikSchema.cast(values, {
             stripUnknown: true,
           })
 
-          createBooks(cleaned)
-            .then(() => {
-              setSubmitting(false)
+          try {
+            await createBooks(cleaned)
 
-              toast({
-                title: 'The books has been added',
-                status: 'success',
-              })
+            toast({
+              title: 'The books has been added',
+              status: 'success',
+            })
 
-              modalProps.onClose()
+            modalProps.onClose()
+          } catch (err) {
+            captureException(err)
+            toast({
+              title: 'Failed to add the books',
+              description: 'Something went wrong. Please try again later.',
+              status: 'error',
             })
-            .catch((err) => {
-              captureException(err)
-              toast({
-                title: 'Failed to add the books',
-                description: 'Something went wrong. Please try again later.',
-                status: 'error',
-              })
-            })
-            .finally(() => {
-              setSubmitting(false)
-            })
+          } finally {
+            setSubmitting(false)
+          }
         }}
       >
         {({ isSubmitting, values, errors, touched }) => (

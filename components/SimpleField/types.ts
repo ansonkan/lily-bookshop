@@ -16,6 +16,7 @@ interface CommonProps
   parse?: (value: any) => any
   // Multi-value version of text input, using `Textarea` as a easy workaround
   multiline?: boolean
+  rows?: number
   // for `Select`
   options?: Option[]
   multiple?: boolean

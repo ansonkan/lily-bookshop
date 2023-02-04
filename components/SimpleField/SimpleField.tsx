@@ -28,6 +28,7 @@ export const SimpleField = ({
   format,
   parse,
   multiline,
+  rows,
   options,
   min,
   max,
@@ -52,6 +53,7 @@ export const SimpleField = ({
         format={format}
         parse={parse}
         multiline={multiline}
+        rows={rows}
         options={options}
         min={min}
         max={max}
@@ -82,9 +84,11 @@ const proxy = <T,>(v: T): T => v
 
 function SimpleFieldHelper<V>({
   type,
+  placeholder,
   format = type === 'date' ? formatDate : proxy,
   parse = type === 'date' ? parseDate : proxy,
   multiline,
+  rows,
   options,
   min,
   max,
@@ -151,6 +155,7 @@ function SimpleFieldHelper<V>({
         {...field}
         value={_value}
         onChange={(str) => helper.setValue(format(str))}
+        placeholder={placeholder}
       >
         <NumberInputField />
         <NumberInputStepper>
@@ -166,7 +171,9 @@ function SimpleFieldHelper<V>({
       <Textarea
         {...field}
         value={_value}
+        placeholder={placeholder}
         onChange={(event) => helper.setValue(format(event.target.value))}
+        rows={rows}
       />
     )
   }
@@ -174,6 +181,7 @@ function SimpleFieldHelper<V>({
   return (
     <Input
       type={type}
+      placeholder={placeholder}
       {...field}
       // next-dev.js?3515:20 Warning: A component is changing an uncontrolled input to be controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled input element for the lifetime of the component.
       value={_value || ''}

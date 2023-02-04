@@ -5,6 +5,7 @@ import type { BookFE } from 'types'
 import type { BookDeleteModalRef } from './BookDeleteModal'
 import type { BookEditModalRef } from './BookEditModal'
 import type { BooksTableRef } from './BooksTable'
+import { ISBNImportModalRef } from './ISBNImportModal'
 
 import {
   Box,
@@ -32,6 +33,7 @@ import { BookDeleteModal } from './BookDeleteModal'
 import { BookEditModal } from './BookEditModal'
 import { BooksCreateModal } from './BooksCreateModal'
 import { BooksTable } from './BooksTable'
+import { ISBNImportModal } from './ISBNImportModal'
 
 export const BooksTabPanel = (): JSX.Element => {
   const { t } = useTranslation()
@@ -43,6 +45,7 @@ export const BooksTabPanel = (): JSX.Element => {
   const disclosure = useDisclosure()
   const editModalRef = useRef<BookEditModalRef>(null)
   const deleteModalRef = useRef<BookDeleteModalRef>(null)
+  const isbnImportModalRef = useRef<ISBNImportModalRef>(null)
 
   const { data } = useSWR(
     debouncedValue
@@ -91,12 +94,8 @@ export const BooksTabPanel = (): JSX.Element => {
             <MenuList>
               <MenuItem onClick={() => disclosure.onOpen()}>Create</MenuItem>
 
-              <MenuItem
-                onClick={() => {
-                  // show quick import modal
-                }}
-              >
-                Quick import
+              <MenuItem onClick={() => isbnImportModalRef.current?.open()}>
+                Import by ISBN
               </MenuItem>
             </MenuList>
           </Menu>
@@ -116,6 +115,13 @@ export const BooksTabPanel = (): JSX.Element => {
       <BookEditModal ref={editModalRef} />
 
       <BookDeleteModal ref={deleteModalRef} />
+
+      <ISBNImportModal
+        ref={isbnImportModalRef}
+        create={() => {
+          // console.log('create books: ', books)
+        }}
+      />
     </VStack>
   )
 }
