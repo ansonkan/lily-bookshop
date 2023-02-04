@@ -41,26 +41,24 @@ export const BookEditModal = memo(
 
       useImperativeHandle(
         ref,
-        () => {
-          return {
-            edit: async (book: BookFE) => {
-              setTarget({
-                ...book,
-                thumbnail: book.thumbnail
-                  ? [
-                      {
-                        type: 's3-object',
-                        key: book.thumbnail,
-                        status: 'unchanged',
-                      },
-                    ]
-                  : undefined,
-              })
+        () => ({
+          edit: async (book: BookFE) => {
+            setTarget({
+              ...book,
+              thumbnail: book.thumbnail
+                ? [
+                    {
+                      type: 's3-object',
+                      key: book.thumbnail,
+                      status: 'unchanged',
+                    },
+                  ]
+                : undefined,
+            })
 
-              disclosure.onOpen()
-            },
-          }
-        },
+            disclosure.onOpen()
+          },
+        }),
         [disclosure]
       )
 
@@ -114,8 +112,6 @@ function BookEditModalContent({ book, onClose }: BookEditModalContentProps) {
           toast({
             title: 'The books has been added',
             status: 'success',
-            duration: 3000,
-            isClosable: true,
           })
 
           onClose()
@@ -125,8 +121,6 @@ function BookEditModalContent({ book, onClose }: BookEditModalContentProps) {
             title: 'Failed to add the books',
             description: 'Something went wrong. Please try again later.',
             status: 'error',
-            duration: 3000,
-            isClosable: true,
           })
         } finally {
           setSubmitting(false)

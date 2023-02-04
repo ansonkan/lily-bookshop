@@ -4,6 +4,7 @@ import type { BookFE } from 'types'
 
 import type { BookDeleteModalRef } from './BookDeleteModal'
 import type { BookEditModalRef } from './BookEditModal'
+import type { BooksTableRef } from './BooksTable'
 
 import {
   Box,
@@ -18,7 +19,7 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { HamburgerIcon, PlusSquareIcon } from '@chakra-ui/icons'
+import { HamburgerIcon, RepeatIcon } from '@chakra-ui/icons'
 import { useCallback, useRef, useState } from 'react'
 import { API } from 'aws-amplify'
 import useSWR from 'swr'
@@ -36,6 +37,8 @@ export const BooksTabPanel = (): JSX.Element => {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
   const debouncedValue = useDebounce(value)
+
+  const tableRef = useRef<BooksTableRef>(null)
 
   const disclosure = useDisclosure()
   const editModalRef = useRef<BookEditModalRef>(null)
@@ -77,15 +80,17 @@ export const BooksTabPanel = (): JSX.Element => {
 
         <ButtonGroup isAttached size="sm">
           <Button
-            leftIcon={<PlusSquareIcon />}
-            onClick={() => disclosure.onOpen()}
+            leftIcon={<RepeatIcon />}
+            onClick={() => tableRef.current?.reload()}
           >
-            Create
+            Reload
           </Button>
 
           <Menu>
             <MenuButton as={IconButton} icon={<HamburgerIcon />} />
             <MenuList>
+              <MenuItem onClick={() => disclosure.onOpen()}>Create</MenuItem>
+
               <MenuItem
                 onClick={() => {
                   // show quick import modal
@@ -103,6 +108,7 @@ export const BooksTabPanel = (): JSX.Element => {
         query={debouncedValue}
         onEdit={onEdit}
         onDelete={onDelete}
+        ref={tableRef}
       />
 
       <BooksCreateModal {...disclosure} />

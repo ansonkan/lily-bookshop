@@ -1,24 +1,29 @@
+export const isValidFileType = (
+  file: File,
+  acceptedFileTypes: string[]
+): boolean => {
+  const fileName = file.name || ''
+  const mimeType = (file.type || '').toLowerCase()
+  const baseMimeType = mimeType.replace(/\/.*$/, '')
+  return acceptedFileTypes.some((type) => {
+    const validType = type.trim().toLowerCase()
+    if (validType.charAt(0) === '.') {
+      return fileName.toLowerCase().endsWith(validType)
+    } else if (validType.endsWith('/*')) {
+      // This is something like a image/* mime type
+      return baseMimeType === validType.replace(/\/.*$/, '')
+    }
+    return mimeType === validType
+  })
+}
+
 // Copied from https://github.com/aws-amplify/amplify-ui/tree/main/packages/react/src/components/Storage/FileUploader
 export const returnAcceptedFiles = (
   files: File[],
   acceptedFileTypes: string[]
 ): File[] => {
   // Remove any files that are not in the accepted file list
-  return files.filter((file) => {
-    const fileName = file.name || ''
-    const mimeType = (file.type || '').toLowerCase()
-    const baseMimeType = mimeType.replace(/\/.*$/, '')
-    return acceptedFileTypes.some((type) => {
-      const validType = type.trim().toLowerCase()
-      if (validType.charAt(0) === '.') {
-        return fileName.toLowerCase().endsWith(validType)
-      } else if (validType.endsWith('/*')) {
-        // This is something like a image/* mime type
-        return baseMimeType === validType.replace(/\/.*$/, '')
-      }
-      return mimeType === validType
-    })
-  })
+  return files.filter((file) => isValidFileType(file, acceptedFileTypes))
 }
 
 export const fileListToArray = (list: FileList) => {

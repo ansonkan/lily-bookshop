@@ -60,12 +60,6 @@ export interface DirectusArticle {
   content: string
 }
 
-export interface AutocompleteBookResult {
-  books: Array<
-    Pick<MongoDbBook, 'title' | 'subtitle' | 'directusId' | 'authors'>
-  >
-}
-
 export type BookDocument = InferType<typeof BookDocumentSchema>
 
 // Book front-end

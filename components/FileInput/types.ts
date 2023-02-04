@@ -1,6 +1,4 @@
-export type NewFileValue =
-  | { type: 'newly-uploaded-file'; file: File }
-  | { type: 'newly-uploaded-url'; url: string }
+export type NewFileValue = { type: 'newly-uploaded-file'; file: File }
 
 export type FileValue =
   | NewFileValue

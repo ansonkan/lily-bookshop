@@ -32,14 +32,12 @@ export const BookDeleteModal = memo(
 
     useImperativeHandle(
       ref,
-      () => {
-        return {
-          askToDelete(book: BookFE) {
-            setTarget(book)
-            disclosure.onOpen()
-          },
-        }
-      },
+      () => ({
+        askToDelete(book: BookFE) {
+          setTarget(book)
+          disclosure.onOpen()
+        },
+      }),
       [disclosure]
     )
 
@@ -52,8 +50,6 @@ export const BookDeleteModal = memo(
         toast({
           title: 'The book has been deleted',
           status: 'success',
-          duration: 3000,
-          isClosable: true,
         })
         disclosure.onClose()
       } catch (err) {
@@ -62,8 +58,6 @@ export const BookDeleteModal = memo(
           title: 'Failed to delete the book',
           description: 'Something went wrong. Please try again later.',
           status: 'error',
-          duration: 3000,
-          isClosable: true,
         })
       } finally {
         setIsLoading(false)

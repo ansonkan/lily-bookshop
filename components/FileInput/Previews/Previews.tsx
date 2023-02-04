@@ -86,31 +86,29 @@ function PreviewItem({ value, onDelete, loadFromMap }: PreviewItemProps) {
             }))
           )
 
-        case 'newly-uploaded-url':
-          return setInfo(
-            await loadFromMap(value.url, () => {
-              // TODO: fetch the file here
-              return { src: value.url }
-            })
-          )
+        // case 'newly-uploaded-url':
+        //   return setInfo(
+        //     await loadFromMap(value.url, () => {
+        //       // TODO: fetch the file here
+        //       return { src: value.url }
+        //     })
+        //   )
         case 's3-object':
           return setInfo(
             await loadFromMap(value.key, async () => {
               try {
-                const keySegments = value.key.split('/')
-
-                const [url, list] = await Promise.all([
-                  Storage.get(value.key, { level: 'public' }),
-                  Storage.list(
-                    keySegments.slice(0, keySegments.length).join('/'),
-                    { pageSize: 10 }
-                  ),
-                ])
+                const image = await Storage.get(value.key, {
+                  level: 'public',
+                  download: true,
+                })
 
                 return {
-                  src: url,
+                  src:
+                    image.Body instanceof Blob
+                      ? URL.createObjectURL(image.Body)
+                      : undefined,
                   name: decodeURIComponent(getLastSplit(value.key, '/')),
-                  size: list.results.find((r) => r.key === value.key)?.size,
+                  size: image.ContentLength,
                 }
               } catch (err) {
                 captureException(err)

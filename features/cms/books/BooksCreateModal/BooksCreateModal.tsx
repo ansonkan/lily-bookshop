@@ -1,8 +1,6 @@
 import type { ModalProps } from '@chakra-ui/react'
 
-import type { BookFE } from 'types'
-
-import type { BooksCreateFormik } from './types'
+import type { BooksCreateFormik, NewBook } from './types'
 
 import {
   Accordion,
@@ -33,7 +31,7 @@ import { BooksCreateFormikSchema } from './schemas'
 import { createBooks } from './queries'
 
 export interface BooksCreateModalProps extends Omit<ModalProps, 'children'> {
-  initialBooks?: BookFE[]
+  initialBooks?: NewBook[]
 }
 
 export const BooksCreateModal = ({
@@ -65,8 +63,6 @@ export const BooksCreateModal = ({
               toast({
                 title: 'The books has been added',
                 status: 'success',
-                duration: 3000,
-                isClosable: true,
               })
 
               modalProps.onClose()
@@ -77,8 +73,6 @@ export const BooksCreateModal = ({
                 title: 'Failed to add the books',
                 description: 'Something went wrong. Please try again later.',
                 status: 'error',
-                duration: 3000,
-                isClosable: true,
               })
             })
             .finally(() => {

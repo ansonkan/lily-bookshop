@@ -34,9 +34,9 @@ export async function processThumbnail(files: FileValue[], bookDocId: string) {
           newThumbnailKey = f.key
         }
         break
-      case 'newly-uploaded-url':
-        // TODO
-        break
+      // case 'newly-uploaded-url':
+      //   // TODO
+      //   break
       case 'newly-uploaded-file': {
         const result = await Storage.put(
           `books/${bookDocId}/thumbnails`,
