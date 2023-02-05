@@ -35,7 +35,6 @@ export async function GET(
     const book = await getById(client, id)
 
     if (book) {
-      // const linkMap = await s3KeysToLinks([book.thum])
       const feBook = docIdToString(book)
 
       return {
@@ -379,7 +378,7 @@ async function s3KeysToLinks(keys: string[]) {
         .getSignedUrlPromise('getObject', {
           Bucket: process.env.STORAGE_S3LILYBOOKSHOPSTORAGE135156F8_BUCKETNAME,
           Key: 'public/' + k,
-          Expire: 86400,
+          Expires: 86400,
         })
         .then((link) => ({ link, key: k }))
     )
