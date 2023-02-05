@@ -78,8 +78,7 @@ export const getServerSideProps: GetServerSideProps<
     ),
   ])
 
-  // res.setHeader('Cache-Control', 's-maxage=3600')
-  res.setHeader('Cache-Control', 's-maxage=60')
+  res.setHeader('Cache-Control', 's-maxage=3600')
 
   return {
     props: {

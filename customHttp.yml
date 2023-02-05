@@ -3,4 +3,3 @@ customHeaders:
     headers:
       - key: 'Cache-Control'
         value: 'public, s-maxage=86400, max-age=86400'
-        # public, max-age=60, must-revalidate

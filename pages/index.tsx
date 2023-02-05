@@ -92,7 +92,6 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
       highlights: highlightsRes.books,
       latestAdditions: latestRes.books,
     },
-    // revalidate: 3600, // 1 hour
-    revalidate: 60, // 1 min
+    revalidate: 3600, // 1 hour
   }
 }
