@@ -1,10 +1,13 @@
 import type { ModalProps } from '@chakra-ui/react'
 
-import type { GoogleBookSearchResult, ISBNImportFormik } from './types'
+import type { GoogleBook, ISBNImportFormik } from './types'
 import type { NewBook } from '../BooksCreateModal/types'
 
 import {
+  Alert,
+  AlertIcon,
   Button,
+  ButtonGroup,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,15 +15,20 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  VStack,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
-import { forwardRef, memo, useImperativeHandle } from 'react'
+import { forwardRef, memo, useImperativeHandle, useState } from 'react'
+import { captureException } from '@sentry/nextjs'
 
 import { SimpleField } from 'components'
 
 import { INITIAL_VALUES } from './constants'
 import { ISBNImportSchema } from './schemas'
+import { googleBookToNewBook } from './utils'
+import { mapGoogleBooks } from './queries'
 
 export interface ISBNImportModalProps
   extends Omit<ModalProps, 'children' | 'isOpen' | 'onClose'> {
@@ -33,14 +41,13 @@ export interface ISBNImportModalRef {
 
 export const ISBNImportModal = memo(
   forwardRef<ISBNImportModalRef, ISBNImportModalProps>(
-    (
-      {
-        // create,
-        ...modalProps
-      },
-      ref
-    ): JSX.Element => {
+    ({ create, ...modalProps }, ref): JSX.Element => {
       const disclosure = useDisclosure()
+      const toast = useToast()
+      const [googleBookResult, setGoogleBookResult] = useState<
+        ResultAlertProps | undefined
+      >()
+      const [isLoading, setIsLoading] = useState(false)
 
       useImperativeHandle(
         ref,
@@ -52,12 +59,36 @@ export const ISBNImportModal = memo(
         [disclosure]
       )
 
+      const doCreate = async (matches: GoogleBook[]) => {
+        if (matches.length === 0) return
+
+        setIsLoading(true)
+        try {
+          const newBooks = await googleBookToNewBook(matches)
+          disclosure.onClose()
+          create(newBooks)
+        } catch (err) {
+          captureException(err)
+          toast({
+            title: 'Failed to search from Google Book',
+            description: 'Something went wrong. Please try again later.',
+            status: 'error',
+          })
+        } finally {
+          setIsLoading(false)
+        }
+      }
+
       return (
         <Modal
           size="4xl"
           closeOnOverlayClick={false}
           {...modalProps}
           {...disclosure}
+          onCloseComplete={() => {
+            // reset
+            setGoogleBookResult(undefined)
+          }}
         >
           <ModalOverlay />
 
@@ -72,90 +103,111 @@ export const ISBNImportModal = memo(
                 stripUnknown: true,
               })
 
-              const results = await Promise.allSettled<
-                Promise<GoogleBookSearchResult>
-              >(
-                cleaned.isbnList.map((isbn) =>
-                  fetch(
-                    `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
-                  ).then((r) => r.json())
-                )
-              )
+              try {
+                const result = await mapGoogleBooks(cleaned.isbnList)
 
-              // const fails = results.filter(
-              //   (r) =>
-              //     r.status === 'rejected' ||
-              //     (r.status === 'fulfilled' && r.value.totalItems === 0)
-              // )
-
-              // const googleBooks = results.reduce(() => , {})
-
-              // TODO: continue...
-              // eslint-disable-next-line no-console
-              console.log(results)
-
-              setSubmitting(false)
-
-              // createBooks(cleaned)
-              //   .then(() => {
-              //     setSubmitting(false)
-
-              //     toast({
-              //       title: 'The books has been added',
-              //       status: 'success',
-              //     })
-
-              //     modalProps.onClose()
-              //   })
-              //   .catch((err) => {
-              //     captureException(err)
-              //     toast({
-              //       title: 'Failed to add the books',
-              //       description:
-              //         'Something went wrong. Please try again later.',
-              //       status: 'error',
-              //     })
-              //   })
-              //   .finally(() => {
-              //     setSubmitting(false)
-              //   })
+                if (result.fails.length === 0) {
+                  await doCreate(result.matches)
+                } else {
+                  setGoogleBookResult(result)
+                }
+              } catch {
+                toast({
+                  title: 'Failed to search from Google Book',
+                  description: 'Something went wrong. Please try again later.',
+                  status: 'error',
+                })
+              } finally {
+                setSubmitting(false)
+              }
             }}
           >
-            {({ isSubmitting }) => (
-              <Form>
-                <ModalContent>
-                  <ModalHeader>ISBN import</ModalHeader>
-                  <ModalCloseButton />
+            {({ isSubmitting }) => {
+              const _isLoading = isSubmitting || isLoading
 
-                  <ModalBody>
-                    <SimpleField
-                      label="ISBN list"
-                      name="isbnList"
-                      type="text"
-                      placeholder="0743279603"
-                      multiline
-                      rows={10}
-                      format={(value) => `${value}`.split('\n')}
-                      parse={(value: string[]) => value.join('\n')}
-                    />
-                  </ModalBody>
+              return (
+                <Form>
+                  <ModalContent>
+                    <ModalHeader>ISBN import</ModalHeader>
+                    <ModalCloseButton />
 
-                  <ModalFooter>
-                    <Button
-                      size="sm"
-                      type="submit"
-                      disabled={isSubmitting}
-                      isLoading={isSubmitting}
-                    >
-                      Submit
-                    </Button>
-                  </ModalFooter>
-                </ModalContent>
-              </Form>
-            )}
+                    <ModalBody>
+                      <VStack>
+                        {googleBookResult && (
+                          <ResultAlert {...googleBookResult} />
+                        )}
+
+                        <SimpleField
+                          label="ISBN list"
+                          name="isbnList"
+                          type="text"
+                          placeholder="0743279603"
+                          multiline
+                          rows={10}
+                          format={(value) => `${value}`.split('\n')}
+                          parse={(value: string[]) => value.join('\n')}
+                        />
+                      </VStack>
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <ButtonGroup>
+                        <Button
+                          size="sm"
+                          type="submit"
+                          disabled={_isLoading}
+                          isLoading={_isLoading}
+                        >
+                          Search
+                        </Button>
+
+                        <Button
+                          size="sm"
+                          disabled={
+                            _isLoading || !googleBookResult?.matches.length
+                          }
+                          onClick={async () => {
+                            if (googleBookResult?.matches.length) {
+                              await doCreate(googleBookResult.matches)
+                            }
+                          }}
+                        >
+                          Create
+                        </Button>
+                      </ButtonGroup>
+                    </ModalFooter>
+                  </ModalContent>
+                </Form>
+              )
+            }}
           </Formik>
         </Modal>
       )
     }
   )
 )
+
+type ResultAlertProps = Awaited<ReturnType<typeof mapGoogleBooks>>
+
+function ResultAlert({ fails, matches }: ResultAlertProps): JSX.Element {
+  let errMsg: string | undefined
+
+  if (fails.length) {
+    errMsg = matches.length
+      ? `There are some ISBN have no matches: ${fails.join(
+          ', '
+        )}. If you still want to continue without them, please click "Create".`
+      : 'There is no match for all of the ISBNs here.'
+  }
+
+  if (errMsg) {
+    return (
+      <Alert status="error">
+        <AlertIcon />
+        {errMsg}
+      </Alert>
+    )
+  }
+
+  return <></>
+}

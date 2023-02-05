@@ -18,139 +18,178 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useDisclosure,
   useToast,
 } from '@chakra-ui/react'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import { FieldArray, Form, Formik } from 'formik'
+import { forwardRef, memo, useImperativeHandle, useState } from 'react'
 import { captureException } from '@sentry/nextjs'
-import { useState } from 'react'
 
 import { INITIAL_BOOK, INITIAL_BOOKS } from './constants'
 import { BookCreateFields } from './BookCreateFields'
 import { BooksCreateFormikSchema } from './schemas'
 import { createBooks } from './queries'
 
-export interface BooksCreateModalProps extends Omit<ModalProps, 'children'> {
-  initialBooks?: NewBook[]
+export type BooksCreateModalProps = Omit<
+  ModalProps,
+  'children' | 'isOpen' | 'onClose'
+>
+
+export interface BooksCreateModalRef {
+  create: (initialBooks?: NewBook[]) => void
 }
 
-export const BooksCreateModal = ({
-  // initialBooks,
-  ...modalProps
-}: BooksCreateModalProps): JSX.Element => {
-  const [expandedIndex, setExpandedIndex] = useState(0)
-  const toast = useToast()
+export const BooksCreateModal = memo(
+  forwardRef<BooksCreateModalRef, BooksCreateModalProps>(
+    (props, ref): JSX.Element => {
+      const disclosure = useDisclosure()
+      const [expandedIndex, setExpandedIndex] = useState(0)
+      const toast = useToast()
+      const [initialValues, setInitialValues] =
+        useState<BooksCreateFormik>(INITIAL_BOOKS)
+      const [isVisible, setIsVisible] = useState(false)
 
-  return (
-    <Modal size="4xl" closeOnOverlayClick={false} {...modalProps}>
-      <ModalOverlay />
+      useImperativeHandle(
+        ref,
+        () => ({
+          create(initialBooks) {
+            initialBooks && setInitialValues({ books: initialBooks })
+            // Note: to block off `Formik` just in case there is `initialValues` to set before rendering it
+            setIsVisible(true)
+            disclosure.onOpen()
+          },
+        }),
+        [disclosure]
+      )
 
-      <Formik<BooksCreateFormik>
-        initialValues={INITIAL_BOOKS}
-        validationSchema={BooksCreateFormikSchema}
-        // otherwise, when the list grows large, typing in a field will become very laggy
-        validateOnChange={false}
-        onSubmit={async (values, { setSubmitting }) => {
-          // Because of `stripUnknown` and also cast numeric strings back to number.
-          const cleaned = BooksCreateFormikSchema.cast(values, {
-            stripUnknown: true,
-          })
+      if (!isVisible) {
+        // Note: to block off `Formik` just in case there is `initialValues` to set before rendering it
+        return <></>
+      }
 
-          try {
-            await createBooks(cleaned)
+      return (
+        <Modal
+          size="4xl"
+          closeOnOverlayClick={false}
+          {...props}
+          {...disclosure}
+          onCloseComplete={() => {
+            // reset
+            setInitialValues(INITIAL_BOOKS)
+            setIsVisible(false)
+          }}
+        >
+          <ModalOverlay />
 
-            toast({
-              title: 'The books has been added',
-              status: 'success',
-            })
+          <Formik<BooksCreateFormik>
+            initialValues={initialValues}
+            validationSchema={BooksCreateFormikSchema}
+            // otherwise, when the list grows large, typing in a field will become very laggy
+            validateOnChange={false}
+            onSubmit={async (values, { setSubmitting }) => {
+              // Because of `stripUnknown` and also cast numeric strings back to number.
+              const cleaned = BooksCreateFormikSchema.cast(values, {
+                stripUnknown: true,
+              })
 
-            modalProps.onClose()
-          } catch (err) {
-            captureException(err)
-            toast({
-              title: 'Failed to add the books',
-              description: 'Something went wrong. Please try again later.',
-              status: 'error',
-            })
-          } finally {
-            setSubmitting(false)
-          }
-        }}
-      >
-        {({ isSubmitting, values, errors, touched }) => (
-          <Form>
-            <ModalContent>
-              <ModalHeader>{'Create books'}</ModalHeader>
-              <ModalCloseButton />
+              try {
+                await createBooks(cleaned)
 
-              <ModalBody>
-                <Accordion
-                  index={expandedIndex}
-                  defaultIndex={[0]}
-                  onChange={(index) => {
-                    typeof index === 'number' && setExpandedIndex(index)
-                    Array.isArray(index) && setExpandedIndex(index[0])
-                  }}
-                  // because the field is not being rendered unless `expandedIndex === index`, otherwise opening/closing will looks janky
-                  reduceMotion
-                >
-                  <FieldArray name="books">
-                    {({ remove, push }) => {
-                      return (
-                        <>
-                          {values.books.map((book, index) => {
-                            return (
-                              <FieldBook
-                                key={index}
-                                book={book}
-                                index={index}
-                                expandedIndex={expandedIndex}
-                                removeSelf={() => remove(index)}
-                                showError={
-                                  !!touched.books?.[index] &&
-                                  !!errors.books?.[index]
-                                }
-                              />
-                            )
-                          })}
+                toast({
+                  title: 'The books has been added',
+                  status: 'success',
+                })
 
-                          <Button
-                            mt={4}
-                            size="sm"
-                            leftIcon={<AddIcon />}
-                            variant="ghost"
-                            w="full"
-                            onClick={() => {
-                              push(INITIAL_BOOK)
-                              setExpandedIndex(values.books.length)
-                            }}
-                          >
-                            Create new draft
-                          </Button>
-                        </>
-                      )
-                    }}
-                  </FieldArray>
-                </Accordion>
-              </ModalBody>
+                disclosure.onClose()
+              } catch (err) {
+                captureException(err)
+                toast({
+                  title: 'Failed to add the books',
+                  description: 'Something went wrong. Please try again later.',
+                  status: 'error',
+                })
+              } finally {
+                setSubmitting(false)
+              }
+            }}
+          >
+            {({ isSubmitting, values, errors, touched }) => (
+              <Form>
+                <ModalContent>
+                  <ModalHeader>{'Create books'}</ModalHeader>
+                  <ModalCloseButton />
 
-              <ModalFooter>
-                <Button
-                  size="sm"
-                  type="submit"
-                  disabled={isSubmitting}
-                  isLoading={isSubmitting}
-                >
-                  Submit
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Form>
-        )}
-      </Formik>
-    </Modal>
+                  <ModalBody>
+                    <Accordion
+                      index={expandedIndex}
+                      defaultIndex={[0]}
+                      onChange={(index) => {
+                        typeof index === 'number' && setExpandedIndex(index)
+                        Array.isArray(index) && setExpandedIndex(index[0])
+                      }}
+                      // because the field is not being rendered unless `expandedIndex === index`, otherwise opening/closing will looks janky
+                      reduceMotion
+                    >
+                      <FieldArray name="books">
+                        {({ remove, push }) => {
+                          return (
+                            <>
+                              {values.books.map((book, index) => {
+                                return (
+                                  <FieldBook
+                                    key={index}
+                                    book={book}
+                                    index={index}
+                                    expandedIndex={expandedIndex}
+                                    removeSelf={() => remove(index)}
+                                    showError={
+                                      !!touched.books?.[index] &&
+                                      !!errors.books?.[index]
+                                    }
+                                  />
+                                )
+                              })}
+
+                              <Button
+                                mt={4}
+                                size="sm"
+                                leftIcon={<AddIcon />}
+                                variant="ghost"
+                                w="full"
+                                onClick={() => {
+                                  push(INITIAL_BOOK)
+                                  setExpandedIndex(values.books.length)
+                                }}
+                              >
+                                Create new draft
+                              </Button>
+                            </>
+                          )
+                        }}
+                      </FieldArray>
+                    </Accordion>
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <Button
+                      size="sm"
+                      type="submit"
+                      disabled={isSubmitting}
+                      isLoading={isSubmitting}
+                    >
+                      Submit
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Form>
+            )}
+          </Formik>
+        </Modal>
+      )
+    }
   )
-}
+)
 
 interface FieldBookProps {
   book: Partial<BooksCreateFormik['books'][number]>

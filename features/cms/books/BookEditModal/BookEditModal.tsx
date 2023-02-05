@@ -24,14 +24,14 @@ import { BookEditFields } from './BookEditFields'
 import { EditedBookSchema } from './schemas'
 import { editBook } from './queries'
 
-export interface BookEditModalRef {
-  edit: (book: BookFE) => Promise<void>
-}
-
 export type BookEditModalProps = Omit<
   ModalProps,
   'children' | 'isOpen' | 'onClose'
 >
+
+export interface BookEditModalRef {
+  edit: (book: BookFE) => void
+}
 
 export const BookEditModal = memo(
   forwardRef<BookEditModalRef, BookEditModalProps>(
@@ -42,7 +42,7 @@ export const BookEditModal = memo(
       useImperativeHandle(
         ref,
         () => ({
-          edit: async (book: BookFE) => {
+          edit: (book: BookFE) => {
             setTarget({
               ...book,
               thumbnail: book.thumbnail

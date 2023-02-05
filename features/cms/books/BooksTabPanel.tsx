@@ -4,8 +4,9 @@ import type { BookFE } from 'types'
 
 import type { BookDeleteModalRef } from './BookDeleteModal'
 import type { BookEditModalRef } from './BookEditModal'
+import type { BooksCreateModalRef } from './BooksCreateModal'
 import type { BooksTableRef } from './BooksTable'
-import { ISBNImportModalRef } from './ISBNImportModal'
+import type { ISBNImportModalRef } from './ISBNImportModal'
 
 import {
   Box,
@@ -18,7 +19,6 @@ import {
   MenuItem,
   MenuList,
   VStack,
-  useDisclosure,
 } from '@chakra-ui/react'
 import { HamburgerIcon, RepeatIcon } from '@chakra-ui/icons'
 import { useCallback, useRef, useState } from 'react'
@@ -42,7 +42,7 @@ export const BooksTabPanel = (): JSX.Element => {
 
   const tableRef = useRef<BooksTableRef>(null)
 
-  const disclosure = useDisclosure()
+  const createModalRef = useRef<BooksCreateModalRef>(null)
   const editModalRef = useRef<BookEditModalRef>(null)
   const deleteModalRef = useRef<BookDeleteModalRef>(null)
   const isbnImportModalRef = useRef<ISBNImportModalRef>(null)
@@ -92,7 +92,9 @@ export const BooksTabPanel = (): JSX.Element => {
           <Menu>
             <MenuButton as={IconButton} icon={<HamburgerIcon />} />
             <MenuList>
-              <MenuItem onClick={() => disclosure.onOpen()}>Create</MenuItem>
+              <MenuItem onClick={() => createModalRef.current?.create()}>
+                Create
+              </MenuItem>
 
               <MenuItem onClick={() => isbnImportModalRef.current?.open()}>
                 Import by ISBN
@@ -110,7 +112,7 @@ export const BooksTabPanel = (): JSX.Element => {
         ref={tableRef}
       />
 
-      <BooksCreateModal {...disclosure} />
+      <BooksCreateModal ref={createModalRef} />
 
       <BookEditModal ref={editModalRef} />
 
@@ -118,9 +120,7 @@ export const BooksTabPanel = (): JSX.Element => {
 
       <ISBNImportModal
         ref={isbnImportModalRef}
-        create={() => {
-          // console.log('create books: ', books)
-        }}
+        create={(books) => createModalRef.current?.create(books)}
       />
     </VStack>
   )

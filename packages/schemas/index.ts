@@ -27,15 +27,7 @@ export const cleanStr = (value?: string) => (value ? value : null)
 export const hasOnlyNumericChar = (value: string) => /^\d+$/gm.test(value)
 
 export const ISBNSchema = () =>
-  string()
-    .optional()
-    .nullable()
-    .transform(cleanStr)
-    .test(
-      'num-char-check',
-      '${path} must consist of only numeric characters',
-      (v) => (v ? hasOnlyNumericChar(v) : true)
-    )
+  string().optional().nullable().transform(cleanStr)
 
 export const BookDocumentSchema = object({
   status: mixed<typeof STATUSES[number]>().oneOf(STATUSES).required(),
