@@ -8,7 +8,6 @@ import { withSSRContext } from 'aws-amplify'
 
 import { ArrowBreadcrumb, BookItem, NoData, Pagination } from 'components'
 import { BaseLayout } from 'layouts'
-import { formatDirectusBook } from 'utils'
 
 interface BooksPageQuery {
   q?: string
@@ -108,7 +107,7 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
     props: {
       ...translations,
       ...searchResult,
-      books: searchResult.books.map((v: BookFE) => formatDirectusBook(v)),
+      books: searchResult.books,
     },
   }
 }

@@ -12,7 +12,6 @@ import {
   LandingSection,
   LatestAdditionsSection,
 } from 'components'
-import { formatDirectusBook } from 'utils'
 
 interface HomePageProps {
   highlights: BookFE[]
@@ -84,14 +83,14 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
     SSR.API.get('apicore', '/books?sort=dateRestocked:-1&limit=10'),
   ])
 
+  // const loader = async (key: string) =>
+  //   SSR.Storage.get(key, { level: 'public' })
+
   return {
     props: {
       ...translations,
-      // need to cast books from `Directus`/`MongoDB Atlas` to `DirectusBook`, then remove all of the `null` properties
-      highlights: highlightsRes.books.map((v: BookFE) => formatDirectusBook(v)),
-      latestAdditions: latestRes.books.map((v: BookFE) =>
-        formatDirectusBook(v)
-      ),
+      highlights: highlightsRes.books,
+      latestAdditions: latestRes.books,
     },
     revalidate: 3600, // 1 hour
   }

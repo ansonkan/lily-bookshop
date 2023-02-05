@@ -8,7 +8,6 @@ import { withSSRContext } from 'aws-amplify'
 
 import { ArrowBreadcrumb, BookItem } from 'components'
 import { BaseLayout } from 'layouts'
-import { formatDirectusBook } from 'utils'
 
 interface BookPageProps {
   book: BookFE
@@ -84,8 +83,8 @@ export const getServerSideProps: GetServerSideProps<
   return {
     props: {
       ...translations,
-      book: formatDirectusBook(book),
-      moreBooks: searchRes.books.map((v: BookFE) => formatDirectusBook(v)),
+      book: book,
+      moreBooks: searchRes.books,
     },
   }
 }
