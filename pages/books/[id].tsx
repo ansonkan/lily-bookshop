@@ -74,11 +74,14 @@ export const getServerSideProps: GetServerSideProps<
     serverSideTranslations(locale ?? 'en', ['common']),
     SSR.API.get(
       'apicore',
-      `/books?relatedTo=${params.id}&sortOnlyExist=1&limit=5`
+      `/books?relatedTo=${params.id}&sortOnlyExist=1&limit=5&useThumbnailLink=1`
     ),
   ])
 
-  res.setHeader('Cache-Control', 's-maxage=3600')
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=3600, stale-while-revalidate=3600'
+  )
 
   return {
     props: {

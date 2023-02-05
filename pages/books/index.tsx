@@ -98,10 +98,16 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
 
   const [translations, searchResult] = await Promise.all([
     serverSideTranslations(locale ?? 'en', ['common']),
-    SSR.API.get('apicore', `/books?q=${q}&limit=${LIMIT}&page=${page}`),
+    SSR.API.get(
+      'apicore',
+      `/books?q=${q}&limit=${LIMIT}&page=${page}&useThumbnailLink=1`
+    ),
   ])
 
-  res.setHeader('Cache-Control', 's-maxage=3600')
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=3600, stale-while-revalidate=3600'
+  )
 
   return {
     props: {

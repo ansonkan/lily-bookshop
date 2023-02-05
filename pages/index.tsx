@@ -78,13 +78,16 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
   const [translations, highlightsRes, latestRes] = await Promise.all([
     serverSideTranslations(locale ?? 'en', ['common']),
     // `highlightOrder` should be changed to `highlight_order` for entries created by the new Rest API
-    SSR.API.get('apicore', '/books?sort=highlightOrder:1&limit=10'),
+    SSR.API.get(
+      'apicore',
+      '/books?sort=highlightOrder:1&limit=10&useThumbnailLink=1'
+    ),
     // `dateRestocked` -> `date_restocked`
-    SSR.API.get('apicore', '/books?sort=dateRestocked:-1&limit=10'),
+    SSR.API.get(
+      'apicore',
+      '/books?sort=dateRestocked:-1&limit=10&useThumbnailLink=1'
+    ),
   ])
-
-  // const loader = async (key: string) =>
-  //   SSR.Storage.get(key, { level: 'public' })
 
   return {
     props: {

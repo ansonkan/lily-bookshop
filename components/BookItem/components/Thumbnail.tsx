@@ -1,9 +1,7 @@
 import type { AspectRatioProps } from '@chakra-ui/react'
 
-import { useEffect, useState } from 'react'
 import { AspectRatio } from '@chakra-ui/react'
 import Image from 'next/image'
-import { Storage } from 'aws-amplify'
 
 import placeholderImageSrc from 'public/placeholder-image.png'
 
@@ -17,21 +15,6 @@ export const Thumbnail = ({
   src,
   ...others
 }: ThumbnailProps): JSX.Element => {
-  const [link, setLink] = useState<string | undefined>()
-
-  useEffect(() => {
-    const getUploadedImage = async () => {
-      if (src) {
-        const file = await Storage.get(src, {
-          level: 'public',
-        })
-        setLink(file)
-      }
-    }
-
-    getUploadedImage()
-  }, [src])
-
   return (
     <AspectRatio
       ratio={1 / 1.5}
@@ -42,7 +25,7 @@ export const Thumbnail = ({
       {...others}
     >
       <Image
-        src={link || placeholderImageSrc}
+        src={src || placeholderImageSrc}
         alt={`Thumbnail of ${bookTitle}`}
         fill
       />

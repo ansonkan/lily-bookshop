@@ -2,4 +2,4 @@ customHeaders:
   - pattern: '/_next/image'
     headers:
       - key: 'Cache-Control'
-        value: 'public, s-maxage=86400, max-age=86400'
+        value: 'public, s-maxage=86400, max-age=86400, immutable'

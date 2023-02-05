@@ -2,6 +2,7 @@ import type { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda'
 import type { Document, MongoClient, Sort, WithId } from 'mongodb'
 import type { BookDocument } from '@lily-bookshop/schemas'
 
+import * as AWS from 'aws-sdk'
 import { ObjectId } from 'mongodb'
 
 import { docIdToString } from './utils'
@@ -13,26 +14,6 @@ export async function GET(
   // `proxy` is a default catch-all parameter in `/books/{proxy+}`
   const id = event.pathParameters?.proxy
 
-  if (id) {
-    /**
-     * `proxy` could be `property1/property2/property3` or more
-     * but let's assume it would be a normal book ID
-     */
-    const book = await getById(client, id)
-
-    if (book) {
-      return {
-        body: JSON.stringify({
-          book: docIdToString(book),
-        }),
-      }
-    }
-
-    return {
-      statusCode: 404,
-    }
-  }
-
   const {
     q,
     // 1 based page
@@ -42,7 +23,34 @@ export async function GET(
     sort,
     sortOnlyExist,
     autocomplete,
+    // try to converts object id to link directly here, rather than request object link in the FE with `useEffect`, see if this solve the cache MISS issue
+    useThumbnailLink,
   } = event.queryStringParameters || {}
+
+  if (id) {
+    /**
+     * `proxy` could be `property1/property2/property3` or more
+     * but let's assume it would be a normal book ID
+     */
+    const book = await getById(client, id)
+
+    if (book) {
+      // const linkMap = await s3KeysToLinks([book.thum])
+      const feBook = docIdToString(book)
+
+      return {
+        body: JSON.stringify({
+          book: useThumbnailLink
+            ? (await populateS3Links([feBook]))[0]
+            : feBook,
+        }),
+      }
+    }
+
+    return {
+      statusCode: 404,
+    }
+  }
 
   const pageInt = page ? parseInt(page) : 1
   const limitInt = limit ? parseInt(limit) : 10
@@ -55,6 +63,9 @@ export async function GET(
           limit: limitInt,
         }),
       }),
+      headers: {
+        'Cache-Control': 'public, s-maxage=86400, max-age=86400',
+      },
     }
   }
 
@@ -105,9 +116,11 @@ export async function GET(
 
   const { books = [], meta } = result[0] || {}
 
+  const feBooks = books.map((b: WithId<BookDocument>) => docIdToString(b))
+
   return {
     body: JSON.stringify({
-      books: books.map((b: WithId<BookDocument>) => docIdToString(b)),
+      books: useThumbnailLink ? await populateS3Links(feBooks) : feBooks,
       total: meta?.[0]?.count.total || 0,
       query: {
         q,
@@ -341,4 +354,42 @@ async function autocompleteTitle(
       ])
       .toArray()
   ).map((item) => item.title) as string[]
+}
+
+async function populateS3Links(books: BookDocument[]) {
+  const keys = books.map((b) => b.thumbnail).filter((t) => !!t)
+
+  const keyToLinkMap = await s3KeysToLinks(keys)
+  books.forEach((b) => {
+    if (b.thumbnail) {
+      b.thumbnail = keyToLinkMap.get(b.thumbnail)
+    }
+  })
+
+  return books
+}
+
+async function s3KeysToLinks(keys: string[]) {
+  const s3 = new AWS.S3()
+  const keyToLinkMap = new Map<string, string>()
+
+  const results = await Promise.allSettled(
+    keys.map((k) =>
+      s3
+        .getSignedUrlPromise('getObject', {
+          Bucket: process.env.STORAGE_S3LILYBOOKSHOPSTORAGE135156F8_BUCKETNAME,
+          Key: 'public/' + k,
+          Expire: 86400,
+        })
+        .then((link) => ({ link, key: k }))
+    )
+  )
+
+  results.forEach((r) => {
+    if (r.status === 'fulfilled') {
+      keyToLinkMap.set(r.value.key, r.value.link)
+    }
+  })
+
+  return keyToLinkMap
 }
