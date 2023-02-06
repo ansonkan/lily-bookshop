@@ -18,6 +18,11 @@ export default async function handler(
 
   const aboutMap = await crawlAboutTheAuthor(links)
 
+  res.setHeader(
+    'Cache-Control',
+    `public, immutable, no-transform, s-maxage=31536000, max-age=31536000`
+  )
+
   return res.status(200).json({ aboutMap })
 }
 

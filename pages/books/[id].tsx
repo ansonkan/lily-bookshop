@@ -64,7 +64,10 @@ export const getServerSideProps: GetServerSideProps<
 
   const SSR = withSSRContext({ req })
 
-  const { book } = await SSR.API.get('apicore', `/books/${params.id}`)
+  const { book } = await SSR.API.get(
+    'apicore',
+    `/books/${params.id}?&useThumbnailLink=1`
+  )
 
   if (!book) {
     return { notFound: true }
