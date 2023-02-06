@@ -1,1 +1,1 @@
-export * from './CMS'
+export * from './books'

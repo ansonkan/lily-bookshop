@@ -8,38 +8,42 @@ import {
 
 export interface BaseLayoutProps {
   slotTop?: React.ReactNode
+  hideTopSlot?: boolean
   children: React.ReactNode
   defaultValue?: BookSearchFormProps['defaultValue']
 }
 
 export const BaseLayout = ({
   slotTop,
+  hideTopSlot,
   children,
   defaultValue,
 }: BaseLayoutProps): JSX.Element => (
   <Box>
-    {/* the `bgColor` is the same from `BaseLayoutScene` to workaround the blank bg before the `appear` animation */}
-    <Box position="relative" h={[150, 200]} bgColor="#fbf8cc">
-      <BaseLayoutScene />
-      {slotTop ?? (
-        <BookSearchForm
-          position="absolute"
-          bottom={0}
-          left="50%"
-          w="50%"
-          transform="translate(-50%, 50%)"
-          maxW={600}
-          minW={300}
-          rounded="3xl"
-          boxShadow="md"
-          bgColor="white"
-          zIndex="dropdown"
-          px={2}
-          py={1}
-          defaultValue={defaultValue}
-        />
-      )}
-    </Box>
+    {!hideTopSlot && (
+      // the `bgColor` is the same from `BaseLayoutScene` to workaround the blank bg before the `appear` animation
+      <Box position="relative" h={[150, 200]} bgColor="#fbf8cc">
+        <BaseLayoutScene />
+        {slotTop ?? (
+          <BookSearchForm
+            position="absolute"
+            bottom={0}
+            left="50%"
+            w="50%"
+            transform="translate(-50%, 50%)"
+            maxW={600}
+            minW={300}
+            rounded="3xl"
+            boxShadow="md"
+            bgColor="white"
+            zIndex="dropdown"
+            px={2}
+            py={1}
+            defaultValue={defaultValue}
+          />
+        )}
+      </Box>
+    )}
 
     <Container
       as="main"
@@ -54,7 +58,11 @@ export const BaseLayout = ({
        * 10: icon's height
        * 1: `py`
        */
-      pt="calc(var(--chakra-space-4) + (var(--chakra-sizes-10) / 2) + var(--chakra-sizes-1))"
+      pt={
+        hideTopSlot
+          ? '14'
+          : 'calc(var(--chakra-space-4) + (var(--chakra-sizes-10) / 2) + var(--chakra-sizes-1))'
+      }
     >
       {children}
     </Container>

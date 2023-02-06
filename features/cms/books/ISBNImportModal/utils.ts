@@ -1,10 +1,10 @@
 import type { GoogleBook } from './types'
-import type { NewBook } from '../BooksCreateModal/types'
+import type { NewBook } from '../BookCreateForm/types'
 
 import { LANG_CODES } from '@lily-bookshop/schemas'
 import mime from 'mime-types'
 
-import { INITIAL_BOOK } from '../BooksCreateModal/constants'
+import { INITIAL_BOOK } from '../BookCreateForm/constants'
 
 export const googleBookToNewBook = async (
   googleBooks: GoogleBook[]

@@ -2,28 +2,33 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## todo
 
-- components are too small for Lily I think, especially she uses her mobile phone only, let's just use the default `size` of chakra components, removing all of the smaller `size`
+- [x] components are too small for Lily I think, especially she uses her mobile phone only, let's just use the default `size` of chakra components, removing all of the smaller `size`
 - split the `cms` page into small pages, like:
 
-  - `/cms`, where you login, after logged in is where you see what you can manage
-    - `/cms/books` - book table + same thing + a button to go to /`cms/books/categories`
-      - `/cms/books/create` - just 1 at a time to keep it simple
-      - `/cms/books/search-from-google-book` - just 1 at a time
-      - `/cms/books/[id]`
-      - `/cms/books/[id]/edit`
-      - `/cms/books/categories` - table + all the action like the current books page because this should only have 2 fields to input for each category - each categories record must have: - chinese label (for display) - english label (for display) - code (auto derived from english label)
-    - `/cms/my-account` - same thing, all the change password, username, ... just keep it for later
-    - `/cms/articles`
+  - [ ] `/cms`, where you login, after logged in is where you see what you can manage
+    - [ ] `/cms/books` - book table + same thing + a button to go to /`cms/books/categories`
+      - [x] `/cms/books/add` - just 1 at a time to keep it simple
+      - [ ] `/cms/books/search-from-google-book` - just 1 at a time
+      - `/cms/books/featured-section` -
+      - [x] `/cms/books/[id]`
+      - [x] `/cms/books/[id]/edit`
+      - [ ] `/cms/books/categories` - table + all the action like the current books page because this should only have 2 fields to input for each category - each categories record must have: - chinese label (for display) - english label (for display) - code (auto derived from english label)
+    - [x] `/cms/my-account` - same thing, all the change password, username, ... just keep it for later
+    - [ ] `/cms/articles`
       - ... just keep it for later
 
-- `Pagination` just use number
-- wrap the form fields in grid
-- `status` -> only `draft` and `published`
-- change default locale to Chinese since Lily is not good at English
+- [x] `Pagination` just use number
+- [x] wrap the form fields in grid
+- [x] `status` -> only `draft` and `published`
+- [x] change default locale to Chinese since Lily is not good at English
 - add translation, keep translation validation error for now because it seems to time consuming
 - `FileInput`:
+
   - show max file size in the helper test
   - show the remaining file slot in the main area
+  - it seems still broken in some cases when adding and editing, maybe about form validation?
+
+- [x] all table to sort by `updated_at` by default in FE
 
 ## Getting Started
 

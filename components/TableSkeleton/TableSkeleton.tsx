@@ -11,7 +11,7 @@ export interface TableSkeletonProps {
 
 // '41px' is a hardcoded value which is the `ButtonGroup` height
 export const TableSkeleton = memo(
-  ({ row, col, rowHeight = '41px' }: TableSkeletonProps): JSX.Element => {
+  ({ row, col, rowHeight = '72.5px' }: TableSkeletonProps): JSX.Element => {
     return (
       <>
         {Array(row)

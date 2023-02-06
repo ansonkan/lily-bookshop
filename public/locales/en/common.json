@@ -35,8 +35,7 @@
   },
   "breadcrumb": {
     "home": "Home",
-    "books": "Books",
-    "cms": "Content Management System"
+    "books": "Books"
   },
   "book-detailed-page": {
     "description": "Description",

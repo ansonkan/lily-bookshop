@@ -13,9 +13,7 @@ export const Section = ({ heading, children }: SectionProps): JSX.Element => {
       <Heading size="md">{heading}</Heading>
 
       {children.split('\n').map((paragraph, i) => (
-        <Text fontSize="small" key={i}>
-          {paragraph}
-        </Text>
+        <Text key={i}>{paragraph}</Text>
       ))}
     </VStack>
   )

@@ -1,7 +1,7 @@
 import type { ModalProps } from '@chakra-ui/react'
 
 import type { GoogleBook, ISBNImportFormik } from './types'
-import type { NewBook } from '../BooksCreateModal/types'
+import type { NewBook } from '../BookCreateForm/types'
 
 import {
   Alert,
@@ -96,7 +96,7 @@ export const ISBNImportModal = memo(
             initialValues={INITIAL_VALUES}
             validationSchema={ISBNImportSchema}
             // otherwise, when the list grows large, typing in a field will become very laggy
-            validateOnChange={false}
+
             onSubmit={async (values, { setSubmitting }) => {
               // Because of `stripUnknown` and also cast numeric strings back to number.
               const cleaned = ISBNImportSchema.cast(values, {

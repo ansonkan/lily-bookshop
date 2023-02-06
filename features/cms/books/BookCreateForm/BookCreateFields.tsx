@@ -6,13 +6,17 @@ import { SimpleField } from 'components'
 export interface BookCreateFieldsProps {
   parentFieldName?: string
   index?: number
-  extra?: React.ReactNode
+  top?: React.ReactNode
+  bottom?: React.ReactNode
 }
+
+const COL_SPAN = [2, 1]
 
 export const BookCreateFields = ({
   index,
   parentFieldName,
-  extra,
+  top,
+  bottom,
 }: BookCreateFieldsProps) => {
   const namePrefix =
     typeof index === 'number' && parentFieldName
@@ -21,7 +25,9 @@ export const BookCreateFields = ({
 
   return (
     <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-      <GridItem colSpan={[2, 1]}>
+      {top}
+
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Status"
           name={`${namePrefix}status`}
@@ -30,7 +36,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Quantity"
           name={`${namePrefix}quantity`}
@@ -41,7 +47,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Currency"
           name={`${namePrefix}currency`}
@@ -50,7 +56,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Price"
           name={`${namePrefix}price`}
@@ -60,7 +66,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Title"
           name={`${namePrefix}title`}
@@ -69,7 +75,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Subtitle"
           name={`${namePrefix}subtitle`}
@@ -114,7 +120,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Categories"
           name={`${namePrefix}categories`}
@@ -128,7 +134,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Language"
           name={`${namePrefix}language`}
@@ -137,7 +143,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Highlight order"
           name={`${namePrefix}highlight_order`}
@@ -146,7 +152,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Date restocked"
           name={`${namePrefix}date_restocked`}
@@ -154,7 +160,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Publisher"
           name={`${namePrefix}publisher`}
@@ -162,7 +168,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Published date"
           name={`${namePrefix}published_date`}
@@ -170,7 +176,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="ISBN 13"
           name={`${namePrefix}ISBN_13`}
@@ -178,7 +184,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="ISBN 10"
           name={`${namePrefix}ISBN_10`}
@@ -186,7 +192,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Storage location"
           name={`${namePrefix}storage_location`}
@@ -194,7 +200,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={[2, 1]}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
           label="Page count"
           name={`${namePrefix}page_count`}
@@ -212,7 +218,7 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      {extra}
+      {bottom}
     </Grid>
   )
 }

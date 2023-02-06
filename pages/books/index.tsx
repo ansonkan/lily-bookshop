@@ -97,7 +97,7 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
   }
 
   const [translations, searchResult] = await Promise.all([
-    serverSideTranslations(locale ?? 'en', ['common']),
+    serverSideTranslations(locale ?? 'zh-HK', ['common']),
     SSR.API.get(
       'apicore',
       `/books?q=${q}&limit=${LIMIT}&page=${page}&useThumbnailLink=1`

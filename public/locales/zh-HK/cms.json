@@ -1,0 +1,65 @@
+{
+  "cms": {
+    "manage-books": "管理 圖書",
+    "manage-articles": "管理 博客文章",
+    "manage-my-account": "管理 我的帳戶",
+    "sign-out": "登出"
+  },
+  "breadcrumb": {
+    "home": "主頁",
+    "books": "圖書",
+    "cms": "內容管理系統",
+    "manage-books": "管理 圖書",
+    "manage-articles": "管理 博客文章",
+    "manage-my-account": "管理 我的帳戶",
+    "add-book": "新增 圖書",
+    "edit-book": "編輯 圖書"
+  },
+  "book-search-form": {
+    "placeholder": "書名、作者、ISBN 或咩都可以",
+    "search-button": "搜尋"
+  },
+  "books": {
+    "other-actions": {
+      "add": "新增",
+      "search-from-google-book": "搜尋 Google圖書",
+      "manage-categories": "管理 類別",
+      "manage-featured": "管理 '精選'",
+      "manage-latest-additions": "管理 '最新'"
+    },
+    "book-table": {
+      "reload": "重載",
+      "columns": {
+        "isbn-10": "ISBN 10",
+        "isbn-13": "ISBN 13",
+        "title": "書名",
+        "authors": "作者",
+        "updated-at": "更新於"
+      },
+      "actions": {
+        "details": "細節",
+        "edit": "編輯",
+        "delete": "刪除"
+      }
+    },
+    "delete-modal": {
+      "title": "你確定你要刪除 ",
+      "no": "不",
+      "yes": "是",
+      "toast": {
+        "success": {
+          "title": "該書已被刪除"
+        },
+        "failed": {
+          "title": "刪除圖書失敗"
+        }
+      }
+    }
+  },
+  "my-account": {
+    "id": "ID",
+    "username": "用戶名",
+    "email": "電子郵件",
+    "email-verified": "電子郵件已驗證"
+  }
+}

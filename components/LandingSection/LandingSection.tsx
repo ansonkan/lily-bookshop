@@ -51,7 +51,9 @@ export const LandingSection = (props: CenterProps): JSX.Element => {
           <Button as={Link} href="#about">
             {t('landing-section.visit-us-button')}
           </Button>
-          <Button>{t('landing-section.blog-button')}</Button>
+
+          {/* WIP */}
+          {/* <Button>{t('landing-section.blog-button')}</Button> */}
         </ButtonGroup>
       </Flex>
     </Center>

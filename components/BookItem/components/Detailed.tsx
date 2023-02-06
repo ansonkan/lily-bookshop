@@ -36,40 +36,28 @@ export const Detailed = ({
       as="article"
       display="flex"
       flexDir="row"
-      gap={[2, 4]}
+      gap={4}
       {...linkBoxProps}
     >
       <Box w={[125, 130]}>
         <Thumbnail src={thumbnail ?? undefined} bookTitle={title} />
       </Box>
 
-      <Box
-        w="full"
-        flexGrow={1}
-        display="flex"
-        flexDirection="column"
-        gap={[2, 4]}
-      >
+      <Box w="full" flexGrow={1} display="flex" flexDirection="column" gap={4}>
         <Box>
           <LinkOverlay as={NextLink} href={detailsLink}>
             <Text as="b">{title}</Text>
 
-            {subtitle && (
-              <Text as="span" fontSize="small">
-                {' ' + subtitle}
-              </Text>
-            )}
+            {subtitle && <Text as="span">{' ' + subtitle}</Text>}
           </LinkOverlay>
 
-          {authors && <Text fontSize="small">{authors.join(', ')}</Text>}
+          {authors && <Text>{authors.join(', ')}</Text>}
         </Box>
 
         {shortDescription && (
           <VStack alignItems="flex-start">
             {shortDescription.split('\n').map((paragraph, i) => (
-              <Text fontSize="small" key={i}>
-                {paragraph}
-              </Text>
+              <Text key={i}>{paragraph}</Text>
             ))}
           </VStack>
         )}

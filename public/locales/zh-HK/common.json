@@ -11,7 +11,7 @@
     "heading": "搵緊下一本書？",
     "search-button": "書名、作者、ISBN 或咩都可以",
     "visit-us-button": "親自拜訪",
-    "blog-button": "睇我哋個Blog"
+    "blog-button": "博客"
   },
   "highlight-section": {
     "heading": "精選"
@@ -35,8 +35,7 @@
   },
   "breadcrumb": {
     "home": "主頁",
-    "books": "圖書",
-    "cms": "內容管理系統"
+    "books": "圖書"
   },
   "book-detailed-page": {
     "description": "概要",

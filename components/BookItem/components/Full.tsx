@@ -17,23 +17,18 @@ export const Full = ({
     title,
     subtitle,
     authors,
-    // aboutTheAuthor,
     about_the_authors,
     publisher,
-    // publishedDate,
     published_date,
     description,
     ISBN_13,
     ISBN_10,
-    // pageCount,
     page_count,
     categories,
     thumbnail,
     language,
-    // storageLocation,
     storage_location,
     quantity,
-    // highlightOrder,
     highlight_order,
   },
   priceLabel,
@@ -45,45 +40,46 @@ export const Full = ({
   const { t } = useTranslation('common')
 
   return (
-    <Box as="article" display="flex" flexDir="row" gap={4} {...boxProps}>
+    <Box
+      as="article"
+      display="flex"
+      flexDir="row"
+      gap={4}
+      w="full"
+      {...boxProps}
+    >
       <Box w={[125, 150, 170]}>
         <Thumbnail src={thumbnail ?? undefined} bookTitle={title} />
       </Box>
 
-      <Box
-        w="full"
-        flexGrow={1}
-        display="flex"
-        flexDirection="column"
-        gap={[2, 4]}
-      >
+      <Box w="full" flexGrow={1} display="flex" flexDirection="column" gap={8}>
         <Box>
           <Heading as="h1">{title}</Heading>
 
           {subtitle && <Text>{subtitle}</Text>}
 
           {authors && <Text>{authors.join(', ')}</Text>}
-        </Box>
 
-        <Flex wrap="wrap" gap={1}>
-          {typeof highlight_order === 'number' && (
-            // probably better to look into how to theme this and the scenes probably https://chakra-ui.com/docs/styled-system/theme
-            <Badge color="9A5B5F" bgColor="var(--highlight-theme)">
-              {t('book-detailed-page.highlight-badge')}
-            </Badge>
-          )}
+          <Flex wrap="wrap" gap={2} mt={2}>
+            {typeof highlight_order === 'number' && (
+              // probably better to look into how to theme this and the scenes probably https://chakra-ui.com/docs/styled-system/theme
+              <Badge color="9A5B5F" bgColor="var(--highlight-theme)">
+                {t('book-detailed-page.highlight-badge')}
+              </Badge>
+            )}
 
-          {language && <Badge>{t(`language.${language}`)}</Badge>}
+            {language && <Badge>{t(`language.${language}`)}</Badge>}
 
-          {categories?.map((c) => (
-            <Badge key={c}>{c}</Badge>
-          ))}
+            {categories?.map((c) => (
+              <Badge key={c}>{c}</Badge>
+            ))}
 
-          {/* for reference */}
-          {/* <Badge as={NextLink} href="/">
+            {/* for reference */}
+            {/* <Badge as={NextLink} href="/">
               {t('book-detailed-page.highlight-badge')}
             </Badge> */}
-        </Flex>
+          </Flex>
+        </Box>
 
         <SimpleGrid columns={[1, 1, 2, 3]} gap={2}>
           {[

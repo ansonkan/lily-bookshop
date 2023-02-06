@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { forwardRef, memo, useImperativeHandle, useRef, useState } from 'react'
 import { captureException } from '@sentry/nextjs'
+import { useTranslation } from 'next-i18next'
 
 import { deleteBook } from './queries'
 
@@ -22,85 +23,96 @@ export interface BookDeleteModalRef {
   askToDelete: (book: BookFE) => void
 }
 
+export interface BookDeleteModal {
+  onDeleteComplete?: (book: BookFE) => void
+}
+
 export const BookDeleteModal = memo(
-  forwardRef<BookDeleteModalRef>((props, ref): JSX.Element => {
-    const cancelButtonRef = useRef<HTMLButtonElement>(null)
-    const disclosure = useDisclosure()
-    const [target, setTarget] = useState<BookFE | undefined>()
-    const [isLoading, setIsLoading] = useState(false)
-    const toast = useToast()
+  forwardRef<BookDeleteModalRef, BookDeleteModal>(
+    ({ onDeleteComplete }, ref): JSX.Element => {
+      const { t } = useTranslation('cms')
 
-    useImperativeHandle(
-      ref,
-      () => ({
-        askToDelete(book: BookFE) {
-          setTarget(book)
-          disclosure.onOpen()
-        },
-      }),
-      [disclosure]
-    )
+      const cancelButtonRef = useRef<HTMLButtonElement>(null)
+      const disclosure = useDisclosure()
+      const [target, setTarget] = useState<BookFE | undefined>()
+      const [isLoading, setIsLoading] = useState(false)
+      const toast = useToast()
 
-    const onConfirm = async () => {
-      if (!target) return
+      useImperativeHandle(
+        ref,
+        () => ({
+          askToDelete(book: BookFE) {
+            setTarget(book)
+            disclosure.onOpen()
+          },
+        }),
+        [disclosure]
+      )
 
-      setIsLoading(true)
-      try {
-        await deleteBook(target)
-        toast({
-          title: 'The book has been deleted',
-          status: 'success',
-        })
-        disclosure.onClose()
-      } catch (err) {
-        captureException(err)
-        toast({
-          title: 'Failed to delete the book',
-          description: 'Something went wrong. Please try again later.',
-          status: 'error',
-        })
-      } finally {
-        setIsLoading(false)
+      const onConfirm = async () => {
+        if (!target) return
+
+        setIsLoading(true)
+        try {
+          await deleteBook(target)
+          toast({
+            title: t('books.delete-modal.toast.success.title'),
+            status: 'success',
+          })
+          disclosure.onClose()
+
+          onDeleteComplete?.(target)
+        } catch (err) {
+          captureException(err)
+          toast({
+            title: t('books.delete-modal.toast.failed.title'),
+            status: 'error',
+          })
+        } finally {
+          setIsLoading(false)
+        }
       }
+
+      return (
+        <AlertDialog
+          motionPreset="slideInBottom"
+          isCentered
+          leastDestructiveRef={cancelButtonRef}
+          {...disclosure}
+        >
+          <AlertDialogOverlay />
+
+          <AlertDialogContent>
+            <AlertDialogHeader>Delete?</AlertDialogHeader>
+            <AlertDialogCloseButton />
+            <AlertDialogBody>
+              {t('books.delete-modal.title')}
+              <Text as="b">
+                {[target?.title, target?.subtitle]
+                  .filter((t) => !!t)
+                  .join(' - ')}
+              </Text>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button ref={cancelButtonRef} onClick={disclosure.onClose}>
+                {t('books.delete-modal.no')}
+              </Button>
+
+              <Button
+                colorScheme="red"
+                ml={3}
+                onClick={onConfirm}
+                isLoading={isLoading}
+                disabled={!target}
+              >
+                {t('books.delete-modal.yes')}
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )
     }
-
-    return (
-      <AlertDialog
-        motionPreset="slideInBottom"
-        isCentered
-        leastDestructiveRef={cancelButtonRef}
-        {...disclosure}
-      >
-        <AlertDialogOverlay />
-
-        <AlertDialogContent>
-          <AlertDialogHeader>Delete?</AlertDialogHeader>
-          <AlertDialogCloseButton />
-          <AlertDialogBody>
-            Are you sure you want to delete{' '}
-            <Text as="b">
-              {[target?.title, target?.subtitle].filter((t) => !!t).join(' - ')}
-            </Text>
-          </AlertDialogBody>
-          <AlertDialogFooter>
-            <Button ref={cancelButtonRef} onClick={disclosure.onClose}>
-              No
-            </Button>
-
-            <Button
-              colorScheme="red"
-              ml={3}
-              onClick={onConfirm}
-              isLoading={isLoading}
-              disabled={!target}
-            >
-              Yes
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    )
-  })
+  )
 )
 
 BookDeleteModal.displayName = 'BookDeleteModal'

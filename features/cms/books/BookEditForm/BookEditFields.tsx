@@ -2,12 +2,12 @@ import { GridItem } from '@chakra-ui/react'
 
 import { SimpleField } from 'components'
 
-import { BookCreateFields } from '../BooksCreateModal'
+import { BookCreateFields } from '../BookCreateForm'
 
 export const BookEditFields = (): JSX.Element => {
   return (
     <BookCreateFields
-      extra={
+      top={
         <>
           <GridItem>
             <SimpleField label="User created" name="user_created" isDisabled />

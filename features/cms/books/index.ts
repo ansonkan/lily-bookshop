@@ -1,3 +1,4 @@
-export * from './BooksCreateModal/BooksCreateModal'
+export * from './BookCreateForm'
+export * from './BookEditForm'
 export * from './BooksTable'
-export * from './BooksTabPanel'
+export * from './BookDeleteModal'

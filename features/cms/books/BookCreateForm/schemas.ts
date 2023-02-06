@@ -29,7 +29,3 @@ export const NewBookSchema = BookDocumentSchema.omit([
     // }),
   })
 )
-
-export const BooksCreateFormikSchema = object({
-  books: array().required().min(1).of(NewBookSchema),
-})

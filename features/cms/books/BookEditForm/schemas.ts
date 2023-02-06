@@ -2,7 +2,7 @@ import type { FileInputProps } from 'components'
 
 import { array, mixed, object, string } from 'yup'
 
-import { NewBookSchema } from '../BooksCreateModal/schemas'
+import { NewBookSchema } from '../BookCreateForm/schemas'
 
 export const EditedBookSchema = NewBookSchema.omit(['thumbnail']).concat(
   object({

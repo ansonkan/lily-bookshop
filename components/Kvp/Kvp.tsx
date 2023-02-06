@@ -2,17 +2,17 @@ import type { IconProps } from '@chakra-ui/icons'
 import type { TypographyProps } from '@chakra-ui/react'
 
 import { Badge, Flex, Text } from '@chakra-ui/react'
-import { MinusIcon } from '@chakra-ui/icons'
+import { CheckCircleIcon, CloseIcon, MinusIcon } from '@chakra-ui/icons'
 
 export interface KvpProps {
   k: string
-  children?: string | number | string[] | number[]
+  children?: string | number | string[] | number[] | boolean
   useBadge?: boolean
   fontSize?: TypographyProps['fontSize']
 }
 
 interface VHelperProps {
-  children: string | number
+  children: string | number | boolean
   useBadge?: boolean
   fontSize?: TypographyProps['fontSize']
 }
@@ -20,7 +20,7 @@ interface VHelperProps {
 const VHelper = ({
   children,
   useBadge,
-  fontSize = ['xs', 'sm'],
+  fontSize = 'md',
 }: VHelperProps): JSX.Element => {
   const Component = useBadge ? Badge : Text
   return (
@@ -33,7 +33,15 @@ const VHelper = ({
       maxW={400}
       title={children ? `${children}` : undefined}
     >
-      {children}
+      {typeof children === 'boolean' ? (
+        children ? (
+          <CheckCircleIcon color="green" />
+        ) : (
+          <CloseIcon color="red" />
+        )
+      ) : (
+        children
+      )}
     </Component>
   )
 }
@@ -69,7 +77,7 @@ export const V = ({
 export const Kvp = ({ k, children, useBadge }: KvpProps): JSX.Element => {
   return (
     <Flex direction="column">
-      <Text fontSize="xs" color="gray" as="dt">
+      <Text fontSize="sm" color="gray" as="dt">
         {k}
       </Text>
 

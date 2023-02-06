@@ -1,9 +1,11 @@
 import {
   Box,
+  Button,
   Input,
   InputGroup,
   InputLeftElement,
   InputProps,
+  InputRightElement,
 } from '@chakra-ui/react'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { SearchIcon } from '@chakra-ui/icons'
@@ -11,10 +13,12 @@ import { SearchIcon } from '@chakra-ui/icons'
 export interface AutocompleteProps extends Omit<InputProps, 'onChange'> {
   options: string[]
   onChange?: (value: string) => void
+  onSearch?: () => void
+  searchButtonLabel: string
 }
 
 export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
-  ({ options, onChange, ...inputProps }, ref) => {
+  ({ options, onChange, onSearch, searchButtonLabel, ...inputProps }, ref) => {
     const rootRef = useRef<HTMLDivElement>(null)
 
     const [opened, setOpened] = useState(false)
@@ -43,6 +47,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
         <Input
           autoComplete="off"
+          pr="20"
           onKeyDown={(event) => {
             switch (event.key) {
               case 'ArrowUp':
@@ -61,6 +66,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
               case 'Enter':
                 if (typeof focusedIndex === 'number') {
                   onChange?.(options[focusedIndex])
+                  onSearch?.()
+                } else if (inputProps.value) {
+                  onSearch?.()
                 }
                 reset()
                 break
@@ -73,6 +81,19 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
           {...inputProps}
           ref={ref}
         />
+
+        <InputRightElement width="5rem">
+          <Button
+            onClick={() => {
+              onSearch?.()
+              reset()
+            }}
+            disabled={!inputProps.value}
+            size="sm"
+          >
+            {searchButtonLabel}
+          </Button>
+        </InputRightElement>
 
         {opened && options.length && (
           <Box
@@ -91,7 +112,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
           >
             {options.map((s, index) => (
               <Box
-                key={s}
+                key={s + index}
                 py="1.5"
                 px="3"
                 cursor="pointer"
@@ -100,6 +121,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 }
                 onClick={() => {
                   onChange?.(s)
+                  onSearch?.()
                   reset()
                 }}
                 background={focusedIndex === index ? 'gray.100' : undefined}

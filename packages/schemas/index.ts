@@ -2,8 +2,8 @@ import type { InferType } from 'yup'
 
 import { ValidationError, array, mixed, number, object, string } from 'yup'
 
-export const STATUSES = ['published', 'draft', 'archived'] as const
-export const LANG_CODES = ['en', 'zh', 'ja', 'ko', 'ru', 'de'] as const // ISO 639-1 code (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+export const STATUSES = ['published', 'draft'] as const
+export const LANG_CODES = ['en', 'zh', 'ja', 'ko', 'ru', 'de', 'fr'] as const // ISO 639-1 code (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
 export const CURRENCIES = ['HKD'] as const
 
 // TODO: might need to use `dayjs` to validate timestamps and date strings

@@ -98,8 +98,7 @@ function BookEditModalContent({ book, onClose }: BookEditModalContentProps) {
     <Formik<EditedBook>
       initialValues={book}
       validationSchema={EditedBookSchema}
-      // otherwise, when the list grows large, typing in a field will become very laggy
-      validateOnChange={false}
+      validateOnBlur={true}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           // Because of `stripUnknown` and also cast numeric strings back to number.

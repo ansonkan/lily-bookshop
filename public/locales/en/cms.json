@@ -1,0 +1,65 @@
+{
+  "cms": {
+    "manage-books": "Manage Books",
+    "manage-articles": "Manage Articles",
+    "manage-my-account": "Manage My Account",
+    "sign-out": "Sign out"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "books": "Books",
+    "cms": "Content Management System",
+    "manage-books": "Manage Books",
+    "manage-articles": "Manage Articles",
+    "manage-my-account": "Manage My Account",
+    "add-book": "Add Book",
+    "edit-book": "Edit Book"
+  },
+  "book-search-form": {
+    "placeholder": "A title, author, ISBN, or anything really...",
+    "search-button": "Search"
+  },
+  "books": {
+    "other-actions": {
+      "add": "Add",
+      "search-from-google-book": "Search Google Books",
+      "manage-categories": "Manage Categories",
+      "manage-featured": "Manage 'Featured'",
+      "manage-latest-additions": "Manage 'Latest Additions'"
+    },
+    "book-table": {
+      "reload": "Reload",
+      "columns": {
+        "isbn-10": "ISBN 10",
+        "isbn-13": "ISBN 13",
+        "title": "Title",
+        "authors": "Authors",
+        "updated-at": "Updated at"
+      },
+      "actions": {
+        "details": "Details",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    },
+    "delete-modal": {
+      "title": "Are you sure you want to delete ",
+      "no": "No",
+      "yes": "Yes",
+      "toast": {
+        "success": {
+          "title": "The book has been deleted"
+        },
+        "failed": {
+          "title": "Failed to delete the book"
+        }
+      }
+    }
+  },
+  "my-account": {
+    "id": "ID",
+    "username": "Username",
+    "email": "Email",
+    "email-verified": "Email Verified"
+  }
+}

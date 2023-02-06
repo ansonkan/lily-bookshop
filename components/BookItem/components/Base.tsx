@@ -19,23 +19,21 @@ export const Base = ({
     as="article"
     display="flex"
     flexDir="column"
-    gap={2}
+    gap={4}
     {...linkBoxProps}
   >
     <Thumbnail src={thumbnail ?? undefined} bookTitle={title} />
 
     <Box w="full" flexGrow={1} display="flex" flexDirection="column">
       <LinkOverlay as={NextLink} href={detailsLink}>
-        <Text as="b" fontSize="sm">
-          {title}
-        </Text>
+        <Text as="b">{title}</Text>
       </LinkOverlay>
 
-      {subtitle && <Text fontSize="xs">{subtitle}</Text>}
+      {subtitle && <Text fontSize="sm">{subtitle}</Text>}
 
-      {authors && <Text fontSize="xs">{authors.join(', ')}</Text>}
+      {authors && <Text fontSize="sm">{authors.join(', ')}</Text>}
 
-      <Text as="b" alignSelf="end" mt="auto" fontSize="sm">
+      <Text as="b" alignSelf="end" mt="auto">
         {priceLabel}
       </Text>
     </Box>
