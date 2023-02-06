@@ -12,7 +12,7 @@ export interface ArrowBreadcrumbProps {
 export const ArrowBreadcrumb = ({
   items,
 }: ArrowBreadcrumbProps): JSX.Element => (
-  <Breadcrumb separator={<ChevronRightIcon color="gray.500" />} fontSize="sm">
+  <Breadcrumb separator={<ChevronRightIcon color="gray.500" />}>
     {items.map(({ href, label }, i) => (
       <BreadcrumbItem
         key={`${href}-${label}`}

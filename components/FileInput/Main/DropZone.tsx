@@ -78,7 +78,7 @@ export const DropZone = ({
 
         <Text align="center">Drop the files here</Text>
 
-        <ButtonGroup size="sm">
+        <ButtonGroup>
           <Button
             onClick={() => {
               inputRef.current && inputRef.current.click()

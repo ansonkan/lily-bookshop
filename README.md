@@ -2,47 +2,28 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## todo
 
-- [ ] UI
-  - [x] Home page
-    - [x] Add a soft background to the landing scene to try to make it less bleak
-    - [x] Complete the search form in the landing scene
-    - [x] Complete the search form in the header. As search button that toggles the header between a search input and the header
-    - [x] Investigate the horizontal scrollbar in Windows. Might need to use [SimpleBar](https://github.com/Grsmto/simplebar/tree/master/packages/simplebar-react#1-documentation) or other workaround if it looks bad
-  - [x] Search result page
-    - [x] breadcrumbs
-    - [x] result section
-    - [x] pagination
-  - [x] Book details page
-    - [x] breadcrumbs
-    - [x] details section
-    - [x] related books section ([$search](https://www.mongodb.com/docs/atlas/atlas-search/tutorial/run-query/) + [$sample](https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/)?)
-  - [x] i18n
-    - [x] initial setup ([Internationalized Routing](https://nextjs.org/docs/advanced-features/i18n-routing) + [next-i18next](https://github.com/i18next/next-i18next))
-    - [x] verify the existing links are working with the i18n setup
-  - [ ] Blog post list page
-  - [ ] Blog post page
-  - [ ] Investigate on how to transition from next/image blur data URL to actual image
-- [ ] CMS
-  - [x] create a new Directus project
-  - [x] create a basic scripts to load Google books by on ISBN into Directus
-  - [x] setup a Directus webbook to sync book entries to MongoDB Atlas
-  - [x] create a script the read Array<{`ISBN` + images}> -> look up details through [Google Books search API](https://developers.google.com/books/docs/v1/using#PerformingSearch) -> import the details and images to Directus (-> import the same set of data to MongoDB Atlas if the webhook doesn't work for imports)
-- [ ] Integration
-  - [x] Home page
-    - [x] search
-    - [x] Highlights
-    - [x] Latest Additions
-  - [x] Book details page
-    - [x] details section
-    - [x] related books section
-  - [x] Search result page
-    - [x] result section
-- [x] Platform
-  - [x] Investigate `SSR` vs `SSG` + `ISR` because Netlify doesn't support caching on `SSR` pages (https://docs.netlify.com/integrations/frameworks/next-js/overview/#limitations) and AWS Amplify seems to support that and most of the Next.js 12 & 13 features (https://aws.amazon.com/about-aws/whats-new/2022/11/aws-amplify-hosting-support-next-js-12-13/)
-  - [ ] buy a domain
-  - [ ] deploy
-- [ ] Improve import scripts by saving intermediate results/data?
-- [ ] Import the real books from the Lily Bookshop
+- components are too small for Lily I think, especially she uses her mobile phone only, let's just use the default `size` of chakra components, removing all of the smaller `size`
+- split the `cms` page into small pages, like:
+
+  - `/cms`, where you login, after logged in is where you see what you can manage
+    - `/cms/books` - book table + same thing + a button to go to /`cms/books/categories`
+      - `/cms/books/create` - just 1 at a time to keep it simple
+      - `/cms/books/search-from-google-book` - just 1 at a time
+      - `/cms/books/[id]`
+      - `/cms/books/[id]/edit`
+      - `/cms/books/categories` - table + all the action like the current books page because this should only have 2 fields to input for each category - each categories record must have: - chinese label (for display) - english label (for display) - code (auto derived from english label)
+    - `/cms/my-account` - same thing, all the change password, username, ... just keep it for later
+    - `/cms/articles`
+      - ... just keep it for later
+
+- `Pagination` just use number
+- wrap the form fields in grid
+- `status` -> only `draft` and `published`
+- change default locale to Chinese since Lily is not good at English
+- add translation, keep translation validation error for now because it seems to time consuming
+- `FileInput`:
+  - show max file size in the helper test
+  - show the remaining file slot in the main area
 
 ## Getting Started
 

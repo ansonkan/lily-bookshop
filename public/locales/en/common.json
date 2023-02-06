@@ -38,10 +38,6 @@
     "books": "Books",
     "cms": "Content Management System"
   },
-  "pagination": {
-    "first": "First",
-    "last": "Last"
-  },
   "book-detailed-page": {
     "description": "Description",
     "related-books": {

@@ -35,7 +35,7 @@ export const SimpleTable = <T,>({
 }: SimpleTableProps<T>): JSX.Element => (
   <>
     <TableContainer {...others}>
-      <Table variant="simple" size="sm" position="relative">
+      <Table variant="simple" position="relative">
         <Thead>
           <Headers table={table} />
 
@@ -94,7 +94,7 @@ export const SimpleTable = <T,>({
             <Td w="full" border="none" p={0}>
               <Fade in={isValidating} unmountOnExit>
                 <Progress
-                  size="xs"
+                  
                   isIndeterminate
                   position="absolute"
                   w="full"

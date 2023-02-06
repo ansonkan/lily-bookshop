@@ -132,7 +132,7 @@ export const BooksTable = memo(
           {
             id: '_actions',
             cell: ({ row }) => (
-              <ButtonGroup size="xs" variant="ghost">
+              <ButtonGroup variant="ghost">
                 <IconButton
                   aria-label="Edit"
                   title="Edit"

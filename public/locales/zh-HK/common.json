@@ -38,10 +38,6 @@
     "books": "圖書",
     "cms": "內容管理系統"
   },
-  "pagination": {
-    "first": "第一頁",
-    "last": "最後一頁"
-  },
   "book-detailed-page": {
     "description": "概要",
     "related-books": {

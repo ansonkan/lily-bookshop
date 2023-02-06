@@ -12,12 +12,7 @@ export const LocaleSwitcher = (): JSX.Element => {
 
   return (
     <Menu>
-      <MenuButton
-        as={Button}
-        rightIcon={<ChevronDownIcon />}
-        size="sm"
-        variant="ghost"
-      >
+      <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="ghost">
         {t(`locale-switcher.${locale}`)}
       </MenuButton>
 

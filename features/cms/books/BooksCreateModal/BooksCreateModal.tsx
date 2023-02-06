@@ -153,7 +153,6 @@ export const BooksCreateModal = memo(
 
                               <Button
                                 mt={4}
-                                size="sm"
                                 leftIcon={<AddIcon />}
                                 variant="ghost"
                                 w="full"
@@ -173,7 +172,6 @@ export const BooksCreateModal = memo(
 
                   <ModalFooter>
                     <Button
-                      size="sm"
                       type="submit"
                       disabled={isSubmitting}
                       isLoading={isSubmitting}
@@ -225,7 +223,6 @@ function FieldBook({
             extra={
               <GridItem colSpan={2}>
                 <Button
-                  size="sm"
                   w="full"
                   variant="ghost"
                   leftIcon={<CloseIcon />}

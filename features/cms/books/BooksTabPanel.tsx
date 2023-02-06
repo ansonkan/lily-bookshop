@@ -73,7 +73,6 @@ export const BooksTabPanel = (): JSX.Element => {
           }}
         >
           <Autocomplete
-            size="sm"
             options={data?.options || []}
             value={value}
             placeholder={t('book-search-form.placeholder') ?? ''}
@@ -81,7 +80,7 @@ export const BooksTabPanel = (): JSX.Element => {
           />
         </Box>
 
-        <ButtonGroup isAttached size="sm">
+        <ButtonGroup isAttached>
           <Button
             leftIcon={<RepeatIcon />}
             onClick={() => tableRef.current?.reload()}

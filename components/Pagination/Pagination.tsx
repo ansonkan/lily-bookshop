@@ -69,13 +69,8 @@ export const Pagination = ({
       currentPage={page}
       disabled={disabled}
       onPageChange={onPageChange}
-      isLastPage
     />
   )
 
-  return (
-    <ButtonGroup {...others} size="sm">
-      {buttons}
-    </ButtonGroup>
-  )
+  return <ButtonGroup {...others}>{buttons}</ButtonGroup>
 }

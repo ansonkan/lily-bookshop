@@ -139,7 +139,6 @@ function BookEditModalContent({ book, onClose }: BookEditModalContentProps) {
 
             <ModalFooter>
               <Button
-                size="sm"
                 type="submit"
                 disabled={isSubmitting}
                 isLoading={isSubmitting}

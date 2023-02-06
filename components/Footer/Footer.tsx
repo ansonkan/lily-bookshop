@@ -22,7 +22,7 @@ export const Footer = (): JSX.Element => {
     <Box as="footer" bgColor="purple.800" color="white">
       <Container py={8}>
         <Image src={FullLogo} width={100} alt="lily Bookshop" />
-        <Heading size={['sm', 'md']} mb={8}>
+        <Heading size="md" mb={8}>
           {t('footer.heading')}
         </Heading>
 

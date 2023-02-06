@@ -72,7 +72,7 @@ export const Header = ({
       zIndex="sticky"
       transition="all 0.3s ease-in-out"
     >
-      <Container py={[2, 4]}>
+      <Container py={1}>
         <HStack justifyContent="space-between">
           <Link
             as={NextLink}
@@ -82,7 +82,7 @@ export const Header = ({
             alignItems="center"
           >
             <Image src={Logo} alt="Lily Bookshop logo" width={32} />
-            <Heading size={['sm', 'md']}>{t('header.heading')}</Heading>
+            <Heading size="md">{t('header.heading')}</Heading>
           </Link>
 
           <ButtonGroup>
@@ -90,14 +90,12 @@ export const Header = ({
               {['base', 'sm'].includes(bp) ? (
                 <IconButton
                   aria-label="Search"
-                  size="sm"
                   variant="ghost"
                   onClick={() => onOpen()}
                   icon={<SearchIcon />}
                 />
               ) : (
                 <Button
-                  size="sm"
                   variant="ghost"
                   onClick={() => onOpen()}
                   leftIcon={<SearchIcon />}

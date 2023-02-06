@@ -143,7 +143,6 @@ function PreviewItem({ value, onDelete, loadFromMap }: PreviewItemProps) {
       </HStack>
 
       <IconButton
-        size="sm"
         aria-label={`Delete ${name}`}
         onClick={onDelete}
         icon={<CloseIcon />}

@@ -153,7 +153,6 @@ export const ISBNImportModal = memo(
                     <ModalFooter>
                       <ButtonGroup>
                         <Button
-                          size="sm"
                           type="submit"
                           disabled={_isLoading}
                           isLoading={_isLoading}
@@ -162,7 +161,6 @@ export const ISBNImportModal = memo(
                         </Button>
 
                         <Button
-                          size="sm"
                           disabled={
                             _isLoading || !googleBookResult?.matches.length
                           }

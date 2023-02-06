@@ -68,13 +68,12 @@ export const LinkImport = ({
         <HStack>
           <Input
             type="url"
-            size="sm"
             value={link}
             onChange={(event) => setLink(event.target.value)}
             disabled={isLoading}
           />
 
-          <ButtonGroup size="sm">
+          <ButtonGroup>
             <Button
               onClick={onImport}
               disabled={!canUploadMore || isLoading || !link}
