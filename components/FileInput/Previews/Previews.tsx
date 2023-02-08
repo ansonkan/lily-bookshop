@@ -11,7 +11,6 @@ import { getLastSplit } from 'utils'
 import placeholderImageSrc from 'public/placeholder-image.png'
 
 import { returnFileSize } from '../utils'
-import styles from './styles.module.scss'
 
 export interface PreviewsProps {
   files: FileValue[]
@@ -126,7 +125,7 @@ function PreviewItem({ value, onDelete, loadFromMap }: PreviewItemProps) {
     <HStack wrap="nowrap" justifyContent="space-between">
       <HStack>
         <Center position="relative" w={50} h={50} overflow="hidden">
-          {src && <Image src={src} alt={name} fill className={styles.image} />}
+          {src && <Image src={src} alt={name} fill className="image-contain" />}
         </Center>
 
         {name && (

@@ -37,3 +37,11 @@
   opacity: 1;
   transition: opacity 0.2s ease;
 }
+
+.image-contain {
+  object-fit: contain;
+}
+
+.image-cover {
+  object-fit: cover;
+}

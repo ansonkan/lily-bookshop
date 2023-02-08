@@ -53,7 +53,7 @@ export async function createBook(b: NewBook) {
   const postProcessFile = (f?: FileValue) => {
     if (!f) return
     if (f.type === 's3-object') return f.key
-    if (f.type === 'newly-uploaded-file') return objectKeyMap.get(f.type)
+    if (f.type === 'newly-uploaded-file') return objectKeyMap.get(f.file)
   }
 
   const newBook: BookCreateQueryInput = {

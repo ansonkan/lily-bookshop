@@ -24,7 +24,7 @@ export async function GET(
     sortOnlyExist,
     autocomplete,
     // try to converts object id to link directly here, rather than request object link in the FE with `useEffect`, see if this solve the cache MISS issue
-    useThumbnailLink,
+    useObjectLink,
   } = event.queryStringParameters || {}
 
   if (id) {
@@ -39,9 +39,7 @@ export async function GET(
 
       return {
         body: JSON.stringify({
-          book: useThumbnailLink
-            ? (await populateS3Links([feBook]))[0]
-            : feBook,
+          book: useObjectLink ? (await populateS3Links([feBook]))[0] : feBook,
         }),
       }
     }
@@ -119,7 +117,7 @@ export async function GET(
 
   return {
     body: JSON.stringify({
-      books: useThumbnailLink ? await populateS3Links(feBooks) : feBooks,
+      books: useObjectLink ? await populateS3Links(feBooks) : feBooks,
       total: meta?.[0]?.count.total || 0,
       query: {
         q,
@@ -356,13 +354,17 @@ async function autocompleteTitle(
 }
 
 async function populateS3Links(books: BookDocument[]) {
-  const keys = books.map((b) => b.thumbnail).filter((t) => !!t)
+  const keys = books
+    .map((b) => [b.thumbnail, ...(b.other_photos || [])])
+    .flat()
+    .filter((t) => !!t)
 
   const keyToLinkMap = await s3KeysToLinks(keys)
   books.forEach((b) => {
-    if (b.thumbnail) {
-      b.thumbnail = keyToLinkMap.get(b.thumbnail)
-    }
+    b.thumbnail = keyToLinkMap.get(b.thumbnail)
+    b.other_photos = b.other_photos
+      ?.map((key) => keyToLinkMap.get(key))
+      .filter((k) => !!k)
   })
 
   return books

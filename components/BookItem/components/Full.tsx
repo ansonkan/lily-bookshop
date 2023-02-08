@@ -1,15 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { BookItemProps } from '../types'
 
-import {
-  Badge,
-  Box,
-  Flex,
-  Heading,
-  SimpleGrid,
-  Square,
-  Text,
-} from '@chakra-ui/react'
+import { Badge, Box, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 
@@ -124,16 +116,25 @@ export const Full = ({
           </Section>
         )}
 
-        {other_photos && (
+        {other_photos?.length && (
           <Section heading={t('book-detailed-page.other-photos')}>
-            <SimpleGrid>
+            <SimpleGrid w="full" gap={4} columns={[1, 2, 3]}>
               {other_photos.map((photo) => (
-                <Square key={photo}>
+                <Box
+                  key={photo}
+                  position="relative"
+                  h="80"
+                  w="full"
+                  rounded="3xl"
+                  overflow="hidden"
+                >
                   <Image
                     src={photo}
                     alt={`Other photos of ${title} ${subtitle || ''}`}
+                    fill
+                    className="image-cover"
                   />
-                </Square>
+                </Box>
               ))}
             </SimpleGrid>
           </Section>

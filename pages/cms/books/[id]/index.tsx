@@ -99,7 +99,7 @@ export const getServerSideProps: GetServerSideProps<
 
   const { book } = await SSR.API.get(
     'apicore',
-    `/books/${params.id}?useThumbnailLink=1`
+    `/books/${params.id}?useObjectLink=1`
   )
 
   if (!book) {
