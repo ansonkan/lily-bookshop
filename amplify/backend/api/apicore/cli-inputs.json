@@ -6,8 +6,31 @@
       "lambdaFunction": "books",
       "permissions": {
         "setting": "protected",
-        "auth": ["create", "read", "update", "delete"],
-        "guest": ["read"]
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ],
+        "guest": [
+          "read"
+        ]
+      }
+    },
+    "/book-categories": {
+      "name": "/book-categories",
+      "lambdaFunction": "bookCategories",
+      "permissions": {
+        "setting": "protected",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ],
+        "guest": [
+          "read"
+        ]
       }
     }
   }

@@ -74,3 +74,10 @@ export const BookDocumentSchema = object({
 })
 
 export type BookDocument = InferType<typeof BookDocumentSchema>
+
+export const BookCategoryDocumentSchema = object({
+  en: string().required().defined(),
+  zh_HK: string().required().defined(),
+})
+
+export type BookCategoryDocument = InferType<typeof BookCategoryDocumentSchema>

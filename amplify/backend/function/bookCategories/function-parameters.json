@@ -1,0 +1,12 @@
+{
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "sentryDsn",
+      "environmentVariableName": "SENTRY_DSN"
+    }
+  ],
+  "secretNames": [
+    "MONGODB_URL_READ_WRITE"
+  ]
+}
