@@ -2,17 +2,15 @@ import type { GetStaticProps, NextPage } from 'next'
 
 import type { NewBook } from 'features/cms/books/BookCreateForm'
 
-import '@aws-amplify/ui-react/styles.css'
 import { Heading } from '@chakra-ui/react'
 import JSONCrush from 'jsoncrush'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import { withAuthenticator } from '@aws-amplify/ui-react'
 
 import { ArrowBreadcrumb } from 'components'
-import { BaseLayout } from 'layouts'
 import { BookCreateForm } from 'features/cms/books/BookCreateForm'
+import { ProtectedLayout } from 'layouts'
 import { useMemo } from 'react'
 
 const CMSBookAddPage: NextPage = () => {
@@ -26,7 +24,7 @@ const CMSBookAddPage: NextPage = () => {
   )
 
   return (
-    <BaseLayout hideTopSlot>
+    <ProtectedLayout>
       <ArrowBreadcrumb
         items={[
           { label: t('breadcrumb.home'), href: '/' },
@@ -50,11 +48,11 @@ const CMSBookAddPage: NextPage = () => {
           insertedId && push({ pathname: `/cms/books/${insertedId}` })
         }}
       />
-    </BaseLayout>
+    </ProtectedLayout>
   )
 }
 
-export default withAuthenticator(CMSBookAddPage, { hideSignUp: true })
+export default CMSBookAddPage
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

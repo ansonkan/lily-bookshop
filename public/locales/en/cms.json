@@ -1,4 +1,9 @@
 {
+  "common": {
+    "cancel": "Cancel",
+    "reset": "Reset",
+    "submit": "Submit"
+  },
   "cms": {
     "manage-books": "Manage Books",
     "manage-articles": "Manage Articles",
@@ -54,12 +59,65 @@
           "title": "Failed to delete the book"
         }
       }
+    },
+    "add": {
+      "basic-information": "Basic Information",
+      "additional-information": "Additional Information",
+      "show-more": "Show Additional Information",
+      "hide-more": "Hide Additional Information",
+      "toast": {
+        "success": {
+          "title": "The book has been added"
+        },
+        "failed": {
+          "title": "Failed to add the book"
+        }
+      },
+      "fields": {
+        "status": "Status",
+        "quantity": "Quantity",
+        "currency": "Currency",
+        "price": "Price",
+        "title": "Title",
+        "subtitle": "Subtitle",
+        "description": "Description",
+        "authors": "Authors",
+        "categories": "Categories",
+        "language": "Language",
+        "thumbnail": "Thumbnail",
+        "storage_location": "Storage location",
+        "isbn_13": "ISBN 13",
+        "isbn_10": "ISBN 10",
+        "about_the_authors": "About the authors",
+        "highlight_order": {
+          "label": "'Highlight order",
+          "helper": "If this book needs to be put into the 'Featured' section, set a number here. Book with the lowest number placed first"
+        },
+        "date_restocked": "Date restocked",
+        "publisher": "Publisher",
+        "published_date": "Published date",
+        "page_count": "Page count",
+        "google_book_link": "Google book link"
+      }
+    },
+    "edit": {
+      "fields": {
+        "user_created": "Created by",
+        "date_created": "Created at",
+        "user_updated": "Updated by",
+        "date_updated": "Updated at"
+      }
     }
   },
   "my-account": {
     "id": "ID",
     "username": "Username",
     "email": "Email",
-    "email-verified": "Email Verified"
+    "email-verified": "Email Verified",
+    "change-password": {
+      "title": "Change Password",
+      "success": "Password is successfully changed",
+      "failed": "Failed to change password"
+    }
   }
 }

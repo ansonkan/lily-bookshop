@@ -1,15 +1,15 @@
 import type { GetStaticProps, NextPage } from 'next'
 
-import { Button, Heading, VStack } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useAuthenticator } from '@aws-amplify/ui-react'
 import { useTranslation } from 'next-i18next'
 
-import { ArrowBreadcrumb } from 'components'
+import { ArrowBreadcrumb, Kvp } from 'components'
 import { ProtectedLayout } from 'layouts'
 
-const CMSPage: NextPage = () => {
+const CMSMyAccountPage: NextPage = () => {
   const { t } = useTranslation('cms')
 
   return (
@@ -18,43 +18,45 @@ const CMSPage: NextPage = () => {
         items={[
           { label: t('breadcrumb.home'), href: '/' },
           { label: t('breadcrumb.cms'), href: '/cms' },
+          { label: t('breadcrumb.manage-my-account'), href: '/cms/my-account' },
         ]}
       />
 
-      <Heading>{t('breadcrumb.cms')}</Heading>
-
-      <MainMenu />
+      <MyAccount />
     </ProtectedLayout>
   )
 }
 
-function MainMenu() {
+function MyAccount() {
   const { t } = useTranslation('cms')
-  const { signOut } = useAuthenticator()
+  const { user, signOut } = useAuthenticator()
 
   return (
-    <VStack alignItems="stretch" gap={4}>
-      <Button as={NextLink} href="/cms/books" size="lg">
-        {t('cms.manage-books')}
+    <VStack alignItems="stretch">
+      <Kvp k={t('my-account.id')}>{user?.username}</Kvp>
+
+      <Kvp k={t('my-account.username')}>
+        {user?.attributes?.preferred_username}
+      </Kvp>
+
+      <Kvp k={t('my-account.email')}>{user?.attributes?.email}</Kvp>
+
+      <Kvp k={t('my-account.email-verified')}>
+        {user?.attributes?.email_verified}
+      </Kvp>
+
+      <Button as={NextLink} href="/cms/my-account/change-password">
+        {t('my-account.change-password.title')}
       </Button>
 
-      {/* WIP */}
-      <Button as={NextLink} href="/cms/articles" size="lg" disabled>
-        {t('cms.manage-articles')}
-      </Button>
-
-      <Button as={NextLink} href="/cms/my-account" size="lg">
-        {t('cms.manage-my-account')}
-      </Button>
-
-      <Button size="lg" variant="outline" onClick={signOut}>
+      <Button onClick={signOut} variant="outline">
         {t('cms.sign-out')}
       </Button>
     </VStack>
   )
 }
 
-export default CMSPage
+export default CMSMyAccountPage
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

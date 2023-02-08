@@ -2,17 +2,15 @@ import type { GetServerSideProps, NextPage } from 'next'
 
 import type { BookFE } from 'types'
 
-import '@aws-amplify/ui-react/styles.css'
 import { Heading } from '@chakra-ui/react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import { withAuthenticator } from '@aws-amplify/ui-react'
 import { withSSRContext } from 'aws-amplify'
 
 import { ArrowBreadcrumb } from 'components'
-import { BaseLayout } from 'layouts'
 import { BookEditForm } from 'features/cms/books/BookEditForm'
+import { ProtectedLayout } from 'layouts'
 
 interface CMSBookEditPageProps {
   book: BookFE
@@ -25,7 +23,7 @@ const CMSBookEditPage: NextPage<CMSBookEditPageProps> = ({
   const { t } = useTranslation('cms')
 
   return (
-    <BaseLayout hideTopSlot>
+    <ProtectedLayout>
       <ArrowBreadcrumb
         items={[
           { label: t('breadcrumb.home'), href: '/' },
@@ -39,7 +37,9 @@ const CMSBookEditPage: NextPage<CMSBookEditPageProps> = ({
         ]}
       />
 
-      <Heading>{t('breadcrumb.edit-book')}</Heading>
+      <Heading>
+        {t('books.book-table.actions.edit')} {`${book.title}`}
+      </Heading>
 
       <BookEditForm
         initialValues={{
@@ -61,11 +61,11 @@ const CMSBookEditPage: NextPage<CMSBookEditPageProps> = ({
           push({ pathname: `/cms/books/${query.id}` })
         }}
       />
-    </BaseLayout>
+    </ProtectedLayout>
   )
 }
 
-export default withAuthenticator(CMSBookEditPage, { hideSignUp: true })
+export default CMSBookEditPage
 
 export const getServerSideProps: GetServerSideProps<
   CMSBookEditPageProps,

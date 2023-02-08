@@ -5,7 +5,6 @@ import type { BookDeleteModalRef } from 'features/cms/books/BookDeleteModal'
 import type { BookFE } from 'types'
 import type { BooksTableRef } from 'features/cms/books/BooksTable'
 
-import '@aws-amplify/ui-react/styles.css'
 import {
   Box,
   Button,
@@ -22,12 +21,11 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { useTranslation } from 'next-i18next'
-import { withAuthenticator } from '@aws-amplify/ui-react'
 
 import { ArrowBreadcrumb, Autocomplete } from 'components'
-import { BaseLayout } from 'layouts'
 import { BookDeleteModal } from 'features/cms/books/BookDeleteModal'
 import { BooksTable } from 'features/cms/books/BooksTable'
+import { ProtectedLayout } from 'layouts'
 import { useDebounce } from 'hooks'
 
 const CMSBooksPage: NextPage = () => {
@@ -66,7 +64,7 @@ const CMSBooksPage: NextPage = () => {
   }, [])
 
   return (
-    <BaseLayout hideTopSlot>
+    <ProtectedLayout>
       <ArrowBreadcrumb
         items={[
           { label: t('breadcrumb.home'), href: '/' },
@@ -96,9 +94,10 @@ const CMSBooksPage: NextPage = () => {
             {t('books.other-actions.manage-featured')}
           </Button>
 
-          <Button as={NextLink} href="/cms/books/latest-additions-section">
+          {/* Note: just use `date_created` to sort out this section for now */}
+          {/* <Button as={NextLink} href="/cms/books/latest-additions-section">
             {t('books.other-actions.manage-latest-additions')}
-          </Button>
+          </Button> */}
         </SimpleGrid>
 
         {/* Books actions */}
@@ -139,11 +138,11 @@ const CMSBooksPage: NextPage = () => {
 
         <BookDeleteModal ref={deleteModalRef} />
       </VStack>
-    </BaseLayout>
+    </ProtectedLayout>
   )
 }
 
-export default withAuthenticator(CMSBooksPage, { hideSignUp: true })
+export default CMSBooksPage
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

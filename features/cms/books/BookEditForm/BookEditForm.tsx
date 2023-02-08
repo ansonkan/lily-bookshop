@@ -3,6 +3,7 @@ import type { EditedBook } from './types'
 import { Button, ButtonGroup, VStack, useToast } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 import { captureException } from '@sentry/nextjs'
+import { useTranslation } from 'next-i18next'
 
 import { BookEditFields } from './BookEditFields'
 import { EditedBookSchema } from './schemas'
@@ -21,6 +22,7 @@ export const BookEditForm = ({
   onSuccess,
   onFailed,
 }: BookEditFormProps): JSX.Element => {
+  const { t } = useTranslation('cms')
   const toast = useToast()
 
   return (
@@ -67,7 +69,7 @@ export const BookEditForm = ({
                   onClick={() => onCancel()}
                   variant="ghost"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
               )}
 
@@ -76,7 +78,7 @@ export const BookEditForm = ({
                 onClick={() => resetForm()}
                 variant="outline"
               >
-                Reset
+                {t('common.reset')}
               </Button>
 
               <Button
@@ -84,7 +86,7 @@ export const BookEditForm = ({
                 disabled={isSubmitting}
                 isLoading={isSubmitting}
               >
-                Submit
+                {t('common.submit')}
               </Button>
             </ButtonGroup>
           </VStack>

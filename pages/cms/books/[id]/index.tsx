@@ -3,7 +3,6 @@ import type { GetServerSideProps, NextPage } from 'next'
 import type { BookDeleteModalRef } from 'features/cms/books/BookDeleteModal'
 import type { BookFE } from 'types'
 
-import '@aws-amplify/ui-react/styles.css'
 import { Button, Flex, SimpleGrid, VStack } from '@chakra-ui/react'
 import { CloseIcon, EditIcon } from '@chakra-ui/icons'
 import { useCallback, useRef } from 'react'
@@ -11,12 +10,11 @@ import NextLink from 'next/link'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import { withAuthenticator } from '@aws-amplify/ui-react'
 import { withSSRContext } from 'aws-amplify'
 
 import { ArrowBreadcrumb, BookItem } from 'components'
-import { BaseLayout } from 'layouts'
 import { BookDeleteModal } from 'features/cms/books/BookDeleteModal'
+import { ProtectedLayout } from 'layouts'
 
 interface CMSBookDetailsPageProps {
   book: BookFE
@@ -39,7 +37,7 @@ const CMSBookDetailsPage: NextPage<CMSBookDetailsPageProps> = ({
   }, [push])
 
   return (
-    <BaseLayout hideTopSlot>
+    <ProtectedLayout>
       <ArrowBreadcrumb
         items={[
           { label: t('breadcrumb.home'), href: '/' },
@@ -83,11 +81,11 @@ const CMSBookDetailsPage: NextPage<CMSBookDetailsPageProps> = ({
           onDeleteComplete={onDeleteComplete}
         />
       </VStack>
-    </BaseLayout>
+    </ProtectedLayout>
   )
 }
 
-export default withAuthenticator(CMSBookDetailsPage, { hideSignUp: true })
+export default CMSBookDetailsPage
 
 export const getServerSideProps: GetServerSideProps<
   CMSBookDetailsPageProps,

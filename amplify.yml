@@ -1,24 +1,25 @@
 version: 1
 
-test:
-  phases:
-    preTest:
-      commands:
-        - node -v
-        - npm ci
-    test:
-      commands:
-        - npm run type-check
-        - npm run lint
-        - npx playwright install --with-deps
-        - npx playwright test
-  artifacts:
-    baseDirectory: playwright-report
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - node_modules/**/*
+# Note: `test` works fine but commenting this out to save build time, plus I'm running the same thing with `left-hook` already
+# test:
+#   phases:
+#     preTest:
+#       commands:
+#         - node -v
+#         - npm ci
+#     test:
+#       commands:
+#         - npm run type-check
+#         - npm run lint
+#         - npx playwright install --with-deps
+#         - npx playwright test
+#   artifacts:
+#     baseDirectory: playwright-report
+#     files:
+#       - '**/*'
+#   cache:
+#     paths:
+#       - node_modules/**/*
 backend:
   phases:
     build:

@@ -1,5 +1,7 @@
+import { Button, Grid, GridItem, Text } from '@chakra-ui/react'
 import { CURRENCIES, LANG_CODES, STATUSES } from '@lily-bookshop/schemas'
-import { Grid, GridItem } from '@chakra-ui/react'
+import { useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
 import { SimpleField } from 'components'
 
@@ -18,18 +20,27 @@ export const BookCreateFields = ({
   top,
   bottom,
 }: BookCreateFieldsProps) => {
+  const { t } = useTranslation('cms')
+  const [showMore, setShowMore] = useState(false)
+
   const namePrefix =
     typeof index === 'number' && parentFieldName
       ? `${parentFieldName}[${index}].`
       : ''
 
   return (
-    <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+    <Grid templateColumns="repeat(2, 1fr)" gap={4} w="full">
       {top}
+
+      <GridItem colSpan={2}>
+        <Text as="h3" fontSize="xl" fontWeight="bold">
+          {t('books.add.basic-information')}
+        </Text>
+      </GridItem>
 
       <GridItem colSpan={COL_SPAN}>
         <SimpleField
-          label="Status"
+          label={t('books.add.fields.status') ?? 'Status'}
           name={`${namePrefix}status`}
           options={STATUSES.map((s) => ({ value: s, label: s }))}
           isRequired
@@ -38,7 +49,7 @@ export const BookCreateFields = ({
 
       <GridItem colSpan={COL_SPAN}>
         <SimpleField
-          label="Quantity"
+          label={t('books.add.fields.quantity') ?? 'Quantity'}
           name={`${namePrefix}quantity`}
           type="number"
           min={0}
@@ -49,7 +60,7 @@ export const BookCreateFields = ({
 
       <GridItem colSpan={COL_SPAN}>
         <SimpleField
-          label="Currency"
+          label={t('books.add.fields.currency') ?? 'Currency'}
           name={`${namePrefix}currency`}
           options={CURRENCIES.map((c) => ({ value: c, label: c }))}
           isRequired
@@ -58,7 +69,7 @@ export const BookCreateFields = ({
 
       <GridItem colSpan={COL_SPAN}>
         <SimpleField
-          label="Price"
+          label={t('books.add.fields.price') ?? 'Price'}
           name={`${namePrefix}price`}
           type="number"
           min={0}
@@ -68,7 +79,7 @@ export const BookCreateFields = ({
 
       <GridItem colSpan={COL_SPAN}>
         <SimpleField
-          label="Title"
+          label={t('books.add.fields.title') ?? 'Title'}
           name={`${namePrefix}title`}
           type="text"
           isRequired
@@ -77,7 +88,7 @@ export const BookCreateFields = ({
 
       <GridItem colSpan={COL_SPAN}>
         <SimpleField
-          label="Subtitle"
+          label={t('books.add.fields.subtitle') ?? 'Subtitle'}
           name={`${namePrefix}subtitle`}
           type="text"
         />
@@ -85,7 +96,7 @@ export const BookCreateFields = ({
 
       <GridItem colSpan={2}>
         <SimpleField
-          label="Description"
+          label={t('books.add.fields.description') ?? 'Description'}
           name={`${namePrefix}description`}
           type="text"
           multiline
@@ -94,7 +105,7 @@ export const BookCreateFields = ({
 
       <GridItem colSpan={2}>
         <SimpleField
-          label="Authors"
+          label={t('books.add.fields.authors') ?? 'Authors'}
           name={`${namePrefix}authors`}
           type="text"
           multiline
@@ -103,26 +114,9 @@ export const BookCreateFields = ({
         />
       </GridItem>
 
-      <GridItem colSpan={2}>
-        <SimpleField
-          label="About the authors"
-          name={`${namePrefix}about_the_authors`}
-          type="text"
-          multiline
-        />
-      </GridItem>
-
-      <GridItem colSpan={2}>
-        <SimpleField
-          label="Thumbnail"
-          name={`${namePrefix}thumbnail`}
-          type="file"
-        />
-      </GridItem>
-
       <GridItem colSpan={COL_SPAN}>
         <SimpleField
-          label="Categories"
+          label={t('books.add.fields.categories') ?? 'Categories'}
           name={`${namePrefix}categories`}
           options={['fiction', 'si-fi', 'english', 'chinese'].map((c) => ({
             value: c,
@@ -136,65 +130,24 @@ export const BookCreateFields = ({
 
       <GridItem colSpan={COL_SPAN}>
         <SimpleField
-          label="Language"
+          label={t('books.add.fields.language') ?? 'Language'}
           name={`${namePrefix}language`}
           options={LANG_CODES.map((c) => ({ value: c, label: c }))}
           isRequired
         />
       </GridItem>
 
-      <GridItem colSpan={COL_SPAN}>
+      <GridItem colSpan={2}>
         <SimpleField
-          label="Highlight order"
-          name={`${namePrefix}highlight_order`}
-          type="number"
-          helperText="If this book needs to be put into the 'Featured' section, set a number here. Book with the lowest number placed first."
+          label={t('books.add.fields.thumbnail') ?? 'Thumbnail'}
+          name={`${namePrefix}thumbnail`}
+          type="file"
         />
       </GridItem>
 
-      <GridItem colSpan={COL_SPAN}>
+      <GridItem colSpan={2}>
         <SimpleField
-          label="Date restocked"
-          name={`${namePrefix}date_restocked`}
-          type="date"
-        />
-      </GridItem>
-
-      <GridItem colSpan={COL_SPAN}>
-        <SimpleField
-          label="Publisher"
-          name={`${namePrefix}publisher`}
-          type="text"
-        />
-      </GridItem>
-
-      <GridItem colSpan={COL_SPAN}>
-        <SimpleField
-          label="Published date"
-          name={`${namePrefix}published_date`}
-          type="text"
-        />
-      </GridItem>
-
-      <GridItem colSpan={COL_SPAN}>
-        <SimpleField
-          label="ISBN 13"
-          name={`${namePrefix}ISBN_13`}
-          type="text"
-        />
-      </GridItem>
-
-      <GridItem colSpan={COL_SPAN}>
-        <SimpleField
-          label="ISBN 10"
-          name={`${namePrefix}ISBN_10`}
-          type="text"
-        />
-      </GridItem>
-
-      <GridItem colSpan={COL_SPAN}>
-        <SimpleField
-          label="Storage location"
+          label={t('books.add.fields.storage_location') ?? 'Storage location'}
           name={`${namePrefix}storage_location`}
           type="text"
         />
@@ -202,20 +155,104 @@ export const BookCreateFields = ({
 
       <GridItem colSpan={COL_SPAN}>
         <SimpleField
-          label="Page count"
-          name={`${namePrefix}page_count`}
-          type="number"
-          min={0}
-          precision={0}
+          label={t('books.add.fields.isbn_13') ?? 'ISBN 13'}
+          name={`${namePrefix}ISBN_13`}
+          type="text"
         />
       </GridItem>
 
-      <GridItem colSpan={2}>
+      <GridItem colSpan={COL_SPAN}>
         <SimpleField
-          label="Google book link"
-          name={`${namePrefix}google_book_link`}
-          type="url"
+          label={t('books.add.fields.isbn_10') ?? 'ISBN 10'}
+          name={`${namePrefix}ISBN_10`}
+          type="text"
         />
+      </GridItem>
+
+      {showMore && (
+        <>
+          <GridItem colSpan={2}>
+            <Text as="h3" fontSize="xl" fontWeight="bold" mt={8}>
+              {t('books.add.additional-information')}
+            </Text>
+          </GridItem>
+
+          <GridItem colSpan={2}>
+            <SimpleField
+              label={
+                t('books.add.fields.about_the_authors') ?? 'About the authors'
+              }
+              name={`${namePrefix}about_the_authors`}
+              type="text"
+              multiline
+            />
+          </GridItem>
+
+          <GridItem colSpan={COL_SPAN}>
+            <SimpleField
+              label={
+                t('books.add.fields.highlight_order.label') ?? 'Highlight order'
+              }
+              name={`${namePrefix}highlight_order`}
+              type="number"
+              helperText={t('books.add.fields.highlight_order.helper') ?? ''}
+            />
+          </GridItem>
+
+          <GridItem colSpan={COL_SPAN}>
+            <SimpleField
+              label={t('books.add.fields.date_restocked') ?? 'Date restocked'}
+              name={`${namePrefix}date_restocked`}
+              type="date"
+            />
+          </GridItem>
+
+          <GridItem colSpan={COL_SPAN}>
+            <SimpleField
+              label={t('books.add.fields.publisher') ?? 'Publisher'}
+              name={`${namePrefix}publisher`}
+              type="text"
+            />
+          </GridItem>
+
+          <GridItem colSpan={COL_SPAN}>
+            <SimpleField
+              label={t('books.add.fields.published_date') ?? 'Published date'}
+              name={`${namePrefix}published_date`}
+              type="text"
+            />
+          </GridItem>
+
+          <GridItem colSpan={COL_SPAN}>
+            <SimpleField
+              label={t('books.add.fields.page_count') ?? 'Page count'}
+              name={`${namePrefix}page_count`}
+              type="number"
+              min={0}
+              precision={0}
+            />
+          </GridItem>
+
+          <GridItem colSpan={COL_SPAN}>
+            <SimpleField
+              label={
+                t('books.add.fields.google_book_link') ?? 'Google book link'
+              }
+              name={`${namePrefix}google_book_link`}
+              type="url"
+            />
+          </GridItem>
+        </>
+      )}
+
+      <GridItem colSpan={2}>
+        <Button
+          onClick={() => setShowMore((prev) => !prev)}
+          variant="outline"
+          w="full"
+        >
+          {t(showMore ? 'books.add.hide-more' : 'books.add.show-more')}
+        </Button>
       </GridItem>
 
       {bottom}

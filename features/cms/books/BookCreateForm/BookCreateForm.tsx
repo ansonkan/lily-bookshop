@@ -1,11 +1,9 @@
-import { ButtonGroup } from '@chakra-ui/react'
-
 import type { BookCreateQueryResult, NewBook } from './types'
 
-import { Button, useToast } from '@chakra-ui/react'
+import { Button, ButtonGroup, VStack, useToast } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 import { captureException } from '@sentry/nextjs'
-import { memo } from 'react'
+import { useTranslation } from 'next-i18next'
 
 import { BookCreateFields } from './BookCreateFields'
 import { INITIAL_BOOK } from './constants'
@@ -19,59 +17,60 @@ export interface BookCreateFormProps {
   onFailed?: (book: NewBook) => void
 }
 
-export const BookCreateForm = memo(
-  ({
-    initialValues,
-    onCancel,
-    onSuccess,
-    onFailed,
-  }: BookCreateFormProps): JSX.Element => {
-    const toast = useToast()
+export const BookCreateForm = ({
+  initialValues,
+  onCancel,
+  onSuccess,
+  onFailed,
+}: BookCreateFormProps): JSX.Element => {
+  const { t } = useTranslation('cms')
+  const toast = useToast()
 
-    return (
-      <Formik<NewBook>
-        initialValues={{ ...INITIAL_BOOK, ...initialValues }}
-        validationSchema={NewBookSchema}
-        validateOnBlur={true}
-        onSubmit={async (values, { setSubmitting }) => {
-          // Because of `stripUnknown` and also cast numeric strings back to number.
-          const cleaned = NewBookSchema.cast(values, {
-            stripUnknown: true,
+  return (
+    <Formik<NewBook>
+      initialValues={{ ...INITIAL_BOOK, ...initialValues }}
+      validationSchema={NewBookSchema}
+      validateOnBlur={true}
+      onSubmit={async (values, { setSubmitting }) => {
+        // Because of `stripUnknown` and also cast numeric strings back to number.
+        const cleaned = NewBookSchema.cast(values, {
+          stripUnknown: true,
+        })
+
+        try {
+          const result = await createBook(cleaned)
+
+          toast({
+            title: t('books.add.toast.success.title'),
+            status: 'success',
           })
 
-          try {
-            const result = await createBook(cleaned)
-
-            toast({
-              title: 'The books has been added',
-              status: 'success',
-            })
-
-            onSuccess?.(result)
-          } catch (err) {
-            captureException(err)
-            toast({
-              title: 'Failed to add the books',
-              status: 'error',
-            })
-            onFailed?.(values)
-          } finally {
-            setSubmitting(false)
-          }
-        }}
-      >
-        {({ isSubmitting, resetForm }) => (
-          <Form>
+          onSuccess?.(result)
+        } catch (err) {
+          captureException(err)
+          toast({
+            title: t('books.add.toast.failed.title'),
+            status: 'error',
+          })
+          onFailed?.(values)
+        } finally {
+          setSubmitting(false)
+        }
+      }}
+    >
+      {({ isSubmitting, resetForm }) => (
+        <Form>
+          <VStack gap={4}>
             <BookCreateFields />
 
-            <ButtonGroup>
+            <ButtonGroup alignSelf="end">
               {onCancel && (
                 <Button
                   disabled={isSubmitting}
                   onClick={() => onCancel()}
                   variant="ghost"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
               )}
 
@@ -80,7 +79,7 @@ export const BookCreateForm = memo(
                 onClick={() => resetForm()}
                 variant="outline"
               >
-                Reset
+                {t('common.reset')}
               </Button>
 
               <Button
@@ -88,14 +87,12 @@ export const BookCreateForm = memo(
                 disabled={isSubmitting}
                 isLoading={isSubmitting}
               >
-                Submit
+                {t('common.submit')}
               </Button>
             </ButtonGroup>
-          </Form>
-        )}
-      </Formik>
-    )
-  }
-)
-
-BookCreateForm.displayName = 'BookCreateForm'
+          </VStack>
+        </Form>
+      )}
+    </Formik>
+  )
+}

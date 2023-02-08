@@ -77,15 +77,18 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
 
   const [translations, highlightsRes, latestRes] = await Promise.all([
     serverSideTranslations(locale ?? 'zh-HK', ['common']),
-    // `highlightOrder` should be changed to `highlight_order` for entries created by the new Rest API
     SSR.API.get(
       'apicore',
-      '/books?sort=highlightOrder:1&limit=10&useThumbnailLink=1&sortOnlyExist=1'
+      '/books?sort=highlight_order:1&limit=10&useThumbnailLink=1&sortOnlyExist=1'
     ),
-    // `dateRestocked` -> `date_restocked`
+    // SSR.API.get(
+    //   'apicore',
+    //   '/books?sort=date_restocked:-1&limit=10&useThumbnailLink=1&sortOnlyExist=1'
+    // ),
+    // Note: keep this simple for now, since I don't even know if Lily wants to continue this project or not
     SSR.API.get(
       'apicore',
-      '/books?sort=dateRestocked:-1&limit=10&useThumbnailLink=1&sortOnlyExist=1'
+      '/books?sort=date_created:-1&limit=10&useThumbnailLink=1'
     ),
   ])
 

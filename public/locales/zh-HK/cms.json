@@ -1,4 +1,9 @@
 {
+  "common": {
+    "cancel": "取消",
+    "reset": "重置",
+    "submit": "提交"
+  },
   "cms": {
     "manage-books": "管理 圖書",
     "manage-articles": "管理 博客文章",
@@ -54,12 +59,65 @@
           "title": "刪除圖書失敗"
         }
       }
+    },
+    "add": {
+      "basic-information": "基本資料",
+      "additional-information": "補充資料",
+      "show-more": "展示 補充資料",
+      "hide-more": "隱藏 補充資料",
+      "toast": {
+        "success": {
+          "title": "本書已新增"
+        },
+        "failed": {
+          "title": "新增圖書失敗"
+        }
+      },
+      "fields": {
+        "status": "狀態",
+        "quantity": "數量",
+        "currency": "貨幣",
+        "price": "價格",
+        "title": "書名",
+        "subtitle": "副書名",
+        "description": "描述",
+        "authors": "作者",
+        "categories": "分類",
+        "language": "語言",
+        "thumbnail": "封面",
+        "storage_location": "存儲位置",
+        "isbn_13": "ISBN 13",
+        "isbn_10": "ISBN 10",
+        "about_the_authors": "關於作者",
+        "highlight_order": {
+          "label": "'精選' 排序順序",
+          "helper": "如果這本書需要放入“精選”部分，請在此處設置一個數字。將編號最小的書排在第一位"
+        },
+        "date_restocked": "進貨日期",
+        "publisher": "出版商",
+        "published_date": "出版日期",
+        "page_count": "頁數",
+        "google_book_link": "Google Book 連結"
+      }
+    },
+    "edit": {
+      "fields": {
+        "user_created": "製作用戶",
+        "date_created": "製作日期",
+        "user_updated": "更新用戶",
+        "date_updated": "更新日期"
+      }
     }
   },
   "my-account": {
     "id": "ID",
     "username": "用戶名",
     "email": "電子郵件",
-    "email-verified": "電子郵件已驗證"
+    "email-verified": "電子郵件已驗證",
+    "change-password": {
+      "title": "修改密碼",
+      "success": "密碼修改成功",
+      "failed": "修改密碼失敗"
+    }
   }
 }
