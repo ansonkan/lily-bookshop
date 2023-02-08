@@ -1,6 +1,8 @@
 import type { ModalProps } from '@chakra-ui/react'
 
-import type { GoogleBook, ISBNImportFormik } from './types'
+import type { GoogleBook } from 'types'
+
+import type { ISBNImportFormik } from './types'
 import type { NewBook } from '../BookCreateForm/types'
 
 import {

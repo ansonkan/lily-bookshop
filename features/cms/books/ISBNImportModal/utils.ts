@@ -1,4 +1,5 @@
-import type { GoogleBook } from './types'
+import type { GoogleBook } from 'types'
+
 import type { NewBook } from '../BookCreateForm/types'
 
 import { LANG_CODES } from '@lily-bookshop/schemas'
@@ -15,9 +16,10 @@ export const googleBookToNewBook = async (
   ])
 
   return googleBooks.map((gb) => {
-    const { ISBN, ISBN_10, ISBN_13 } = getISBN(gb)
+    const key = getKey(gb)
+    const { ISBN_10, ISBN_13 } = getISBN(gb)
     const googleBookLink = getGoogleBookLink(gb)
-    const thumbnailFile = ISBN ? thumbnailMap.get(ISBN) : undefined
+    const thumbnailFile = key ? thumbnailMap.get(key) : undefined
 
     return {
       ...INITIAL_BOOK,
@@ -48,22 +50,22 @@ export const getGoogleBookThumbnails = async (
 ): Promise<Map<string, File>> => {
   const thumbnailMap = new Map<string, File>() // ISBN: File
 
-  const thumbnailPromises: Promise<{ ISBN: string; thumbnailFile: File }>[] = []
+  const thumbnailPromises: Promise<{ key: string; thumbnailFile: File }>[] = []
   googleBooks.forEach((gb) => {
     const thumbnailLink =
       gb.volumeInfo?.imageLinks?.thumbnail ||
       gb.volumeInfo?.imageLinks?.smallThumbnail
 
-    const { ISBN } = getISBN(gb)
+    const key = getKey(gb)
 
-    if (thumbnailLink && ISBN) {
+    if (thumbnailLink && key) {
       thumbnailPromises.push(
         fetch(
           `/api/download-cors-file?link=${encodeURIComponent(thumbnailLink)}`
         )
           .then((r) => r.blob())
           .then((blob) => ({
-            ISBN,
+            key,
             thumbnailFile: new File(
               [blob],
               blob.name ||
@@ -76,9 +78,10 @@ export const getGoogleBookThumbnails = async (
   })
 
   const thumbnailResults = await Promise.allSettled(thumbnailPromises)
+
   thumbnailResults.forEach((tr) => {
     if (tr.status === 'fulfilled') {
-      thumbnailMap.set(tr.value.ISBN, tr.value.thumbnailFile)
+      thumbnailMap.set(tr.value.key, tr.value.thumbnailFile)
     }
   })
 
@@ -106,7 +109,7 @@ export const getAboutTheAuthors = async (
     .then((json) => json.aboutMap)
 }
 
-function getISBN(googleBook: GoogleBook) {
+export function getISBN(googleBook: GoogleBook) {
   const industryIdentifiers = googleBook.volumeInfo?.industryIdentifiers
   const ISBN_13 = industryIdentifiers?.find(
     (identity) => identity.type === 'ISBN_13'
@@ -122,7 +125,12 @@ function getISBN(googleBook: GoogleBook) {
   }
 }
 
-function getGoogleBookLink({ volumeInfo }: GoogleBook) {
+export function getGoogleBookLink({ volumeInfo }: GoogleBook) {
   const { infoLink, previewLink, canonicalVolumeLink } = volumeInfo || {}
   return infoLink || previewLink || canonicalVolumeLink
+}
+
+function getKey(googleBook: GoogleBook) {
+  const { ISBN } = getISBN(googleBook)
+  return ISBN || googleBook.volumeInfo?.title
 }

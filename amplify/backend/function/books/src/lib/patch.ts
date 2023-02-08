@@ -5,7 +5,7 @@ import type { MongoClient } from 'mongodb'
 import { BookDocumentSchema } from '@lily-bookshop/schemas'
 import { ObjectId } from 'mongodb'
 
-import { getUserInfo } from './utils'
+import { getUserInfo, matchISBN } from './utils'
 
 export async function PATCH(
   client: MongoClient,
@@ -33,6 +33,17 @@ export async function PATCH(
     },
     { stripUnknown: true, strict: true }
   )
+
+  const matches = await matchISBN(client, [cleanPartialBook])
+
+  if (matches?.length) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        isbn_matches: matches,
+      }),
+    }
+  }
 
   if (id) {
     const result = await updateOne(client, id, cleanPartialBook)

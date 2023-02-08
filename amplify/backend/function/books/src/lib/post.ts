@@ -4,7 +4,7 @@ import type { MongoClient } from 'mongodb'
 
 import { BookDocumentSchema } from '@lily-bookshop/schemas'
 
-import { getUserInfo } from './utils'
+import { getUserInfo, matchISBN } from './utils'
 
 export async function POST(
   client: MongoClient,
@@ -28,6 +28,17 @@ export async function POST(
       { stripUnknown: true, strict: true }
     )
 
+    const matches = await matchISBN(client, [cleanBook])
+
+    if (matches?.length) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          isbn_matches: matches,
+        }),
+      }
+    }
+
     const result = await insertOne(client, cleanBook)
 
     return {
@@ -47,6 +58,17 @@ export async function POST(
         { stripUnknown: true, strict: true }
       )
     )
+
+    const matches = await matchISBN(client, cleanBooks)
+
+    if (matches?.length) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          isbn_matches: matches,
+        }),
+      }
+    }
 
     const result = await insertMany(client, cleanBooks)
 

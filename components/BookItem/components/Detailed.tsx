@@ -1,6 +1,14 @@
 import type { BookItemProps } from '../types'
 
-import { Box, LinkBox, LinkOverlay, Text, VStack } from '@chakra-ui/react'
+import {
+  Badge,
+  Box,
+  HStack,
+  LinkBox,
+  LinkOverlay,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { useMemo } from 'react'
 
@@ -13,7 +21,7 @@ export interface DetailedProps
 }
 
 export const Detailed = ({
-  book: { title, subtitle, authors, description, thumbnail },
+  book: { title, subtitle, authors, description, thumbnail, ISBN_10, ISBN_13 },
   priceLabel,
   detailsLink,
   descriptionWorkCount = 100,
@@ -31,12 +39,21 @@ export const Detailed = ({
     [description, descriptionWorkCount]
   )
 
+  const Title = () => (
+    <>
+      <Text as="b">{title}</Text>
+
+      {subtitle && <Text as="span">{' ' + subtitle}</Text>}
+    </>
+  )
+
   return (
     <LinkBox
       as="article"
       display="flex"
       flexDir="row"
       gap={4}
+      w="full"
       {...linkBoxProps}
     >
       <Box w={[125, 130]}>
@@ -45,13 +62,20 @@ export const Detailed = ({
 
       <Box w="full" flexGrow={1} display="flex" flexDirection="column" gap={4}>
         <Box>
-          <LinkOverlay as={NextLink} href={detailsLink}>
-            <Text as="b">{title}</Text>
-
-            {subtitle && <Text as="span">{' ' + subtitle}</Text>}
-          </LinkOverlay>
+          {detailsLink ? (
+            <LinkOverlay as={NextLink} href={detailsLink}>
+              <Title />
+            </LinkOverlay>
+          ) : (
+            <Title />
+          )}
 
           {authors && <Text>{authors.join(', ')}</Text>}
+
+          <HStack>
+            {ISBN_10 && <Badge>{ISBN_10}</Badge>}
+            {ISBN_13 && <Badge>{ISBN_13}</Badge>}
+          </HStack>
         </Box>
 
         {shortDescription && (

@@ -18,7 +18,8 @@
     "manage-articles": "管理 博客文章",
     "manage-my-account": "管理 我的帳戶",
     "add-book": "新增 圖書",
-    "edit-book": "編輯 圖書"
+    "edit-book": "編輯 圖書",
+    "search-from-google-book": "從Google Book中搜索"
   },
   "book-search-form": {
     "placeholder": "書名、作者、ISBN 或咩都可以",

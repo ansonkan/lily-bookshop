@@ -14,28 +14,36 @@ export const Base = ({
   priceLabel,
   detailsLink,
   ...linkBoxProps
-}: BaseProps): JSX.Element => (
-  <LinkBox
-    as="article"
-    display="flex"
-    flexDir="column"
-    gap={4}
-    {...linkBoxProps}
-  >
-    <Thumbnail src={thumbnail ?? undefined} bookTitle={title} />
+}: BaseProps): JSX.Element => {
+  const Title = () => <Text as="b">{title}</Text>
 
-    <Box w="full" flexGrow={1} display="flex" flexDirection="column">
-      <LinkOverlay as={NextLink} href={detailsLink}>
-        <Text as="b">{title}</Text>
-      </LinkOverlay>
+  return (
+    <LinkBox
+      as="article"
+      display="flex"
+      flexDir="column"
+      gap={4}
+      {...linkBoxProps}
+    >
+      <Thumbnail src={thumbnail ?? undefined} bookTitle={title} />
 
-      {subtitle && <Text fontSize="sm">{subtitle}</Text>}
+      <Box w="full" flexGrow={1} display="flex" flexDirection="column">
+        {detailsLink ? (
+          <LinkOverlay as={NextLink} href={detailsLink}>
+            <Title />
+          </LinkOverlay>
+        ) : (
+          <Title />
+        )}
 
-      {authors && <Text fontSize="sm">{authors.join(', ')}</Text>}
+        {subtitle && <Text fontSize="sm">{subtitle}</Text>}
 
-      <Text as="b" alignSelf="end" mt="auto">
-        {priceLabel}
-      </Text>
-    </Box>
-  </LinkBox>
-)
+        {authors && <Text fontSize="sm">{authors.join(', ')}</Text>}
+
+        <Text as="b" alignSelf="end" mt="auto">
+          {priceLabel}
+        </Text>
+      </Box>
+    </LinkBox>
+  )
+}

@@ -1,9 +1,6 @@
 import type { GetStaticProps, NextPage } from 'next'
 
-import type { NewBook } from 'features/cms/books/BookCreateForm'
-
 import { Heading } from '@chakra-ui/react'
-import JSONCrush from 'jsoncrush'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
@@ -11,17 +8,10 @@ import { useTranslation } from 'next-i18next'
 import { ArrowBreadcrumb } from 'components'
 import { BookCreateForm } from 'features/cms/books/BookCreateForm'
 import { ProtectedLayout } from 'layouts'
-import { useMemo } from 'react'
 
 const CMSBookAddPage: NextPage = () => {
-  const { push, query, back } = useRouter()
+  const { push, back } = useRouter()
   const { t } = useTranslation('cms')
-
-  const initialBook: NewBook | undefined = useMemo(
-    () =>
-      query.book ? JSON.parse(JSONCrush.uncrush(query.book + '')) : undefined,
-    [query.book]
-  )
 
   return (
     <ProtectedLayout>
@@ -40,7 +30,6 @@ const CMSBookAddPage: NextPage = () => {
       <Heading>{t('breadcrumb.add-book')}</Heading>
 
       <BookCreateForm
-        initialValues={initialBook}
         onCancel={() => {
           back()
         }}

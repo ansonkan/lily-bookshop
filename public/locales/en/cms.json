@@ -18,7 +18,8 @@
     "manage-articles": "Manage Articles",
     "manage-my-account": "Manage My Account",
     "add-book": "Add Book",
-    "edit-book": "Edit Book"
+    "edit-book": "Edit Book",
+    "search-from-google-book": "Search from Google Book"
   },
   "book-search-form": {
     "placeholder": "A title, author, ISBN, or anything really...",

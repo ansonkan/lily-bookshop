@@ -109,8 +109,8 @@ export const BookCreateFields = ({
           name={`${namePrefix}authors`}
           type="text"
           multiline
-          format={(value) => `${value}`.split('\n')}
-          parse={(value: string[]) => value.join('\n')}
+          format={(value) => (value ? `${value}`.split('\n') : '')}
+          parse={(value: string[]) => value?.join('\n')}
         />
       </GridItem>
 

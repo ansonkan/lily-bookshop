@@ -12,7 +12,7 @@ const nextConfig = {
   swcMinify: true,
   i18n,
   images: {
-    domains: ['wcy0wine.directus.app'],
+    domains: ['books.google.com'],
     remotePatterns: [
       {
         protocol: 'https',

@@ -13,14 +13,26 @@ import { SearchIcon } from '@chakra-ui/icons'
 export interface AutocompleteProps extends Omit<InputProps, 'onChange'> {
   options: string[]
   onChange?: (value: string) => void
-  onSearch?: () => void
+  onSearch?: (value: string) => void
   searchButtonLabel: string
+  isLoading?: boolean
 }
 
 export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
-  ({ options, onChange, onSearch, searchButtonLabel, ...inputProps }, ref) => {
+  (
+    {
+      options,
+      onChange,
+      onSearch,
+      searchButtonLabel,
+      isLoading,
+      ...inputProps
+    },
+    ref
+  ) => {
     const rootRef = useRef<HTMLDivElement>(null)
 
+    const [internalValue, setInternalValue] = useState('')
     const [opened, setOpened] = useState(false)
     const [focusedIndex, setFocusedIndex] = useState<undefined | number>()
 
@@ -38,6 +50,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         setTimeout(reset, 10)
       })
     }, [])
+
+    const _onChange = (v: string) => {
+      setInternalValue(v)
+      onChange?.(v)
+    }
+
+    const _value = (inputProps.value || '') + '' || internalValue
 
     return (
       <InputGroup ref={rootRef} size={inputProps.size}>
@@ -65,17 +84,17 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 break
               case 'Enter':
                 if (typeof focusedIndex === 'number') {
-                  onChange?.(options[focusedIndex])
-                  onSearch?.()
-                } else if (inputProps.value) {
-                  onSearch?.()
+                  _onChange(options[focusedIndex])
+                  onSearch?.(_value)
+                } else if (_value) {
+                  onSearch?.(_value)
                 }
                 reset()
                 break
             }
           }}
           onChange={(event) => {
-            onChange?.(event.target.value)
+            _onChange(event.target.value)
             !opened && setOpened(true)
           }}
           {...inputProps}
@@ -85,11 +104,12 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         <InputRightElement width="5rem">
           <Button
             onClick={() => {
-              onSearch?.()
+              onSearch?.(_value)
               reset()
             }}
-            disabled={!inputProps.value}
+            disabled={!_value}
             size="sm"
+            isLoading={isLoading}
           >
             {searchButtonLabel}
           </Button>
@@ -120,8 +140,8 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                   typeof focusedIndex === 'number' && setFocusedIndex(undefined)
                 }
                 onClick={() => {
-                  onChange?.(s)
-                  onSearch?.()
+                  _onChange(s)
+                  onSearch?.(_value)
                   reset()
                 }}
                 background={focusedIndex === index ? 'gray.100' : undefined}
