@@ -3,6 +3,7 @@ import type { NewFileValue } from '../types'
 import { Button, ButtonGroup, Input, Text, VStack } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 import { AttachmentIcon } from '@chakra-ui/icons'
+import { useTranslation } from 'next-i18next'
 
 import { BASE_COLOR } from './constants'
 import { Root } from './Root'
@@ -25,6 +26,9 @@ export const DropZone = ({
   addFiles,
   switchToLink,
 }: DropZoneProps): JSX.Element => {
+  // Note: dirty workaround for now, since there is only input under the `/cms` protected route
+  const { t } = useTranslation('cms')
+
   const inputRef = useRef<HTMLInputElement>(null)
   const [inDropZone, setInDropZone] = useState(false)
 
@@ -76,7 +80,7 @@ export const DropZone = ({
       <VStack>
         <AttachmentIcon boxSize={10} color={borderColor} />
 
-        <Text align="center">Drop the files here</Text>
+        <Text align="center">{t('file-input.drop-zone.title')}</Text>
 
         <ButtonGroup>
           <Button
@@ -85,11 +89,11 @@ export const DropZone = ({
             }}
             disabled={!canUploadMore}
           >
-            Browse files
+            {t('file-input.drop-zone.browse-button')}
           </Button>
 
           <Button onClick={switchToLink} disabled={!canUploadMore}>
-            Upload link
+            {t('file-input.drop-zone.upload-link-button')}
           </Button>
         </ButtonGroup>
       </VStack>

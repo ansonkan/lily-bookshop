@@ -119,5 +119,25 @@
       "success": "密碼修改成功",
       "failed": "修改密碼失敗"
     }
+  },
+  "file-input": {
+    "preview-button": {
+      "show": "顯示預覽 - {{count}}個",
+      "hide": "隱藏預覽 - {{count}}個"
+    },
+    "drop-zone": {
+      "title": "將文件拖放到這裡",
+      "browse-button": "瀏覽文件",
+      "upload-link-button": "上傳連結"
+    },
+    "link-import": {
+      "title": "從連結上傳文件",
+      "import-button": "上傳",
+      "toast": {
+        "failed": {
+          "title": "上傳失敗"
+        }
+      }
+    }
   }
 }

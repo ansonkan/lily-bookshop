@@ -119,5 +119,25 @@
       "success": "Password is successfully changed",
       "failed": "Failed to change password"
     }
+  },
+  "file-input": {
+    "preview-button": {
+      "show": "Show previews - {{count}} file(s)",
+      "hide": "Hide previews - {{count}} file(s)"
+    },
+    "drop-zone": {
+      "title": "Drop the files here",
+      "browse-button": "Browse files",
+      "upload-link-button": "Upload link"
+    },
+    "link-import": {
+      "title": "Import a file from a link",
+      "import-button": "Import",
+      "toast": {
+        "failed": {
+          "title": "Failed to import"
+        }
+      }
+    }
   }
 }

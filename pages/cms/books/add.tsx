@@ -45,6 +45,10 @@ const CMSBookAddPage: NextPage = () => {
           back()
         }}
         onSuccess={({ result: { insertedId } }) => {
+          /**
+           * TODO: Use `toast` + 'button' to allow user click on it like 'Create another one?'
+           * https://github.com/chakra-ui/chakra-ui/issues/849
+           */
           insertedId && push({ pathname: `/cms/books/${insertedId}` })
         }}
       />

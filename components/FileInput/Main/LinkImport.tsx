@@ -12,6 +12,7 @@ import {
 import { LinkIcon } from '@chakra-ui/icons'
 import mime from 'mime-types'
 import { useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
 import { BASE_COLOR } from './constants'
 import { Root } from './Root'
@@ -27,6 +28,9 @@ export const LinkImport = ({
   addFiles,
   switchToDropZone,
 }: LinkImportProps): JSX.Element => {
+  // Note: dirty workaround for now, since there is only input under the `/cms` protected route
+  const { t } = useTranslation('cms')
+
   const [link, setLink] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const toast = useToast()
@@ -52,7 +56,10 @@ export const LinkImport = ({
         },
       ])
     } catch {
-      toast({ title: 'Failed to import', status: 'error' })
+      toast({
+        title: t('file-input.link-import.toast.failed.title'),
+        status: 'error',
+      })
     } finally {
       setIsLoading(false)
     }
@@ -63,7 +70,7 @@ export const LinkImport = ({
       <VStack>
         <LinkIcon boxSize={10} color={BASE_COLOR} />
 
-        <Text align="center">Import a file from a link</Text>
+        <Text align="center">{t('file-input.link-import.title')}</Text>
 
         <HStack>
           <Input
@@ -78,11 +85,11 @@ export const LinkImport = ({
               onClick={onImport}
               disabled={!canUploadMore || isLoading || !link}
             >
-              Import
+              {t('file-input.link-import.import-button')}
             </Button>
 
             <Button onClick={switchToDropZone} disabled={isLoading}>
-              Cancel
+              {t('common.cancel')}
             </Button>
           </ButtonGroup>
         </HStack>

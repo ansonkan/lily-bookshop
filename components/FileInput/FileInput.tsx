@@ -2,6 +2,7 @@ import type { FileValue, NewFileValue } from './types'
 
 import { Button, VStack } from '@chakra-ui/react'
 import { useCallback, useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
 import { Main } from './Main'
 import { Previews } from './Previews'
@@ -17,6 +18,9 @@ export interface FileInputProps {
 }
 
 export const FileInput = (props: FileInputProps): JSX.Element => {
+  // Note: dirty workaround for now, since there is only input under the `/cms` protected route
+  const { t } = useTranslation('cms')
+
   const [files, setFiles] = useState<FileValue[]>([])
   const [showPreviews, setShowPreviews] = useState(false)
 
@@ -90,11 +94,14 @@ export const FileInput = (props: FileInputProps): JSX.Element => {
             hidden={!showPreviews}
           />
 
-          <Button onClick={() => setShowPreviews((prev) => !prev)}>{`${
-            showPreviews ? 'Close' : 'Show'
-          } previews (${displayValues.length} file${
-            displayValues.length > 1 ? 's' : ''
-          })`}</Button>
+          <Button onClick={() => setShowPreviews((prev) => !prev)}>
+            {t(
+              showPreviews
+                ? 'file-input.preview-button.hide'
+                : 'file-input.preview-button.show',
+              { count: displayValues.length }
+            )}
+          </Button>
         </>
       )}
     </VStack>
