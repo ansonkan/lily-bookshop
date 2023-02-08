@@ -20,16 +20,20 @@ export async function DELETE(
    */
   if (json.id) {
     const book = await getById(client, json.id)
+    const objectKeys = [book.thumbnail, ...(book.other_photos || [])].filter(
+      (key) => !!key
+    )
+
     const result = await deleteOne(client, json.id)
 
-    if (book.thumbnail) {
+    if (objectKeys.length) {
       /**
        * TODO:
        * If failed to delete images of the book:
        * - create a scheduled lambda to regularly clean up unused images?
        * - revert the delete then throw error?
        */
-      await deletePublicObjects([book.thumbnail])
+      await deletePublicObjects(objectKeys)
     }
 
     return {
@@ -38,13 +42,15 @@ export async function DELETE(
   }
 
   if (json.ids) {
-    const keys = (await getByIds(client, json.ids))
-      .map((b) => b.thumbnail)
-      .filter((t) => !!t)
+    const objectKeys = (await getByIds(client, json.ids))
+      .map((b) => [b.thumbnail, ...(b.other_photos || [])])
+      .flat()
+      .filter((key) => !!key)
+
     const result = await deleteMany(client, json.ids)
 
-    if (keys.length) {
-      await deletePublicObjects(keys)
+    if (objectKeys.length) {
+      await deletePublicObjects(objectKeys)
     }
 
     return {

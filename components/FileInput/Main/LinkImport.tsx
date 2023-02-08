@@ -21,12 +21,14 @@ export interface LinkImportProps {
   canUploadMore?: boolean
   addFiles: (files: NewFileValue[]) => void
   switchToDropZone: () => void
+  helper?: React.ReactNode
 }
 
 export const LinkImport = ({
   canUploadMore,
   addFiles,
   switchToDropZone,
+  helper,
 }: LinkImportProps): JSX.Element => {
   // Note: dirty workaround for now, since there is only input under the `/cms` protected route
   const { t } = useTranslation('cms')
@@ -39,10 +41,13 @@ export const LinkImport = ({
     setIsLoading(true)
 
     try {
-      // const file = await fetch(link).then((r) => r.blob())
-      const blob = await fetch(
+      const result = await fetch(
         `/api/download-cors-file?link=${encodeURIComponent(link)}`
-      ).then((r) => r.blob())
+      )
+
+      if (!result.ok) throw new Error('Something went wrong!')
+
+      const blob = await result.blob()
 
       addFiles([
         {
@@ -55,6 +60,8 @@ export const LinkImport = ({
           ),
         },
       ])
+
+      setLink('')
     } catch {
       toast({
         title: t('file-input.link-import.toast.failed.title'),
@@ -93,6 +100,8 @@ export const LinkImport = ({
             </Button>
           </ButtonGroup>
         </HStack>
+
+        {helper}
       </VStack>
     </Root>
   )

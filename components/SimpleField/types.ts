@@ -22,6 +22,8 @@ interface CommonProps
   multiple?: boolean
   // for `FileInput`
   accept?: string[]
+  maxSizePerFile?: number
+  maxFiles?: number
 }
 
 export interface SimpleFieldProps extends FormControlProps, CommonProps {

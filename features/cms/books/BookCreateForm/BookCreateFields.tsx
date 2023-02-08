@@ -188,6 +188,15 @@ export const BookCreateFields = ({
             />
           </GridItem>
 
+          <GridItem colSpan={2}>
+            <SimpleField
+              label={t('books.add.fields.other_photos') ?? 'Other photos'}
+              name={`${namePrefix}other_photos`}
+              type="file"
+              multiple
+            />
+          </GridItem>
+
           <GridItem colSpan={COL_SPAN}>
             <SimpleField
               label={

@@ -97,7 +97,8 @@
         "publisher": "出版商",
         "published_date": "出版日期",
         "page_count": "頁數",
-        "google_book_link": "Google Book 連結"
+        "google_book_link": "Google Book 連結",
+        "other_photos": "其他照片"
       }
     },
     "edit": {
@@ -138,6 +139,10 @@
           "title": "上傳失敗"
         }
       }
+    },
+    "helper": {
+      "size-limit": "文件大小限制: {{size}}",
+      "quantity-limit": "還能上傳 {{count}}個"
     }
   }
 }

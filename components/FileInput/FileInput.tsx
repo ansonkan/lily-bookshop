@@ -1,12 +1,12 @@
 import type { FileValue, NewFileValue } from './types'
 
-import { Button, VStack } from '@chakra-ui/react'
+import { Button, FormHelperText, VStack } from '@chakra-ui/react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 
+import { isValidFileType, returnFileSize } from './utils'
 import { Main } from './Main'
 import { Previews } from './Previews'
-import { isValidFileType } from './utils'
 
 export interface FileInputProps {
   name?: string
@@ -15,6 +15,7 @@ export interface FileInputProps {
   multiple?: boolean
   accept: string[]
   maxSizePerFile?: number
+  maxFiles?: number
 }
 
 export const FileInput = (props: FileInputProps): JSX.Element => {
@@ -31,20 +32,26 @@ export const FileInput = (props: FileInputProps): JSX.Element => {
     multiple,
     accept,
     maxSizePerFile = 5242880, // 5 MB
+    maxFiles = 5,
   } = props
 
   const controlled = Object.prototype.hasOwnProperty.call(props, 'value')
   const _values = controlled ? value : files
-  const canUploadMore = multiple || !_values || _values.length === 0
+  const displayValues = (_values || []).filter((f) =>
+    f.type === 's3-object' ? f.status !== 'to-be-removed' : true
+  )
+
+  const remainingFileCount =
+    (multiple ? maxFiles : 1) - (displayValues?.length || 0)
 
   const addFiles = (targets: NewFileValue[]) => {
-    if (!canUploadMore) return
+    if (!remainingFileCount) return
 
     let validTargets = targets.filter(
       (t) => t.file.size <= maxSizePerFile && isValidFileType(t.file, accept)
     )
 
-    if (!multiple) validTargets = validTargets.slice(0, 1)
+    validTargets = validTargets.slice(0, remainingFileCount)
     if (validTargets.length === 0) return
 
     const newFiles = [...(_values || []), ...validTargets]
@@ -71,18 +78,25 @@ export const FileInput = (props: FileInputProps): JSX.Element => {
     [_values, onChange]
   )
 
-  const displayValues = (_values || []).filter((f) =>
-    f.type === 's3-object' ? f.status !== 'to-be-removed' : true
-  )
-
   return (
     <VStack alignItems="stretch">
       <Main
         name={name}
         accept={accept}
         multiple={multiple}
-        canUploadMore={canUploadMore}
+        canUploadMore={remainingFileCount > 0}
         addFiles={addFiles}
+        helper={
+          <FormHelperText>
+            {t('file-input.helper.size-limit', {
+              size: returnFileSize(maxSizePerFile),
+            })}
+            ;{' '}
+            {t('file-input.helper.quantity-limit', {
+              count: remainingFileCount,
+            })}
+          </FormHelperText>
+        }
       />
 
       {!!displayValues?.length && (

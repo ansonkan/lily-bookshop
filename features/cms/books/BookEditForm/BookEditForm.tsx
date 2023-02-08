@@ -29,7 +29,7 @@ export const BookEditForm = ({
     <Formik<EditedBook>
       initialValues={initialValues}
       validationSchema={EditedBookSchema}
-      validateOnBlur={true}
+      validateOnChange={false}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           // Because of `stripUnknown` and also cast numeric strings back to number.

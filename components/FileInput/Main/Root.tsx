@@ -12,8 +12,8 @@ export const Root = ({
   borderWidth = 1,
   borderStyle = 'dashed',
   borderRadius = 'md',
-  h = '40',
-  p = '2',
+  h = '52',
+  p = '4',
   children,
   ...others
 }: RootProps): JSX.Element => (

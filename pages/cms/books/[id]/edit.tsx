@@ -53,6 +53,11 @@ const CMSBookEditPage: NextPage<CMSBookEditPageProps> = ({
                 },
               ]
             : undefined,
+          other_photos: book.other_photos?.map((op) => ({
+            type: 's3-object',
+            key: op,
+            status: 'unchanged',
+          })),
         }}
         onCancel={() => {
           back()

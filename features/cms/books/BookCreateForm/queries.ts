@@ -1,3 +1,5 @@
+import type { FileValue } from 'components'
+
 import type {
   BookCreateQueryInput,
   BookCreateQueryResult,
@@ -15,26 +17,31 @@ export async function createBook(b: NewBook) {
   const imageUploadPromises: ReturnType<typeof Storage['put']>[] = []
   const objectKeyMap = new Map<File | string, string>() // File / URL
 
-  const thumbnail = b.thumbnail?.[0]
+  const fileToBeProcessed = [b.thumbnail?.[0], ...(b.other_photos || [])]
 
-  if (thumbnail) {
-    switch (thumbnail.type) {
+  const requestId = guid() + new Date().valueOf()
+  for (let i = 0; i < fileToBeProcessed.length; i++) {
+    const fileInput = fileToBeProcessed[i]
+    if (!fileInput) continue
+
+    switch (fileInput.type) {
       case 's3-object':
         break
       case 'newly-uploaded-file': {
-        const thumbnailObjectKey = [
+        const objectKey = [
           'books',
           'create-request',
-          guid() + new Date().valueOf(),
-          thumbnail.file.name,
+          requestId,
+          i,
+          fileInput.file.name,
         ]
           .map((str) => encodeURIComponent(str))
           .join('/')
 
-        objectKeyMap.set(thumbnail.file, thumbnailObjectKey)
+        objectKeyMap.set(fileInput.file, objectKey)
 
         imageUploadPromises.push(
-          Storage.put(thumbnailObjectKey, thumbnail.file, { level: 'public' })
+          Storage.put(objectKey, fileInput.file, { level: 'public' })
         )
         break
       }
@@ -43,13 +50,18 @@ export async function createBook(b: NewBook) {
 
   await Promise.all(imageUploadPromises)
 
-  const t = b.thumbnail?.[0]
+  const postProcessFile = (f?: FileValue) => {
+    if (!f) return
+    if (f.type === 's3-object') return f.key
+    if (f.type === 'newly-uploaded-file') return objectKeyMap.get(f.type)
+  }
+
   const newBook: BookCreateQueryInput = {
     ...b,
-    thumbnail:
-      t && t.type === 'newly-uploaded-file'
-        ? objectKeyMap.get(t.file)
-        : undefined,
+    thumbnail: postProcessFile(b.thumbnail?.[0]),
+    other_photos: b.other_photos
+      ?.map((photos) => postProcessFile(photos))
+      .filter((key): key is string => !!key),
   }
 
   const postResult: BookCreateQueryResult = await API.post(

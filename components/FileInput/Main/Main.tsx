@@ -11,6 +11,7 @@ export interface MainProps {
   multiple?: boolean
   canUploadMore?: boolean
   addFiles: (files: NewFileValue[]) => void
+  helper?: React.ReactNode
 }
 
 export const Main = ({
@@ -19,6 +20,7 @@ export const Main = ({
   multiple,
   canUploadMore,
   addFiles,
+  helper,
 }: MainProps): JSX.Element => {
   const [mode, setMode] = useState<'drop-zone' | 'link-import'>('drop-zone')
 
@@ -28,6 +30,7 @@ export const Main = ({
         canUploadMore={canUploadMore}
         addFiles={addFiles}
         switchToDropZone={() => setMode('drop-zone')}
+        helper={helper}
       />
     )
   }
@@ -40,6 +43,7 @@ export const Main = ({
       canUploadMore={canUploadMore}
       addFiles={addFiles}
       switchToLink={() => setMode('link-import')}
+      helper={helper}
     />
   )
 }

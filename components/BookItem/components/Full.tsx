@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { BookItemProps } from '../types'
 
-import { Badge, Box, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react'
+import {
+  Badge,
+  Box,
+  Flex,
+  Heading,
+  SimpleGrid,
+  Square,
+  Text,
+} from '@chakra-ui/react'
+import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 
 import { Kvp } from '../../Kvp'
@@ -30,6 +39,7 @@ export const Full = ({
     storage_location,
     quantity,
     highlight_order,
+    other_photos,
   },
   priceLabel,
   // Note: just to pick this out from `boxProps`
@@ -111,6 +121,21 @@ export const Full = ({
         {about_the_authors && (
           <Section heading={t('book-detailed-page.about-the-author')}>
             {about_the_authors}
+          </Section>
+        )}
+
+        {other_photos && (
+          <Section heading={t('book-detailed-page.other-photos')}>
+            <SimpleGrid>
+              {other_photos.map((photo) => (
+                <Square key={photo}>
+                  <Image
+                    src={photo}
+                    alt={`Other photos of ${title} ${subtitle || ''}`}
+                  />
+                </Square>
+              ))}
+            </SimpleGrid>
           </Section>
         )}
       </Box>

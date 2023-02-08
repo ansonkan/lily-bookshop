@@ -30,7 +30,7 @@ export const BookCreateForm = ({
     <Formik<NewBook>
       initialValues={{ ...INITIAL_BOOK, ...initialValues }}
       validationSchema={NewBookSchema}
-      validateOnBlur={true}
+      validateOnChange={false}
       onSubmit={async (values, { setSubmitting }) => {
         // Because of `stripUnknown` and also cast numeric strings back to number.
         const cleaned = NewBookSchema.cast(values, {

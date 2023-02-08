@@ -40,7 +40,7 @@ export const BookDocumentSchema = object({
     .required()
     .test('is-not-future', (value, { path }) => validateDate(value, path)), // new Date().getTime()
   title: string().required(),
-  subtitle: string().optional().nullable(),
+  subtitle: string().optional().nullable().transform(cleanStr),
   authors: array(string()).transform(cleanStrArray),
   about_the_authors: string().optional().nullable(),
   publisher: string().optional().nullable().transform(cleanStr),
@@ -54,13 +54,7 @@ export const BookDocumentSchema = object({
     .optional()
     .nullable()
     .transform(cleanStr),
-  categories: array(string()).transform(cleanStrArray),
-  /**
-   * `thumbnail` object key:
-   * - when create: `${ISBN_13 || ISBN_10 || title || request_id}/${timestamp}/${book_index}/${file_name}`
-   * - use `encodeURIComponent`
-   * - more about S3 object key: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html
-   */
+  categories: array(string().defined()).transform(cleanStrArray),
   thumbnail: string().optional().nullable().transform(cleanStr),
   language: mixed<typeof LANG_CODES[number]>().oneOf(LANG_CODES),
   google_book_link: string().optional().nullable().transform(cleanStr),
@@ -76,6 +70,7 @@ export const BookDocumentSchema = object({
       if (value === undefined || value === null) return true // since this is optional
       return validateDate(value, path)
     }),
+  other_photos: array(string().defined()).transform(cleanStrArray),
 })
 
 export type BookDocument = InferType<typeof BookDocumentSchema>

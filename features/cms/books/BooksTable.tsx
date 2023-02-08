@@ -58,9 +58,7 @@ export const BooksTable = memo(
         }
       }, [pageIndex, query, prevQuery])
 
-      const [sorting, setSorting] = useState<SortingState>([
-        { id: 'date_updated', desc: true },
-      ])
+      const [sorting, setSorting] = useState<SortingState>([])
 
       const params = new URLSearchParams({
         limit: `${pageSize}`,
@@ -87,22 +85,6 @@ export const BooksTable = memo(
       const columns = useMemo<ColumnDef<BookFE>[]>(
         () => [
           {
-            id: 'ISBN_10',
-            header: t('books.book-table.columns.isbn-10') ?? 'ISBN 10',
-            accessorKey: 'ISBN_10',
-            cell: ({ getValue }) => (
-              <V useBadge>{getValue<string | undefined>()}</V>
-            ),
-          },
-          {
-            id: 'ISBN_13',
-            header: t('books.book-table.columns.isbn-13') ?? 'ISBN 13',
-            accessorKey: 'ISBN_13',
-            cell: ({ getValue }) => (
-              <V useBadge>{getValue<string | undefined>()}</V>
-            ),
-          },
-          {
             id: 'title',
             header: t('books.book-table.columns.title') ?? 'Title',
             accessorKey: 'title',
@@ -122,6 +104,22 @@ export const BooksTable = memo(
             accessorKey: 'authors',
             cell: (info) => (
               <V>{info.getValue<string[] | undefined>()?.join(', ')}</V>
+            ),
+          },
+          {
+            id: 'ISBN_10',
+            header: t('books.book-table.columns.isbn-10') ?? 'ISBN 10',
+            accessorKey: 'ISBN_10',
+            cell: ({ getValue }) => (
+              <V useBadge>{getValue<string | undefined>()}</V>
+            ),
+          },
+          {
+            id: 'ISBN_13',
+            header: t('books.book-table.columns.isbn-13') ?? 'ISBN 13',
+            accessorKey: 'ISBN_13',
+            cell: ({ getValue }) => (
+              <V useBadge>{getValue<string | undefined>()}</V>
             ),
           },
           {

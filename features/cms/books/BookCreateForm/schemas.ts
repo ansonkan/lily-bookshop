@@ -1,4 +1,4 @@
-import type { FileInputProps } from 'components'
+import type { FileValue } from 'components'
 
 import { array, mixed, object } from 'yup'
 import { BookDocumentSchema } from '@lily-bookshop/schemas'
@@ -9,23 +9,10 @@ export const NewBookSchema = BookDocumentSchema.omit([
   'date_updated',
   'user_updated',
   'thumbnail',
+  'other_photos',
 ]).concat(
   object({
-    thumbnail: array()
-      .length(1)
-      .of(mixed<NonNullable<FileInputProps['value']>[number]>().required()),
-    // .test('file-check', (value, { path }) => {
-    //   if (!value || value.length === 0) return true
-
-    //   if (value[0] instanceof File) {
-    //     return true
-    //   }
-
-    //   return new ValidationError(
-    //     `${path} is not a valid File array`,
-    //     value,
-    //     path
-    //   )
-    // }),
+    thumbnail: array().max(1).of(mixed<FileValue>().required()),
+    other_photos: array().max(5).of(mixed<FileValue>().required()),
   })
 )

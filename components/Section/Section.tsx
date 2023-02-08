@@ -2,7 +2,7 @@ import { Heading, Text, VStack } from '@chakra-ui/react'
 
 export interface SectionProps {
   heading: string
-  children?: string
+  children?: React.ReactNode
 }
 
 export const Section = ({ heading, children }: SectionProps): JSX.Element => {
@@ -12,9 +12,11 @@ export const Section = ({ heading, children }: SectionProps): JSX.Element => {
     <VStack alignItems="flex-start">
       <Heading size="md">{heading}</Heading>
 
-      {children.split('\n').map((paragraph, i) => (
-        <Text key={i}>{paragraph}</Text>
-      ))}
+      {typeof children === 'string'
+        ? children
+            .split('\n')
+            .map((paragraph, i) => <Text key={i}>{paragraph}</Text>)
+        : children}
     </VStack>
   )
 }

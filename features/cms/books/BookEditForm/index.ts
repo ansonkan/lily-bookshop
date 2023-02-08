@@ -1,4 +1,3 @@
-export * from './BookEditModal'
 export * from './BookEditFields'
 export * from './BookEditForm'
 export * from './types'

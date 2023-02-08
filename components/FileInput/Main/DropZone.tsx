@@ -16,6 +16,7 @@ export interface DropZoneProps {
   canUploadMore?: boolean
   addFiles: (files: NewFileValue[]) => void
   switchToLink: () => void
+  helper?: React.ReactNode
 }
 
 export const DropZone = ({
@@ -25,6 +26,7 @@ export const DropZone = ({
   canUploadMore,
   addFiles,
   switchToLink,
+  helper,
 }: DropZoneProps): JSX.Element => {
   // Note: dirty workaround for now, since there is only input under the `/cms` protected route
   const { t } = useTranslation('cms')
@@ -96,6 +98,8 @@ export const DropZone = ({
             {t('file-input.drop-zone.upload-link-button')}
           </Button>
         </ButtonGroup>
+
+        {helper}
       </VStack>
 
       <Input

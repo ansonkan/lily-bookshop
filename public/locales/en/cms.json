@@ -97,7 +97,8 @@
         "publisher": "Publisher",
         "published_date": "Published date",
         "page_count": "Page count",
-        "google_book_link": "Google book link"
+        "google_book_link": "Google book link",
+        "other_photos": "Other photos"
       }
     },
     "edit": {
@@ -138,6 +139,10 @@
           "title": "Failed to import"
         }
       }
+    },
+    "helper": {
+      "size-limit": "File size limit: {{size}}",
+      "quantity-limit": "Can upload {{count}} more files"
     }
   }
 }
