@@ -77,7 +77,7 @@ const CMSBooksPage: NextPage = () => {
 
       <VStack gap={4}>
         {/* Other actions */}
-        <SimpleGrid gap={4} columns={[1, 2, 3, 4]}>
+        <SimpleGrid gap={4} columns={[1, 2, 3]}>
           <Button as={NextLink} href="/cms/books/add" leftIcon={<AddIcon />}>
             {t('books.other-actions.add')}
           </Button>
@@ -90,9 +90,9 @@ const CMSBooksPage: NextPage = () => {
             {t('books.other-actions.manage-categories')}
           </Button>
 
-          <Button as={NextLink} href="/cms/books/featured-section">
+          {/* <Button as={NextLink} href="/cms/books/featured-section">
             {t('books.other-actions.manage-featured')}
-          </Button>
+          </Button> */}
 
           {/* Note: just use `date_created` to sort out this section for now */}
           {/* <Button as={NextLink} href="/cms/books/latest-additions-section">

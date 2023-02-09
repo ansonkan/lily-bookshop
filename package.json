@@ -14,7 +14,7 @@
     "format:check": "prettier -c .",
     "test": "npx playwright test",
     "amplify:books": "cd amplify/backend/function/books/src && rm -rf node_modules && ls && npm i && tsc && cd -",
-    "amplify:book-categories": "cd amplify/backend/function/bookCategories/src && rm -rf node_modules && ls && npm i && tsc && cd -"
+    "amplify:bookCategories": "cd amplify/backend/function/bookCategories/src && rm -rf node_modules && ls && npm i && tsc && cd -"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "4.3.2",
