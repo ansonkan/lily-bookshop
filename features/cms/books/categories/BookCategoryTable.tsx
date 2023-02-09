@@ -28,8 +28,7 @@ export const BookCategoryTable = memo(
 
       const { data, isLoading, isValidating, mutate } = useSWR(
         ['apicore', '/book-categories'],
-        ([apiName, url]) => API.get(apiName, url, {}),
-        { keepPreviousData: true }
+        ([apiName, url]) => API.get(apiName, url, {})
       )
 
       useImperativeHandle(

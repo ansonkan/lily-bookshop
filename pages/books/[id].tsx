@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps<
 
   const { book } = await SSR.API.get(
     'apicore',
-    `/books/${params.id}?&useObjectLink=1`
+    `/books/${params.id}?&useObjectLink=1&&publishedOnly=1`
   )
 
   if (!book) {
@@ -77,7 +77,7 @@ export const getServerSideProps: GetServerSideProps<
     serverSideTranslations(locale ?? 'zh-HK', ['common']),
     SSR.API.get(
       'apicore',
-      `/books?relatedTo=${params.id}&limit=5&useObjectLink=1`
+      `/books?relatedTo=${params.id}&limit=5&useObjectLink=1&&publishedOnly=1`
     ),
   ])
 

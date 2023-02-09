@@ -76,7 +76,10 @@
         }
       },
       "fields": {
-        "status": "Status",
+        "status": {
+          "label": "Status",
+          "helper": "'Draft' can't be found by customers"
+        },
         "quantity": "Quantity",
         "currency": "Currency",
         "price": "Price",

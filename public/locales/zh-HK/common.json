@@ -60,7 +60,8 @@
     "ja": "日文",
     "ru": "俄文",
     "ko": "韓文",
-    "de": "德文"
+    "de": "德文",
+    "fr": "法文"
   },
   "cms": {
     "tab": {
@@ -71,5 +72,9 @@
   },
   "generic": {
     "no-data": "沒有搜尋結果"
+  },
+  "status-options": {
+    "published": "已發布",
+    "draft": "草稿"
   }
 }

@@ -60,7 +60,8 @@
     "ja": "Japanese",
     "ru": "Russian",
     "ko": "Korean",
-    "de": "German"
+    "de": "German",
+    "fr": "French"
   },
   "cms": {
     "tab": {
@@ -71,5 +72,9 @@
   },
   "generic": {
     "no-data": "No data found"
+  },
+  "status-options": {
+    "published": "Published",
+    "draft": "Draft"
   }
 }

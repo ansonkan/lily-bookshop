@@ -100,7 +100,7 @@ export const getServerSideProps: GetServerSideProps<BooksPageProps> = async ({
     serverSideTranslations(locale ?? 'zh-HK', ['common']),
     SSR.API.get(
       'apicore',
-      `/books?q=${q}&limit=${LIMIT}&page=${page}&useObjectLink=1`
+      `/books?q=${q}&limit=${LIMIT}&page=${page}&useObjectLink=1&publishedOnly=1`
     ),
   ])
 

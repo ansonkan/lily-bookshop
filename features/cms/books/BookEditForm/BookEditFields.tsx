@@ -10,6 +10,7 @@ export const BookEditFields = (): JSX.Element => {
 
   return (
     <BookCreateFields
+      editMode={true}
       top={
         <>
           <GridItem>

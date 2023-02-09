@@ -10,6 +10,7 @@ export interface BookCreateFieldsProps {
   index?: number
   top?: React.ReactNode
   bottom?: React.ReactNode
+  editMode?: boolean
 }
 
 const COL_SPAN = [2, 1]
@@ -19,8 +20,10 @@ export const BookCreateFields = ({
   parentFieldName,
   top,
   bottom,
+  editMode,
 }: BookCreateFieldsProps) => {
   const { t } = useTranslation('cms')
+  const { t: ct } = useTranslation('common')
   const [showMore, setShowMore] = useState(false)
 
   const namePrefix =
@@ -40,10 +43,14 @@ export const BookCreateFields = ({
 
       <GridItem colSpan={COL_SPAN}>
         <SimpleField
-          label={t('books.add.fields.status') ?? 'Status'}
+          label={t('books.add.fields.status.label') ?? 'Status'}
           name={`${namePrefix}status`}
-          options={STATUSES.map((s) => ({ value: s, label: s }))}
+          options={STATUSES.map((s) => ({
+            value: s,
+            label: ct(`status-options.${s}`) ?? s,
+          }))}
           isRequired
+          helperText={t('books.add.fields.status.helper') ?? ''}
         />
       </GridItem>
 
@@ -132,7 +139,10 @@ export const BookCreateFields = ({
         <SimpleField
           label={t('books.add.fields.language') ?? 'Language'}
           name={`${namePrefix}language`}
-          options={LANG_CODES.map((c) => ({ value: c, label: c }))}
+          options={LANG_CODES.map((c) => ({
+            value: c,
+            label: ct(`language.${c}`) ?? c,
+          }))}
           isRequired
         />
       </GridItem>
@@ -158,6 +168,7 @@ export const BookCreateFields = ({
           label={t('books.add.fields.isbn_13') ?? 'ISBN 13'}
           name={`${namePrefix}ISBN_13`}
           type="text"
+          isDisabled={editMode}
         />
       </GridItem>
 
@@ -166,6 +177,7 @@ export const BookCreateFields = ({
           label={t('books.add.fields.isbn_10') ?? 'ISBN 10'}
           name={`${namePrefix}ISBN_10`}
           type="text"
+          isDisabled={editMode}
         />
       </GridItem>
 

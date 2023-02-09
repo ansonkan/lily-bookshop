@@ -5,7 +5,7 @@ import type { MongoClient } from 'mongodb'
 import { BookDocumentSchema } from '@lily-bookshop/schemas'
 import { ObjectId } from 'mongodb'
 
-import { getUserInfo, matchISBN } from './utils'
+import { getUserInfo } from './utils'
 
 export async function PATCH(
   client: MongoClient,
@@ -21,9 +21,15 @@ export async function PATCH(
 
   const { userSub } = getUserInfo(event)
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore - only validate only given properties because this is a `PATCH` request, and the `book` can be partial
-  const partialBookDocumentSchema = BookDocumentSchema.pick(Object.keys(book))
+  const partialBookDocumentSchema = BookDocumentSchema.pick(
+    /**
+     * 1. only validate only given properties because this is a `PATCH` request, and the `book` can be partial
+     * 2. not allow ISBN to be edited as a workaround to keep ISBN unique
+     */
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    Object.keys(book).filter((k) => k !== 'ISBN_13' && k !== 'ISBN_10')
+  )
 
   const cleanPartialBook = partialBookDocumentSchema.validateSync(
     {
@@ -34,16 +40,17 @@ export async function PATCH(
     { stripUnknown: true, strict: true }
   )
 
-  const matches = await matchISBN(client, [cleanPartialBook])
+  // TODO: this doesn't work, because I need to check the previous and new ISBN instead
+  // const matches = await matchISBN(client, [cleanPartialBook])
 
-  if (matches?.length) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        isbn_matches: matches,
-      }),
-    }
-  }
+  // if (matches?.length) {
+  //   return {
+  //     statusCode: 400,
+  //     body: JSON.stringify({
+  //       isbn_matches: matches,
+  //     }),
+  //   }
+  // }
 
   if (id) {
     const result = await updateOne(client, id, cleanPartialBook)

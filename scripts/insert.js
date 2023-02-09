@@ -3,17 +3,29 @@ const path = require('path')
 const mongodb = require('mongodb')
 
 require('dotenv').config({
-  path: path.join(__dirname, '..', '..', '.env.local'),
+  path: path.join(__dirname, '..', '.env.local'),
 })
 
-insertFakeBooks()
+// insertFakeBooks()
+
+test()
+
+async function test() {
+  const client = await getClient()
+
+  const result = await client
+    .db('bookshop')
+    .collection('book_categories')
+    .find({})
+    .toArray()
+
+  console.log('result: ', JSON.stringify(result, null, 2))
+}
 
 async function insertFakeBooks() {
   const books = JSON.parse(fs.readFileSync(path.join(__dirname, 'books.json')))
 
-  const MongoClient = mongodb.MongoClient
-
-  const client = await MongoClient.connect(process.env.MONGODB_URI ?? '')
+  const client = await getClient()
   const db = client.db('bookshop')
 
   const size = 100
@@ -34,4 +46,10 @@ async function insertFakeBooks() {
   }
 
   console.log('DONE!!!', books.length)
+}
+
+async function getClient() {
+  const MongoClient = mongodb.MongoClient
+
+  return await MongoClient.connect(process.env.MONGODB_URL_READ_WRITE ?? '')
 }

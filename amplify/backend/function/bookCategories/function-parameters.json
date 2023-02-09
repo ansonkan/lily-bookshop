@@ -8,5 +8,6 @@
   ],
   "secretNames": [
     "MONGODB_URL_READ_WRITE"
-  ]
+  ],
+  "permissions": {}
 }

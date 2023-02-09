@@ -79,7 +79,7 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
     serverSideTranslations(locale ?? 'zh-HK', ['common']),
     SSR.API.get(
       'apicore',
-      '/books?sort=highlight_order:1&limit=10&useObjectLink=1&sortOnlyExist=1'
+      '/books?sort=highlight_order:1&limit=10&useObjectLink=1&sortOnlyExist=1&publishedOnly=1'
     ),
     // SSR.API.get(
     //   'apicore',
@@ -88,7 +88,7 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async ({
     // Note: keep this simple for now, since I don't even know if Lily wants to continue this project or not
     SSR.API.get(
       'apicore',
-      '/books?sort=date_created:-1&limit=10&useObjectLink=1'
+      '/books?sort=date_created:-1&limit=10&useObjectLink=1&publishedOnly=1'
     ),
   ])
 

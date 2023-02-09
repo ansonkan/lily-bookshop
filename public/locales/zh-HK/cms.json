@@ -76,7 +76,10 @@
         }
       },
       "fields": {
-        "status": "狀態",
+        "status": {
+          "label": "狀態",
+          "helper": "客戶不會找到'草稿'"
+        },
         "quantity": "數量",
         "currency": "貨幣",
         "price": "價格",

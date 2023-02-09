@@ -25,6 +25,7 @@ export async function GET(
     autocomplete,
     // try to converts object id to link directly here, rather than request object link in the FE with `useEffect`, see if this solve the cache MISS issue
     useObjectLink,
+    publishedOnly,
   } = event.queryStringParameters || {}
 
   if (id) {
@@ -32,7 +33,7 @@ export async function GET(
      * `proxy` could be `property1/property2/property3` or more
      * but let's assume it would be a normal book ID
      */
-    const book = await getById(client, id)
+    const book = await getById(client, id, publishedOnly === '1')
 
     if (book) {
       const feBook = docIdToString(book)
@@ -58,6 +59,7 @@ export async function GET(
         options: await autocompleteTitle(client, {
           query: autocomplete,
           limit: limitInt,
+          publishedOnly: publishedOnly === '1',
         }),
       }),
       headers: {
@@ -88,6 +90,7 @@ export async function GET(
         limit: limitInt,
         sort: sortStage,
         sortOnlyExist: sortOnlyExist === '1',
+        publishedOnly: publishedOnly === '1',
       })
     }
 
@@ -100,6 +103,7 @@ export async function GET(
         relatedTo,
         page: pageInt,
         limit: limitInt,
+        publishedOnly: publishedOnly === '1',
       })
     }
 
@@ -108,6 +112,7 @@ export async function GET(
       limit: limitInt,
       sort: sortStage,
       sortOnlyExist: sortOnlyExist === '1',
+      publishedOnly: publishedOnly === '1',
     })
   })()
 
@@ -128,18 +133,39 @@ export async function GET(
   }
 }
 
-export async function getById(client: MongoClient, id: string) {
+export async function getById(
+  client: MongoClient,
+  id: string,
+  publishedOnly?: boolean
+) {
   return await client
     .db('bookshop')
     .collection<BookDocument>('books')
-    .findOne({ _id: new ObjectId(id) })
+    .findOne(
+      publishedOnly
+        ? { _id: new ObjectId(id), status: 'published' }
+        : { _id: new ObjectId(id) }
+    )
 }
 
-export async function getByIds(client: MongoClient, ids: string[]) {
+export async function getByIds(
+  client: MongoClient,
+  ids: string[],
+  publishedOnly?: boolean
+) {
   return await client
     .db('bookshop')
     .collection<BookDocument>('books')
-    .find({ _id: { $in: ids.map((id) => new ObjectId(id)) } })
+    .find(
+      publishedOnly
+        ? {
+            _id: {
+              $in: ids.map((id) => new ObjectId(id)),
+              status: 'published',
+            },
+          }
+        : { _id: { $in: ids.map((id) => new ObjectId(id)) } }
+    )
     .toArray()
 }
 
@@ -154,44 +180,51 @@ interface SearchOptions {
   limit: number
   sort?: Sort
   sortOnlyExist?: boolean
+  publishedOnly?: boolean
 }
 
 async function search(
   client: MongoClient,
-  { query, page, limit, sort, sortOnlyExist }: SearchOptions
+  { query, page, limit, sort, sortOnlyExist, publishedOnly }: SearchOptions
 ) {
   const skip = (page - 1) * limit
+
+  const stages: Document[] = [
+    {
+      $search: {
+        index: 'default',
+        text: {
+          query,
+          path: {
+            wildcard: '*',
+          },
+          fuzzy: {},
+        },
+        count: {
+          type: 'total',
+        },
+      },
+    },
+    {
+      $facet: {
+        books: [
+          ...(sort ? getSortStages(sort, sortOnlyExist) : []),
+          { $skip: skip },
+          { $limit: limit },
+        ],
+        meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
+      },
+    },
+  ]
+
+  if (publishedOnly) {
+    stages.unshift({ $match: { status: 'published' } })
+  }
 
   return (await client
     .db('bookshop')
     .collection('books')
-    .aggregate([
-      {
-        $search: {
-          index: 'default',
-          text: {
-            query,
-            path: {
-              wildcard: '*',
-            },
-            fuzzy: {},
-          },
-          count: {
-            type: 'total',
-          },
-        },
-      },
-      {
-        $facet: {
-          books: [
-            ...(sort ? getSortStages(sort, sortOnlyExist) : []),
-            { $skip: skip },
-            { $limit: limit },
-          ],
-          meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
-        },
-      },
-    ])
+    .aggregate(stages)
     .toArray()) as BookResults
 }
 
@@ -199,11 +232,12 @@ interface ListRelatedOptions {
   relatedTo: string // book _id
   page: number
   limit: number
+  publishedOnly?: boolean
 }
 
 async function listRelated(
   client: MongoClient,
-  { relatedTo, page, limit }: ListRelatedOptions
+  { relatedTo, page, limit, publishedOnly }: ListRelatedOptions
 ) {
   const targetBook = await getById(client, relatedTo)
 
@@ -240,33 +274,39 @@ async function listRelated(
 
   const skip = (page - 1) * limit
 
+  const stages: Document[] = [
+    {
+      $search: {
+        index: 'default',
+        compound: {
+          should: searchShoulds,
+        },
+        count: {
+          type: 'total',
+        },
+      },
+    },
+    {
+      $match: {
+        _id: { $ne: new ObjectId(targetBook._id) },
+      },
+    },
+    {
+      $facet: {
+        books: [{ $skip: skip }, { $limit: limit }],
+        meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
+      },
+    },
+  ]
+
+  if (publishedOnly) {
+    stages.unshift({ $match: { status: 'published' } })
+  }
+
   return (await client
     .db('bookshop')
     .collection('books')
-    .aggregate([
-      {
-        $search: {
-          index: 'default',
-          compound: {
-            should: searchShoulds,
-          },
-          count: {
-            type: 'total',
-          },
-        },
-      },
-      {
-        $match: {
-          _id: { $ne: new ObjectId(targetBook._id) },
-        },
-      },
-      {
-        $facet: {
-          books: [{ $skip: skip }, { $limit: limit }],
-          meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
-        },
-      },
-    ])
+    .aggregate(stages)
     .toArray()) as BookResults
 }
 
@@ -292,64 +332,76 @@ interface ListOptions {
   limit: number
   sort?: Sort
   sortOnlyExist?: boolean
+  publishedOnly?: boolean
 }
 
 async function list(
   client: MongoClient,
-  { page, limit, sort, sortOnlyExist }: ListOptions
+  { page, limit, sort, sortOnlyExist, publishedOnly }: ListOptions
 ) {
   const skip = (page - 1) * limit
+
+  const stages: Document[] = [
+    {
+      $facet: {
+        books: [
+          ...(sort ? getSortStages(sort, sortOnlyExist) : []),
+          { $skip: skip },
+          { $limit: limit },
+        ],
+        meta: [
+          { $count: 'count' },
+          // mimic the shape of `$$SEARCH_META`
+          { $project: { count: { total: '$count' } } },
+        ],
+      },
+    },
+  ]
+
+  if (publishedOnly) {
+    stages.unshift({ $match: { status: 'published' } })
+  }
 
   return (await client
     .db('bookshop')
     .collection('books')
-    .aggregate([
-      {
-        $facet: {
-          books: [
-            ...(sort ? getSortStages(sort, sortOnlyExist) : []),
-            { $skip: skip },
-            { $limit: limit },
-          ],
-          meta: [
-            { $count: 'count' },
-            // mimic the shape of `$$SEARCH_META`
-            { $project: { count: { total: '$count' } } },
-          ],
-        },
-      },
-    ])
+    .aggregate(stages)
     .toArray()) as BookResults
 }
 
 interface AutocompleteTitleOptions {
   query: string
   limit: number
+  publishedOnly?: boolean
 }
 
 async function autocompleteTitle(
   client: MongoClient,
-  { query, limit }: AutocompleteTitleOptions
+  { query, limit, publishedOnly }: AutocompleteTitleOptions
 ) {
-  return (
-    await client
-      .db('bookshop')
-      .collection('books')
-      .aggregate([
-        {
-          $search: {
-            index: 'autocomplete',
-            autocomplete: {
-              query,
-              path: 'title',
-              fuzzy: {},
-            },
-          },
+  const stages: Document[] = [
+    {
+      $search: {
+        index: 'autocomplete',
+        autocomplete: {
+          query,
+          path: 'title',
+          fuzzy: {},
         },
-        { $limit: limit },
-        { $project: { _id: 0, title: 1 } },
-      ])
-      .toArray()
+      },
+    },
+    { $limit: limit },
+    { $project: { _id: 0, title: 1 } },
+  ]
+
+  if (publishedOnly) {
+    stages.push({
+      $match: { status: 'published' },
+    })
+  }
+
+  return (
+    await client.db('bookshop').collection('books').aggregate(stages).toArray()
   ).map((item) => item.title) as string[]
 }
 

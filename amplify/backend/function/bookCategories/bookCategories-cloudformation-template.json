@@ -16,10 +16,10 @@
     "s3Key": {
       "Type": "String"
     },
-    "sentryDsn": {
+    "secretsPathAmplifyAppId": {
       "Type": "String"
     },
-    "secretsPathAmplifyAppId": {
+    "sentryDsn": {
       "Type": "String"
     }
   },
@@ -76,9 +76,6 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "SENTRY_DSN": {
-              "Ref": "sentryDsn"
-            },
             "MONGODB_URL_READ_WRITE": {
               "Fn::Join": [
                 "",
@@ -100,6 +97,9 @@
                   "MONGODB_URL_READ_WRITE"
                 ]
               ]
+            },
+            "SENTRY_DSN": {
+              "Ref": "sentryDsn"
             }
           }
         },

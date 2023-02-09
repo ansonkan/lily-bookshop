@@ -58,9 +58,9 @@ export async function getByIds(client: MongoClient, ids: string[]) {
 }
 
 async function list(client: MongoClient) {
-  return (await client
+  return await client
     .db('bookshop')
-    .collection('book_categories')
+    .collection<BookCategoryDocument>('book_categories')
     .find({})
-    .toArray()) as WithId<BookCategoryDocument>[]
+    .toArray()
 }

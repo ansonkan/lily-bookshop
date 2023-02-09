@@ -19,7 +19,7 @@ export const createBookCategory = async (
 }
 
 export async function editBookCategory({ id, ...others }: EditedBookCategory) {
-  const result = await API.patch('apicore', '/books-categories', {
+  const result = await API.patch('apicore', '/book-categories', {
     body: {
       id,
       bookCategory: others,

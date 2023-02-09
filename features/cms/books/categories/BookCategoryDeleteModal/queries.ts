@@ -5,7 +5,7 @@ import { API } from 'aws-amplify'
 import { mutateBookCategories } from '../utils'
 
 export async function deleteBookCategory(cat: BookCategoryFE) {
-  const result = await API.del('apicore', '/books-categories', {
+  const result = await API.del('apicore', '/book-categories', {
     body: { id: cat.id },
   })
 
