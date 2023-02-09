@@ -61,7 +61,6 @@ const SearchFromGoogleBookPage: NextPage = () => {
         thumbnail:
           item.volumeInfo?.imageLinks?.thumbnail ||
           item.volumeInfo?.imageLinks?.smallThumbnail,
-
         original: item,
       }
     })
@@ -138,7 +137,11 @@ const SearchFromGoogleBookPage: NextPage = () => {
                       await googleBookToNewBook([book.original])
                     )[0]
 
-                    createModal.current?.create(cleanedGoogleBook)
+                    createModal.current?.create({
+                      ...cleanedGoogleBook,
+                      // Note: overwrite `categories` from Google Book because I think better leave this after Lily defines her own category list
+                      categories: undefined,
+                    })
                   } finally {
                     setPreparingIndex(undefined)
                   }

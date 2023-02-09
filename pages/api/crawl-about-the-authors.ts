@@ -37,10 +37,13 @@ async function crawlAboutTheAuthor(googleBookLinks: string[]) {
         const $ = cheerio.load(body)
 
         // https://github.com/cheeriojs/cheerio/issues/839#issuecomment-379737480
-        return [
-          link,
-          $('#about_author_v').find('br').replaceWith('\n').end().text(),
-        ]
+        const paragraphs: string[] = []
+
+        $('#about_author_v p').each(function (i, elem) {
+          paragraphs.push($(elem).find('br').replaceWith('\n\n').end().text())
+        })
+
+        return [link, paragraphs.filter((p) => !!p).join('\n\n')]
       })
     )
   )

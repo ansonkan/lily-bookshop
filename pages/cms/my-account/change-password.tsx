@@ -39,12 +39,13 @@ function MyAccount() {
   return (
     <>
       <AccountSettings.ChangePassword
-        onSuccess={() =>
+        onSuccess={() => {
           toast({
             status: 'success',
             title: t('my-account.change-password.success'),
           })
-        }
+          back()
+        }}
         onError={() => {
           toast({
             status: 'error',
