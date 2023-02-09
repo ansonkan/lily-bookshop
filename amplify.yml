@@ -25,7 +25,7 @@ backend:
     build:
       commands:
         - npm run amplify:books
-        - npm run amplify:book-categories
+        - npm run amplify:bookCategories
         - amplifyPush --simple
 frontend:
   phases:
