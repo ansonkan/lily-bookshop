@@ -7,7 +7,7 @@ import { mutateBooks } from '../utils'
 export async function deleteBook(book: BookFE) {
   const result = await API.del('apicore', '/books', { body: { id: book.id } })
 
-  mutateBooks()
+  await mutateBooks()
 
   return result
 }

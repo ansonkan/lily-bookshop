@@ -1,33 +1,40 @@
 import type { GetStaticProps, NextPage } from 'next'
 
-// import type { BookCategoryDocumentFE } from 'types'
-import type { BookCategoryTableRef } from 'features'
+import type {
+  BookCategoryDeleteModalRef,
+  BookCategoryModalRef,
+  BookCategoryTableRef,
+} from 'features'
+import type { BookCategoryFE } from 'types'
 
+import { AddIcon, RepeatIcon } from '@chakra-ui/icons'
 import { Button, Heading, VStack } from '@chakra-ui/react'
-import { RepeatIcon } from '@chakra-ui/icons'
+import { useCallback, useRef } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useRef } from 'react'
 import { useTranslation } from 'next-i18next'
 
+import {
+  BookCategoryDeleteModal,
+  BookCategoryModal,
+  BookCategoryTable,
+} from 'features'
 import { ArrowBreadcrumb } from 'components'
-import { BookCategoryTable } from 'features'
 import { ProtectedLayout } from 'layouts'
 
 const BookCategoriesPage: NextPage = () => {
   const { t } = useTranslation('cms')
 
   const tableRef = useRef<BookCategoryTableRef>(null)
-  // const deleteModalRef = useRef<BookDeleteModalRef>(null)
+  const modalRef = useRef<BookCategoryModalRef>(null)
+  const deleteModalRef = useRef<BookCategoryDeleteModalRef>(null)
 
-  // const onEdit = useCallback((cat: BookCategoryDocumentFE) => {
-  //   // push({ pathname: `/cms/books/${book.id}/edit` })
-  //   console.log(cat)
-  // }, [])
+  const onEdit = useCallback((cat: BookCategoryFE) => {
+    modalRef.current?.edit(cat)
+  }, [])
 
-  // const onDelete = useCallback((cat: BookCategoryDocumentFE) => {
-  //   // deleteModalRef.current?.askToDelete(book)
-  //   console.log(cat)
-  // }, [])
+  const onDelete = useCallback((cat: BookCategoryFE) => {
+    deleteModalRef.current?.askToDelete(cat)
+  }, [])
 
   return (
     <ProtectedLayout>
@@ -45,17 +52,33 @@ const BookCategoriesPage: NextPage = () => {
 
       <Heading>{t('breadcrumb.manage-book-categories')}</Heading>
 
+      <Button
+        alignSelf="center"
+        leftIcon={<AddIcon />}
+        onClick={() => modalRef.current?.create()}
+      >
+        {t('book-categories.add.heading')}
+      </Button>
+
       <VStack gap={4}>
         <Button
           alignSelf="self-end"
           leftIcon={<RepeatIcon />}
           onClick={() => tableRef.current?.reload()}
         >
-          Reload
+          {t('books.book-table.reload')}
         </Button>
 
-        {/* <BookCategoryTable ref={tableRef} onEdit={onEdit} onDelete={onDelete} /> */}
-        <BookCategoryTable ref={tableRef} />
+        <BookCategoryTable
+          ref={tableRef}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          w="full"
+        />
+
+        <BookCategoryModal ref={modalRef} />
+
+        <BookCategoryDeleteModal ref={deleteModalRef} />
       </VStack>
     </ProtectedLayout>
   )

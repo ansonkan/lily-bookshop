@@ -5,6 +5,7 @@ import type { BookDeleteModalRef } from 'features/cms/books/BookDeleteModal'
 import type { BookFE } from 'types'
 import type { BooksTableRef } from 'features/cms/books/BooksTable'
 
+import { AddIcon, RepeatIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -16,7 +17,6 @@ import {
 import { useCallback, useRef, useState } from 'react'
 import { API } from 'aws-amplify'
 import NextLink from 'next/link'
-import { RepeatIcon } from '@chakra-ui/icons'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
@@ -78,7 +78,7 @@ const CMSBooksPage: NextPage = () => {
       <VStack gap={4}>
         {/* Other actions */}
         <SimpleGrid gap={4} columns={[1, 2, 3, 4]}>
-          <Button as={NextLink} href="/cms/books/add">
+          <Button as={NextLink} href="/cms/books/add" leftIcon={<AddIcon />}>
             {t('books.other-actions.add')}
           </Button>
 

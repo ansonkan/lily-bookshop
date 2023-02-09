@@ -1,4 +1,4 @@
-import type { BookCategoryDocumentFE } from 'types'
+import type { BookCategoryFE } from 'types'
 import type { ColumnDef } from '@tanstack/react-table'
 import type { TableContainerProps } from '@chakra-ui/react'
 
@@ -13,8 +13,8 @@ import { useTranslation } from 'next-i18next'
 import { SimpleTable, V } from 'components'
 
 export interface BookCategoryTableProps extends TableContainerProps {
-  onEdit?: (cat: BookCategoryDocumentFE) => void
-  onDelete?: (cat: BookCategoryDocumentFE) => void
+  onEdit?: (cat: BookCategoryFE) => void
+  onDelete?: (cat: BookCategoryFE) => void
 }
 
 export interface BookCategoryTableRef {
@@ -40,17 +40,20 @@ export const BookCategoryTable = memo(
         [mutate]
       )
 
-      const columns = useMemo<ColumnDef<BookCategoryDocumentFE>[]>(
+      const columns = useMemo<ColumnDef<BookCategoryFE>[]>(
         () => [
           {
             id: 'en',
-            header: t('books.book-category-table.columns.en') ?? 'English',
+            header:
+              t('book-categories.book-category-table.columns.en') ?? 'English',
             accessorKey: 'en',
             cell: ({ getValue }) => <V>{getValue<string | undefined>()}</V>,
           },
           {
             id: 'zh_HK',
-            header: t('books.book-category-table.columns.zh_HK') ?? 'Chinese',
+            header:
+              t('book-categories.book-category-table.columns.zh_HK') ??
+              'Chinese',
             accessorKey: 'zh_HK',
             cell: ({ getValue }) => <V>{getValue<string | undefined>()}</V>,
           },
@@ -81,7 +84,7 @@ export const BookCategoryTable = memo(
       )
 
       const table = useReactTable({
-        data: data?.books || [],
+        data: data?.book_categories || [],
         columns,
         getCoreRowModel: getCoreRowModel(),
       })

@@ -26,7 +26,7 @@ export async function editBook({ id, ...others }: EditedBook) {
     },
   })
 
-  mutateBooks()
+  await mutateBooks()
 
   return result
 }

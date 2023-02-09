@@ -40,7 +40,7 @@ export const BookEditForm = ({
           await editBook(cleaned)
 
           toast({
-            title: 'The book has been updated',
+            title: t('books.edit.toast.success.title'),
             status: 'success',
           })
 
@@ -48,7 +48,7 @@ export const BookEditForm = ({
         } catch (err) {
           captureException(err)
           toast({
-            title: 'Failed to edit the book',
+            title: t('books.edit.toast.failed.title'),
             status: 'error',
           })
           onFailed?.(values)

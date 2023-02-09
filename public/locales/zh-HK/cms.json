@@ -28,7 +28,7 @@
   },
   "books": {
     "other-actions": {
-      "add": "新增",
+      "add": "新增 圖書",
       "search-from-google-book": "搜尋 Google圖書",
       "manage-categories": "管理 類別",
       "manage-featured": "管理 '精選'",
@@ -109,6 +109,54 @@
         "date_created": "製作日期",
         "user_updated": "更新用戶",
         "date_updated": "更新日期"
+      },
+      "toast": {
+        "success": {
+          "title": "本書已更新"
+        },
+        "failed": {
+          "title": "更新圖書失敗"
+        }
+      }
+    }
+  },
+  "book-categories": {
+    "book-category-table": {
+      "columns": {
+        "en": "英文標籤",
+        "zh_HK": "中文標籤"
+      }
+    },
+    "add": {
+      "heading": "新增圖書類別",
+      "toast": {
+        "success": {
+          "title": "圖書類別已新增"
+        },
+        "failed": {
+          "title": "新增圖書類別失敗"
+        }
+      }
+    },
+    "edit": {
+      "heading": "編輯圖書類別",
+      "toast": {
+        "success": {
+          "title": "圖書類別已更新"
+        },
+        "failed": {
+          "title": "更新圖書類別失敗"
+        }
+      }
+    },
+    "delete": {
+      "toast": {
+        "success": {
+          "title": "該圖書類別已被刪除"
+        },
+        "failed": {
+          "title": "刪除圖書類別失敗"
+        }
       }
     }
   },

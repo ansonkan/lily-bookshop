@@ -28,7 +28,7 @@
   },
   "books": {
     "other-actions": {
-      "add": "Add",
+      "add": "Add book",
       "search-from-google-book": "Search Google Books",
       "manage-categories": "Manage Categories",
       "manage-featured": "Manage 'Featured'",
@@ -109,6 +109,54 @@
         "date_created": "Created at",
         "user_updated": "Updated by",
         "date_updated": "Updated at"
+      },
+      "toast": {
+        "success": {
+          "title": "The book has been updated"
+        },
+        "failed": {
+          "title": "Failed to update the book"
+        }
+      }
+    }
+  },
+  "book-categories": {
+    "book-category-table": {
+      "columns": {
+        "en": "English label",
+        "zh_HK": "Chinese label"
+      }
+    },
+    "add": {
+      "heading": "Add Book Category",
+      "toast": {
+        "success": {
+          "title": "The book category has been added"
+        },
+        "failed": {
+          "title": "Failed to add the book category"
+        }
+      }
+    },
+    "edit": {
+      "heading": "Edit Book Category",
+      "toast": {
+        "success": {
+          "title": "The book category has been updated"
+        },
+        "failed": {
+          "title": "Failed to update the book category"
+        }
+      }
+    },
+    "delete": {
+      "toast": {
+        "success": {
+          "title": "The book category has been updated"
+        },
+        "failed": {
+          "title": "Failed to update the book category"
+        }
       }
     }
   },

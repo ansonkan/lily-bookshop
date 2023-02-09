@@ -70,7 +70,7 @@ export const BookDocumentSchema = object({
       if (value === undefined || value === null) return true // since this is optional
       return validateDate(value, path)
     }),
-  other_photos: array(string().defined()).transform(cleanStrArray),
+  other_photos: array(string().defined()).transform(cleanStrArray).nullable(),
 })
 
 export type BookDocument = InferType<typeof BookDocumentSchema>

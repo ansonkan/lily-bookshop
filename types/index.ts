@@ -29,7 +29,7 @@ export interface BookFE extends BookDocument {
 
 export type BookCategoryDocument = InferType<typeof BookCategoryDocumentSchema>
 
-export interface BookCategoryDocumentFE extends BookCategoryDocument {
+export interface BookCategoryFE extends BookCategoryDocument {
   id: string // MongoDB ObjectId.toString()
 }
 

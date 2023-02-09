@@ -72,7 +72,7 @@ export async function createBook(b: NewBook) {
     }
   )
 
-  mutateBooks()
+  await mutateBooks()
 
   return postResult
 }
