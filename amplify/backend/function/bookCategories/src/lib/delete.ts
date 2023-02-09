@@ -10,8 +10,6 @@ export async function DELETE(
 ): Promise<Partial<APIGatewayProxyResult>> {
   const json = JSON.parse(event.body)
 
-  throw new Error(event.body)
-
   if (json.id) {
     const result = await deleteOne(client, json.id)
 
