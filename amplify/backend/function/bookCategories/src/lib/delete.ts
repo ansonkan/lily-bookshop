@@ -15,8 +15,6 @@ export async function DELETE(
 
     await cleanupBooks(client, [json.id])
 
-    // TODO: remove this category from all books
-
     return {
       body: JSON.stringify({ result }),
     }
@@ -57,5 +55,5 @@ async function cleanupBooks(client: MongoClient, ids: string[]) {
   return await client
     .db('bookshop')
     .collection<BookDocument>('books')
-    .updateMany({}, { $pull: { categories: ids } })
+    .updateMany({}, { $pull: { categories: { $in: ids } } })
 }

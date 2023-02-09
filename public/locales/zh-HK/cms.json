@@ -197,5 +197,10 @@
       "size-limit": "文件大小限制: {{size}}",
       "quantity-limit": "還能上傳 {{count}}個"
     }
+  },
+  "simple-field": {
+    "menu": {
+      "selected-count": "已選擇{{count}}個"
+    }
   }
 }

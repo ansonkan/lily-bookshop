@@ -15,9 +15,11 @@ async function test() {
 
   const result = await client
     .db('bookshop')
-    .collection('book_categories')
-    .find({})
-    .toArray()
+    .collection('books')
+    .updateMany(
+      {},
+      { $pull: { categories: { $in: ['63e47799194f79e0b7a71996'] } } }
+    )
 
   console.log('result: ', JSON.stringify(result, null, 2))
 }

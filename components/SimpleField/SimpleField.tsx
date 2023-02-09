@@ -1,11 +1,17 @@
 import type { SimpleFieldHelperProps, SimpleFieldProps } from './types'
 
 import {
+  Button,
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
   Input,
+  Menu,
+  MenuButton,
+  MenuItemOption,
+  MenuList,
+  MenuOptionGroup,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -15,6 +21,7 @@ import {
   Textarea,
 } from '@chakra-ui/react'
 import { useField } from 'formik'
+import { useTranslation } from 'next-i18next'
 
 import { formatDate, parseDate } from './utils'
 import { FileInput } from '../FileInput'
@@ -61,6 +68,7 @@ export const SimpleField = ({
         precision={precision}
         multiple={multiple}
         accept={accept}
+        label={label}
       />
 
       {isError ? (
@@ -85,6 +93,7 @@ const proxy = <T,>(v: T): T => v
 function SimpleFieldHelper<V>({
   type,
   placeholder,
+  label,
   format = type === 'date' ? formatDate : proxy,
   parse = type === 'date' ? parseDate : proxy,
   multiline,
@@ -99,14 +108,43 @@ function SimpleFieldHelper<V>({
   field,
   helper,
 }: SimpleFieldHelperProps<V>) {
+  const { t } = useTranslation('cms')
+
   /**
    * TODO:
    * 1. `Menu` might be the easier workaround for multi-select (e.g. categories)
    * 2. `Textarea` + newline split might be the easier workaround for multi-free-text-value (e.g. authors)
    */
-
   if (options && multiple) {
     // use `Menu` (for desktop view)?
+    return (
+      <Menu closeOnSelect={false}>
+        <MenuButton as={Button} w="full">
+          {t('simple-field.menu.selected-count', {
+            count: Array.isArray(field.value) ? field.value?.length : 0,
+          })}
+        </MenuButton>
+        <MenuList>
+          <MenuOptionGroup
+            title={label}
+            type="checkbox"
+            // Note: just relay the generic type of `Formik` for now, this component is really hard to type but save me from so many boilerplates
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            value={field.value}
+            onChange={(value) =>
+              helper.setValue(Array.isArray(value) ? value : [])
+            }
+          >
+            {options.map(({ value, label }) => (
+              <MenuItemOption value={value} key={value}>
+                {label || value}
+              </MenuItemOption>
+            ))}
+          </MenuOptionGroup>
+        </MenuList>
+      </Menu>
+    )
   }
 
   if (type === 'file') {

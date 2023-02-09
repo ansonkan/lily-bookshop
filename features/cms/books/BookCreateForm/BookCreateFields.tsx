@@ -1,9 +1,11 @@
 import { Button, Grid, GridItem, Text } from '@chakra-ui/react'
 import { CURRENCIES, LANG_CODES, STATUSES } from '@lily-bookshop/schemas'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
 import { SimpleField } from 'components'
+import { useBookCategories } from 'features'
 
 export interface BookCreateFieldsProps {
   parentFieldName?: string
@@ -25,6 +27,20 @@ export const BookCreateFields = ({
   const { t } = useTranslation('cms')
   const { t: ct } = useTranslation('common')
   const [showMore, setShowMore] = useState(false)
+  const { locale } = useRouter()
+
+  const { data } = useBookCategories()
+
+  const categoryOptions = useMemo(() => {
+    if (!data?.book_categories) return []
+
+    return [
+      ...data.book_categories.map((cat) => ({
+        value: cat.id,
+        label: locale === 'en' ? cat.en : cat.zh_HK,
+      })),
+    ]
+  }, [data, locale])
 
   const namePrefix =
     typeof index === 'number' && parentFieldName
@@ -125,12 +141,10 @@ export const BookCreateFields = ({
         <SimpleField
           label={t('books.add.fields.categories') ?? 'Categories'}
           name={`${namePrefix}categories`}
-          options={['fiction', 'si-fi', 'english', 'chinese'].map((c) => ({
-            value: c,
-          }))}
+          options={categoryOptions}
           multiple
           // this is a placeholder until the `book_categories` collection and APIs are ready
-          format={(value?: string) => (value ? [value] : undefined)}
+          format={(value?: string) => (value ? [value] : null)}
           parse={(value?: string[]) => value?.[0]}
         />
       </GridItem>

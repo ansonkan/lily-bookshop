@@ -3,11 +3,15 @@ import type { BookItemProps } from '../types'
 
 import { Badge, Box, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
+
+import { useBookCategories } from 'features'
 
 import { Kvp } from '../../Kvp'
 import { Section } from '../../Section'
 import { Thumbnail } from './Thumbnail'
+import { useMemo } from 'react'
 
 export interface FullProps extends Omit<BookItemProps, 'variant' | 'price'> {
   priceLabel?: string
@@ -40,6 +44,23 @@ export const Full = ({
   ...boxProps
 }: FullProps): JSX.Element => {
   const { t } = useTranslation('common')
+  const { locale } = useRouter()
+  const { data } = useBookCategories()
+
+  const categoryBadges = useMemo(() => {
+    if (!categories) return []
+
+    return categories
+      .map((cid) => {
+        const match = data?.book_categories.find((option) => option.id === cid)
+        if (!match) return undefined
+
+        const label = locale === 'en' ? match.en : match.zh_HK
+
+        return <Badge key={match.id}>{label}</Badge>
+      })
+      .filter((elem): elem is JSX.Element => !!elem)
+  }, [categories, data?.book_categories, locale])
 
   return (
     <Box
@@ -72,9 +93,7 @@ export const Full = ({
 
             {language && <Badge>{t(`language.${language}`)}</Badge>}
 
-            {categories?.map((c) => (
-              <Badge key={c}>{c}</Badge>
-            ))}
+            {categoryBadges}
 
             {/* for reference */}
             {/* <Badge as={NextLink} href="/">

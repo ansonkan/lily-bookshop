@@ -10,6 +10,7 @@ interface CommonProps
   extends Pick<NumberInputProps, 'min' | 'max' | 'step' | 'precision'> {
   type?: string
   placeholder?: string
+  label?: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   format?: (value: any) => any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

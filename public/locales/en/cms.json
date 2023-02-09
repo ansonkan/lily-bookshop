@@ -197,5 +197,10 @@
       "size-limit": "File size limit: {{size}}",
       "quantity-limit": "Can upload {{count}} more files"
     }
+  },
+  "simple-field": {
+    "menu": {
+      "selected-count": "{{count}} selected"
+    }
   }
 }

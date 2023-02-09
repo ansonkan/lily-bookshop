@@ -6,11 +6,11 @@ import { ButtonGroup, IconButton } from '@chakra-ui/react'
 import { CloseIcon, EditIcon } from '@chakra-ui/icons'
 import { forwardRef, memo, useImperativeHandle, useMemo } from 'react'
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { API } from 'aws-amplify'
-import useSWR from 'swr'
 import { useTranslation } from 'next-i18next'
 
 import { SimpleTable, V } from 'components'
+
+import { useBookCategories } from './queries'
 
 export interface BookCategoryTableProps extends TableContainerProps {
   onEdit?: (cat: BookCategoryFE) => void
@@ -26,10 +26,7 @@ export const BookCategoryTable = memo(
     ({ onEdit, onDelete, ...tableContainerProps }, ref): JSX.Element => {
       const { t } = useTranslation('cms')
 
-      const { data, isLoading, isValidating, mutate } = useSWR(
-        ['apicore', '/book-categories'],
-        ([apiName, url]) => API.get(apiName, url, {})
-      )
+      const { data, isLoading, isValidating, mutate } = useBookCategories()
 
       useImperativeHandle(
         ref,
