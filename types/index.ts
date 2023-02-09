@@ -1,6 +1,9 @@
 import type { InferType } from 'yup'
 
-import { BookDocumentSchema } from '@lily-bookshop/schemas'
+import {
+  BookCategoryDocumentSchema,
+  BookDocumentSchema,
+} from '@lily-bookshop/schemas'
 
 export type NonNullableFields<T> = {
   [P in keyof T]: NonNullable<T[P]>
@@ -21,6 +24,12 @@ export type BookDocument = InferType<typeof BookDocumentSchema>
 
 // Book front-end
 export interface BookFE extends BookDocument {
+  id: string // MongoDB ObjectId.toString()
+}
+
+export type BookCategoryDocument = InferType<typeof BookCategoryDocumentSchema>
+
+export interface BookCategoryDocumentFE extends BookCategoryDocument {
   id: string // MongoDB ObjectId.toString()
 }
 
