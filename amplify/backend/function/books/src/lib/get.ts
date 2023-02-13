@@ -205,21 +205,22 @@ async function search(
         },
       },
     },
-    {
-      $facet: {
-        books: [
-          ...(sort ? getSortStages(sort, sortOnlyExist) : []),
-          { $skip: skip },
-          { $limit: limit },
-        ],
-        meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
-      },
-    },
   ]
 
   if (publishedOnly) {
-    stages.unshift({ $match: { status: 'published' } })
+    stages.push({ $match: { status: 'published' } })
   }
+
+  stages.push({
+    $facet: {
+      books: [
+        ...(sort ? getSortStages(sort, sortOnlyExist) : []),
+        { $skip: skip },
+        { $limit: limit },
+      ],
+      meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
+    },
+  })
 
   return (await client
     .db('bookshop')
@@ -274,39 +275,36 @@ async function listRelated(
 
   const skip = (page - 1) * limit
 
-  const stages: Document[] = [
-    {
-      $search: {
-        index: 'default',
-        compound: {
-          should: searchShoulds,
-        },
-        count: {
-          type: 'total',
-        },
-      },
-    },
-    {
-      $match: {
-        _id: { $ne: new ObjectId(targetBook._id) },
-      },
-    },
-    {
-      $facet: {
-        books: [{ $skip: skip }, { $limit: limit }],
-        meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
-      },
-    },
-  ]
-
-  if (publishedOnly) {
-    stages.unshift({ $match: { status: 'published' } })
-  }
-
   return (await client
     .db('bookshop')
     .collection('books')
-    .aggregate(stages)
+    .aggregate([
+      {
+        $search: {
+          index: 'default',
+          compound: {
+            should: searchShoulds,
+          },
+          count: {
+            type: 'total',
+          },
+        },
+      },
+      {
+        $match: {
+          _id: {
+            $ne: new ObjectId(targetBook._id),
+          },
+          ...(publishedOnly ? { status: 'published' } : {}),
+        },
+      },
+      {
+        $facet: {
+          books: [{ $skip: skip }, { $limit: limit }],
+          meta: [{ $replaceWith: '$$SEARCH_META' }, { $limit: 1 }],
+        },
+      },
+    ])
     .toArray()) as BookResults
 }
 
@@ -390,8 +388,6 @@ async function autocompleteTitle(
         },
       },
     },
-    { $limit: limit },
-    { $project: { _id: 0, title: 1 } },
   ]
 
   if (publishedOnly) {
@@ -399,6 +395,8 @@ async function autocompleteTitle(
       $match: { status: 'published' },
     })
   }
+
+  stages.push(...[{ $limit: limit }, { $project: { _id: 0, title: 1 } }])
 
   return (
     await client.db('bookshop').collection('books').aggregate(stages).toArray()
