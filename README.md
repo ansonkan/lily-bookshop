@@ -1,4 +1,4 @@
-This was a failed attempt to help create a website for a local book store. My original intention was to build a website to provide easier book searching for customers, but me and the book store owner figured a POS system is needed way more than a website like this. A bad move for me to dive right into this website without getting clear requiremtns first. Lesson learned.
+This was a failed attempt to help create a website for a local book store. My original intention was to build a website to provide easier book searching to customers, but me and the book store owner figured a POS system is needed way more than a website like this. A bad move for me to dive right into this website without getting clear requiremtns first. Lesson learned.
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
